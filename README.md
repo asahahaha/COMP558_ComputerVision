@@ -6,8 +6,8 @@ COMP 558 Fundamentals of Computer Vision @ McGill Class Notes
 * Grading: 20% Assignments + 20% Group Research Project + 20% Midterm + 40% Final
 ```
 
-Author: @asahahaha
-All class notes written in [notion.so](https://www.notion.so/), click on the *lecture titles* to open the corresponding note page.
+> Author: @asahahaha
+All class notes written in [notion.so](https://www.notion.so/), **click on the *lecture titles* to open the corresponding note page**.
 
 ## [Lec 2 - RGB Images](COMP558_Lec2)
 * Bayer pattern
