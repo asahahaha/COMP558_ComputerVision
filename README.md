@@ -8,7 +8,8 @@ COMP 558 Fundamentals of Computer Vision @ McGill Class Notes
 
 All class note written in [notion.so](https://www.notion.so/)
 
-## Lec 2 - RGB Images
+## [Lec 2 - RGB Images](COMP558_Lec2)
+[Lec 2 - RGB Images](COMP558_Lec2)
 * bayer pattern
 * RAW to JPG
 
