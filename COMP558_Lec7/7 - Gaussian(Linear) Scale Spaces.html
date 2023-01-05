@@ -1,0 +1,737 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>7 - Gaussian(Linear) Scale Spaces</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="45ad603a-c35c-4dfc-ad47-58bcc4cd5a7a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">7 - Gaussian(Linear) Scale Spaces</h1></header><div class="page-body"><p id="0676989f-6d0f-43fe-a607-aeb090986fb6" class=""><time>@September 22, 2022</time> </p><p id="ea72c76c-9546-4226-9a15-dc51051ecf99" class="">
+</p><nav id="0272f26a-0755-43ec-b9df-98ef009bbcf1" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#43804bf8-71fe-45dd-bba7-d179b6b1768f">Generic VS. non-generic view points </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b37a40ee-0427-44c0-bf9d-1da7f3d5dbb3">Scales</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e87b7e52-a25d-49b5-8560-6f59bd5f16a1">Texture flow</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7dbe3c80-4816-4e3e-b9e1-d6f5d461b520">Fractals</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b7244ae6-e5c0-4972-b13e-d30071c7f8aa">Gaussian scale space (definition)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#73d7834a-c4c2-4b24-b92c-37fd248bfaea"><mark class="highlight-pink">EXAMPLES</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8dec2dc5-5271-4950-ad8a-a4f48a3458b8">Gaussian Scale Space (1D image)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ba8e3353-2fcd-4924-b360-0ded903535ab">Gaussian Scale Space (2D image)</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#6158f624-2c62-487f-8713-194bfad80c17"><mark class="highlight-purple">example (Habitat 67)</mark></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0bfae8b5-c82e-4574-9fef-0d3ca545d5c2">Gaussian Pyramid</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#828c21bc-a7ce-453d-9f7f-cefe7d3bca00">Application of Gaussian pyramids</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#49ec0a36-7e03-4696-9635-2daf95ea9f67">Multiscale Image Registration <span style="border-bottom:0.05em solid"><mark class="highlight-purple">(Lucas-Kanade)</mark></span></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#42957eeb-b0e5-4dfb-88ec-ff88c89f8479">Lucas-Kanade </a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#7f3b5118-2338-41a8-89d1-52ba339509d3">Application: “Coarse to fine”</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#157e8f52-32ed-424b-9ff1-df5f771edc05">RECALL: Convolutions (gaussian)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d4d0f194-c58c-413e-8e47-21f5c933ba20">Features in scale space</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#35e4c20d-dee3-4e84-a22d-757cc183b0a4">1st Derivative</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#54eaa449-5624-473a-869e-4115e3f9c5f5">⭐️ 1. <mark class="highlight-teal">Scale-Normalized</mark> Gaussian Derivative</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#094e655c-9ebe-4bfc-a27b-23cd2c8dfa66">2nd Derivative</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1303d734-58b7-419c-a0e9-49ccd1808ecc">⭐️ 2. <mark class="highlight-teal">Normalized</mark> 2nd Derivative Scale Space</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#6779ba54-9971-4dbb-8426-790f52c4dc1f">⭐️ 3. <mark class="highlight-teal">Normalized</mark> 2nd Derivative Scale Space for “<mark class="highlight-orange">box</mark>” image</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#649c46d3-d097-45f4-ab4f-86f31b499fd0">EX. Gaussian Sacle Space for “box”</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#7b177328-1997-424c-82e0-b405ad54c7ea">Box(Blob) Detector in scale space</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d4102001-11b3-441c-b78c-09cbe53f1638">Gaussian Properties</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5b221e19-9737-45df-b768-8708e1082e55">1. Separability</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e42d6bc3-def5-4676-a7f2-cc2861c5f6b3">2. Semi-group property</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#c7088512-cf3f-480e-aab8-c139048e7b37">Connection: Gaussian Blurring VS. HEAT Equation</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#84bc9481-0e4c-4c51-a8d9-da8ec59d0ddd">ASIDE: Isotropic VS. Anisotropic</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#138aa410-96a5-491f-97db-dca2ae457736"><span style="border-bottom:0.05em solid">HEAT equation VS. Perona-Malik Anisotropic Diffusion</span></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8f06dafb-022b-4441-b9d3-a85ea8704191"><mark class="highlight-purple">Anisotropic IN-CLASS NOTES</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#146a00ee-20e1-4e18-a69a-2ff5249af762">Geometric HEAT Equation (non-linear)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#929c9451-08ee-4d0c-9d55-2b1eb6244e0a">More on Gaussian Pyramid &amp; Laplacian Pyramid</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1634ab8f-a209-4843-9a8c-8e81b3ff3a56">Gaussian Pyramid</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3f660fc3-120e-4343-b60b-5d49d4c06d24">Laplacian Pyramid</a></div></nav><p id="01752dad-0eab-485f-a73b-01e3b98d7198" class="">
+</p><h2 id="43804bf8-71fe-45dd-bba7-d179b6b1768f" class="">Generic VS. non-generic view points </h2><ul id="2265c34e-1c7a-44cc-925a-609066ccc05a" class="bulleted-list"><li style="list-style-type:disc">generic: if move around and see stuff are SAME</li></ul><ul id="5dc43d47-2296-4056-afa9-770e6e6f4467" class="bulleted-list"><li style="list-style-type:disc">non-generic: if move around, see stuff different)<figure id="cc4f0d3b-7aff-4f82-8003-19702a4dc20e" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.04.54_PM.png"><img style="width:336px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.04.54_PM.png"/></a></figure></li></ul><p id="9b9e756a-f9f9-40f8-b0f7-49413ec15d64" class="">
+</p><p id="38b86476-babe-41e3-b476-bd4aa5942bd6" class="">
+</p><h2 id="b37a40ee-0427-44c0-bf9d-1da7f3d5dbb3" class="">Scales</h2><ul id="0542fac0-6134-4c28-9497-bd236202d26b" class="bulleted-list"><li style="list-style-type:disc">take off your glasses, <p id="5ad2b08a-c832-4a0e-ae65-6454b4250b5b" class="">edges of the expanded pixels will blur out and you may see the recognizable face.</p></li></ul><figure id="e9fcc250-90ca-4890-ae34-427291a65e4e" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.07.40_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.07.40_PM.png"/></a></figure><figure id="be13d3ca-a5c7-4987-89dd-93f198a6cb93" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.07.34_PM.png"><img style="width:528px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.07.34_PM.png"/></a></figure><p id="168370d1-8fdc-41b7-860b-32c5896ce826" class="">→ cool math behind how we use math &amp; smooth the orientaion</p><p id="9ff84e6c-8b21-4bfc-a929-44795e205116" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="55f43f30-86aa-4a71-b128-206934efe12e"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Build mosaic, replace every tile with completely different spixel<ul id="f48c34e2-8e38-4500-8b11-e7aa54a4e02a" class="bulleted-list"><li style="list-style-type:disc">the one u replace → <strong>if u look far away, it look pretty similar</strong><ul id="7351590e-d128-4e57-84c0-2c574999be6c" class="bulleted-list"><li style="list-style-type:circle">ALGORITHM: us econvolution to <strong><mark class="highlight-pink">replace every tile  with a completely random tile (but with similar weighted average)</mark></strong> </li></ul></li></ul></div></figure><p id="a6c09c50-fc25-415e-870c-a7f798ef3e19" class="">
+</p><p id="e390e952-7282-4b33-b764-af471d0d4618" class="">
+</p><p id="93ed8db6-9c0b-44e4-ae45-764696b910a6" class="">
+</p><p id="886be01b-9b7e-47af-8aea-7607f8770af6" class="">
+</p><h3 id="e87b7e52-a25d-49b5-8560-6f59bd5f16a1" class="">Texture flow</h3><hr id="ba20f50b-65e7-4d51-9dc4-0a27a692c003"/><ul id="8da810c1-8e58-48be-a4b8-3d01dc3f628a" class="bulleted-list"><li style="list-style-type:disc">can only see the texture flow at fine scale</li></ul><figure id="b97b3186-6b98-401b-95cc-784209d3af8f" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-21_at_1.56.26_PM.png"><img style="width:576px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-21_at_1.56.26_PM.png"/></a></figure><p id="977df29b-c2cd-4f93-be2f-f808d928d23e" class="">
+</p><p id="90847054-0989-4094-823c-1363ac371779" class="">
+</p><h2 id="7dbe3c80-4816-4e3e-b9e1-d6f5d461b520" class="">Fractals</h2><p id="b70a5f26-9a36-4d89-ac31-0bafc4f6c6c5" class="">similar geometric structure at multiple scales, repeating</p><hr id="4359c204-d3fb-433b-ac8b-797b52f3d135"/><blockquote id="dc0d8f01-a4a3-47e3-a8f8-a01eb0dc07b3" class="">by recursion</blockquote><figure id="50180a19-7f06-42c3-8bab-0fe02aef68e3" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.11.31_PM.png"><img style="width:384px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.11.31_PM.png"/></a></figure><p id="2a2ef21a-dc4a-49ff-b465-d2e9f39f1d86" class="">
+</p><figure id="d5ea85a8-35f9-4e39-a3fe-9b5bba1b1b8c" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-21_at_1.59.46_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-21_at_1.59.46_PM.png"/></a></figure><p id="e05c80ff-3e7c-49b2-ad86-3b7a7c07f8c8" class="">
+</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="5cf17af2-6ef0-48a8-b19d-888377680404"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>NOTE: we don’t just subsample! </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><p id="01171cd5-2c2c-40f3-a710-2a5e1cc1aa4d" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>need to </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><mark class="highlight-pink"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>blur first and then subsample </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>→ </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><span style="border-bottom:0.05em solid"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>don’t wanna skip</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></span><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong> over many pixels (guaranteed that all pixels in the original image will be represented)⬇️</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p></div></figure><h1 id="b7244ae6-e5c0-4972-b13e-d30071c7f8aa" class="">Gaussian scale space (definition)</h1><hr id="d71d4016-0340-4b49-ba87-393cb1cfaf85"/><blockquote id="fe35377f-097e-4d97-ab7d-96225eb2e41e" class=""><strong>blur with gaussian &amp; get increasing blurred images</strong></blockquote><ul id="c8c91137-fcdf-49c0-b66b-d6abcd4ad73a" class="bulleted-list"><li style="list-style-type:disc">if small structure with a bit of blurring → easy to remove</li></ul><ul id="2b9ad8d5-195a-4ec2-88c0-11c156087227" class="bulleted-list"><li style="list-style-type:disc">if big structure→ harder, more work fro it do disappear</li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="375a9aac-ae1b-48fb-9136-dcba647267cd"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Gaussian Scale Space</strong>: a family of blurred images → <span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid">as move up, increased blurring</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></div></figure><p id="573e2d4e-11ed-48bb-8614-cc54229251ca" class=""><span style="border-bottom:0.05em solid"><strong>a stack of blurred images</strong></span></p><p id="ca200e6b-7af5-422a-82d7-35922785ef60" class="">
+</p><p id="7d9644e2-48c7-4ca4-92b7-1e880667c7e3" class="">you&#x27;ll see that very fine scale features like edges are highlighted</p><p id="03152a68-307d-48ed-92cb-cba76f779969" class="">
+</p><h2 id="73d7834a-c4c2-4b24-b92c-37fd248bfaea" class=""><mark class="highlight-pink">EXAMPLES</mark></h2><hr id="93b85e1a-55e4-4b6f-84e5-c04d662c3593"/><h2 id="8dec2dc5-5271-4950-ad8a-a4f48a3458b8" class="">Gaussian Scale Space (1D image)</h2><figure id="56721b17-4cd6-435a-bc16-ad8aa923ac71" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.15.13_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.15.13_PM.png"/></a><figcaption>red: sigma 1;   yellow: sigma 2:    purple: sigma 4;    green: sigma   ….</figcaption></figure><ul id="64321224-682c-4e63-9ae0-257504143bd5" class="bulleted-list"><li style="list-style-type:disc">the signal got increasingly <strong>smoothed out</strong></li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="f7e82729-500e-4101-8476-94c0e8fd8c7b"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">NOTE: the choice of powers are usually at <strong>power of 2 ⭐️</strong><p id="fa96f27f-2566-4086-b24f-574a98d21cfc" class=""><em><mark class="highlight-blue">ex. 1 2 4 8….</mark></em></p></div></figure><p id="90029610-9524-4eae-97e9-77c2b23da85a" class="">
+</p><h2 id="ba8e3353-2fcd-4924-b360-0ded903535ab" class="">Gaussian Scale Space (2D image)</h2><figure id="ecc4af33-e68f-4ebf-b444-eaa6840bb4bf" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.18.08_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.18.08_PM.png"/></a></figure><figure id="14a3c8ee-ae5e-4ad2-9928-84fb69b9fe24" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.18.33_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.18.33_PM.png"/></a></figure><h3 id="6158f624-2c62-487f-8713-194bfad80c17" class=""><mark class="highlight-purple">example (Habitat 67)</mark></h3><hr id="04968424-5b89-4af8-9964-c36a4a1589b0"/><div id="b85f5515-8f0c-436b-a6ed-8b2003a2f26e" class="column-list"><div id="2483ebe1-04db-4168-947b-3b18764f52c4" style="width:50%" class="column"><figure id="a96c66bb-58bc-4d9c-8b03-7a79a7ccf086" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.14_PM.png"><img style="width:794px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.14_PM.png"/></a></figure></div><div id="15ad806f-490a-4502-8033-c4dc9edef9c7" style="width:50%" class="column"><figure id="bdaf2bf1-f21b-43de-8cc0-9048e8908557" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.19_PM.png"><img style="width:744px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.19_PM.png"/></a></figure></div></div><div id="732a3957-4da7-4ab8-9d19-db639ba8f5dd" class="column-list"><div id="9c53dd64-dca6-4e96-a445-7d1c036641e1" style="width:50%" class="column"><figure id="97873dd1-22e7-44d5-b030-83cd03e3ced6" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.26_PM.png"><img style="width:778px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.26_PM.png"/></a></figure></div><div id="868b95d4-c450-4b7d-b731-15dc53ebf0a9" style="width:50%" class="column"><figure id="268fe07b-a0bf-49a9-ac8d-08c0b7c3878f" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.32_PM.png"><img style="width:848px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.19.32_PM.png"/></a></figure></div></div><p id="98ead3db-eb74-450d-841a-5119005e6989" class="block-color-teal_background">
+</p><h1 id="0bfae8b5-c82e-4574-9fef-0d3ca545d5c2" class="">Gaussian Pyramid</h1><hr id="24f5eca2-b57f-4687-9cdd-8070bf88afdd"/><blockquote id="cafce068-7548-4f24-958a-c254a5bb7cdb" class=""><mark class="highlight-purple"><strong>Blurring + sub-sampling</strong></mark></blockquote><ul id="722efa4d-8462-4376-9f29-02d9acd89082" class="bulleted-list"><li style="list-style-type:disc">in original, have<mark class="highlight-blue"><strong> 4 </strong></mark>pixels →<ul id="70bff006-e7c6-47ab-b7b9-a2f5b3a79519" class="bulleted-list"><li style="list-style-type:circle">but in the <strong>upper level</strong>, we pick every pixel in that 2*2 matrix</li></ul></li></ul><div id="d7fda732-8bee-4be5-99d5-952ab0e21acc" class="column-list"><div id="4c1d38b0-4c8f-4088-97dd-3e53dbc99da2" style="width:50%" class="column"><figure id="31fbbfb4-3c40-40d6-bd80-0a31e6fe3640" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.20.46_PM.png"><img style="width:336px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.20.46_PM.png"/></a></figure></div><div id="6f67cc4f-d8b6-44ba-894c-74517dcfa9c4" style="width:50%" class="column"><figure id="95519e59-1e0a-42c3-9193-8cdb9bc6bb64" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.21.10_PM.png"><img style="width:790px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.21.10_PM.png"/></a></figure></div></div><ul id="381cda15-eb63-4f31-9ad0-a8fcb47d71e7" class="bulleted-list"><li style="list-style-type:disc">kinda expensive… so we do this instead</li></ul><p id="41756d8c-6eec-4cb7-b0b5-e08b6e1199c6" class="">
+</p><p id="47c4a780-143a-4ae3-8c42-e6d84108fade" class=""><mark class="highlight-purple">👇👇 </mark><mark class="highlight-purple"><strong>this is what is happening in practice</strong></mark></p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="4c457bb3-7cbe-43d7-a014-1791ebc9e9f6"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><span style="border-bottom:0.05em solid"><mark class="highlight-purple"><strong>iteratively</strong></mark></span><strong> blur (using 𝜎 = 1 ) and subsample (using stride 2)!!!!</strong><p id="8f06c4fd-5abc-453e-a066-3510efee2d4a" class=""><em><mark class="highlight-blue">Note: </mark></em><em><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I_{k+1}(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361079999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></mark></em><em><mark class="highlight-blue"> was already convolved with a gaussian in the previous step.</mark></em></p><p id="b9f84f42-5b2d-4f7a-9e88-cc9f503eebcf" class=""><em><mark class="highlight-blue">Therefore we only need a filter with sigma =1.</mark></em></p></div></figure><figure id="bee79064-a66f-4ff5-8c91-f4fa69dc69bb" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.23.11_PM.png"><img style="width:672px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.23.11_PM.png"/></a></figure><p id="323b983b-922f-447f-a062-e47324567ef8" class="">
+</p><p id="33acc3ff-8eca-45a4-be5d-3a0c23eb0969" class="">
+</p><p id="56875b07-a09b-44ac-83bb-9dc57c1e1b01" class="">
+</p><p id="0d93f744-b98c-4402-83b8-8d6fa217f3db" class="">
+</p><p id="2f0f9375-ca09-4d54-b2a0-e9ebf5bf2a22" class="">
+</p><p id="1c7ac869-0fe9-458e-ae59-3017f43c2e01" class="">
+</p><h3 id="828c21bc-a7ce-453d-9f7f-cefe7d3bca00" class="">Application of Gaussian pyramids</h3><hr id="162abd42-8d2c-49f8-96e2-2cadf61aa765"/><p id="90a71d31-7ca5-4aa3-bd4c-c00b4a9a8b43" class="block-color-purple">Recovering dense flow field ~ moving sequence across a sequence of frames → <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>what is moving in the scene</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><p id="95d029f0-a802-472e-8a25-97643981a84d" class="block-color-purple">→ use <span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong>lucas-kanade</strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span>, 2 frame optical flow</p><p id="b5cbb6fb-d117-4cc5-8abd-d6106b88e909" class="">
+</p><h3 id="49ec0a36-7e03-4696-9635-2daf95ea9f67" class="">Multiscale Image Registration <span style="border-bottom:0.05em solid"><mark class="highlight-purple">(Lucas-Kanade)</mark></span></h3><h2 id="42957eeb-b0e5-4dfb-88ec-ff88c89f8479" class="">Lucas-Kanade </h2><ul id="2fac1ea2-4388-428b-9c64-e4651ba11e07" class="bulleted-list"><li style="list-style-type:disc">assume optical flow is constant within small box<ul id="cbb0d54d-b8de-4708-8956-96637b062199" class="bulleted-list"><li style="list-style-type:circle">so for all points in this box</li></ul><figure id="7383b5ef-3650-4e48-a31e-caba5413379f" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_12.02.13_AM.png"><img style="width:432px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_12.02.13_AM.png"/></a></figure><figure id="244b66c5-077d-45fc-a36e-6d8e0c8aeafb" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_12.02.59_AM.png"><img style="width:432px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_12.02.59_AM.png"/></a></figure></li></ul><figure id="ed9329d9-0c0f-4d3e-ba52-28690f40da07" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.24.52_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.24.52_PM.png"/></a></figure><ul id="224a6a5a-1647-40ba-881c-8ffea5019bc4" class="bulleted-list"><li style="list-style-type:disc">assume 2 frames are <strong>close enough</strong>, algorithm come up with <mark class="highlight-blue"><strong>displacement (the SHIFT)</strong></mark></li></ul><ul id="fb53c4a9-e230-4586-8d24-871c0188e48c" class="bulleted-list"><li style="list-style-type:disc">then goes down the pyramid and keep going with the algorithm</li></ul><p id="cd6d2acd-5a52-4c66-960a-86b98e240537" class="">
+</p><p id="df7bc0a4-cec7-488e-ad11-9e6472af8356" class="block-color-blue_background">     <strong><mark class="highlight-blue">to compute the Gaussian pyramids</mark></strong></p><figure id="2f21d611-bcf7-4fbd-8c94-33d02ba76134" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.26.35_PM.png"><img style="width:1210px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.26.35_PM.png"/></a></figure><p id="e23475b6-01b7-43a6-a40f-942653b5006f" class="">
+</p><p id="37ac5dfc-a748-4e51-94bc-8952752b51c1" class="">
+</p><h3 id="7f3b5118-2338-41a8-89d1-52ba339509d3" class="">Application: “Coarse to fine”</h3><figure id="9a3f99bf-843a-458b-af0b-91637da21519" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.26.41_PM.png"><img style="width:624px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.26.41_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="a6f954eb-929d-4b3c-a505-56b05e2beab5"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">how do we register images? multi-dimensional multi problem</div></figure><ul id="74787b56-78e3-4d37-a2b3-8a5c8e64c9f3" class="bulleted-list"><li style="list-style-type:disc">advantages: easy → to LK on small images</li></ul><p id="a1b07dfc-6dfd-4112-a2bf-42ad27e5c953" class="">
+</p><h2 id="157e8f52-32ed-424b-9ff1-df5f771edc05" class="">RECALL: Convolutions (gaussian)</h2><ul id="886afaae-dc75-4120-a30b-3b5589e8de90" class="bulleted-list"><li style="list-style-type:disc">to do 2D colvoluntion, <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>speed up by</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><ul id="a78dd151-33a4-4adc-8dc7-29a780394db8" class="bulleted-list"><li style="list-style-type:circle">one 1D conv followed by another</li></ul></li></ul><p id="76c95178-15b8-4f95-9cb6-ae540adf3990" class="">
+</p><p id="7f0eb6c1-09de-4e3f-a611-fa6ef38a2751" class="">ex.  convolve with 2D gaussian (<span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid">same sigma in both directions</span></span></span></span></span></span></span>) <div class="indented"><p id="be2a0d96-c704-4115-8542-d7841e4cb835" class="">→ outer conv only along <code>v</code> inner conv only along <code>u</code></p></div></p><p id="a7a7182b-ee90-4197-92c3-02809f86199c" class="">
+</p><p id="530f7046-a96f-43b9-960c-5351edbea8f0" class="">ex2. covolve with 3d gaussian <div class="indented"><p id="eb47bbf9-0e68-482e-a0ff-695725a0e50f" class="">→ just same way</p></div></p><h1 id="d4d0f194-c58c-413e-8e47-21f5c933ba20" class="">Features in scale space</h1><h2 id="35e4c20d-dee3-4e84-a22d-757cc183b0a4" class="">1st Derivative</h2><hr id="df71e264-81fb-47ee-b271-ac863ec2f89f"/><p id="ed1e45e4-e3ba-4135-b2c4-a4d8dbed255d" class="">PROBLEM: more blurring, then we cannot detect the thingy</p><figure id="54776647-dec1-4cfe-b2a5-ec1891be6ff5" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.30.42_PM.png"><img style="width:576px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.30.42_PM.png"/></a></figure><figure id="6a73cb16-a068-4d5b-bcf1-f8e12a8d66f8" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.30.51_PM.png"><img style="width:480px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.30.51_PM.png"/></a></figure><p id="19bff986-cd27-4937-a52c-0d402b9c4a8b" class=""><span style="border-bottom:0.05em solid"><em><mark class="highlight-teal">to solve this…. ⬇️</mark></em></span></p><h3 id="54eaa449-5624-473a-869e-4115e3f9c5f5" class="">⭐️ 1. <mark class="highlight-teal">Scale-Normalized</mark> Gaussian Derivative</h3><hr id="93d77bcb-9638-45a8-aca8-0bc880dbd136"/><blockquote id="09b753d4-16cd-4038-b8e3-eac54d1f2d10" class="">height will be <strong>preserved!!!</strong></blockquote><figure id="79d25bfb-3490-412e-87af-6f941a8ac6f7" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.31.46_PM.png"><img style="width:672px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.31.46_PM.png"/></a></figure><p id="38e02ff8-b6a8-401d-b859-9f642a68df59" class="">
+</p><p id="5910872e-8e41-4846-8b85-28ad2e40b182" class="">
+</p><p id="9b334813-2fcd-48ce-a0a5-72d47410a723" class="">
+</p><h2 id="094e655c-9ebe-4bfc-a27b-23cd2c8dfa66" class="">2nd Derivative</h2><hr id="d0827cb6-1a6d-42d1-bdd0-2a453b566df9"/><figure id="d2f9b77d-1612-4858-ac0e-4e2f5ab56b92" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.34.20_PM.png"><img style="width:672px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.34.20_PM.png"/></a></figure><p id="33399977-e376-4280-82a8-34438b82ae7d" class="">
+</p><p id="edb1bf39-f2a6-4bd6-8240-183834386902" class="">Q: what are u losing when u blurring?</p><p id="4c5349a4-c299-4a4b-8c05-076714d22de5" class="">A: less precise we cna localize events in our original scene</p><p id="6a15fbb5-87f6-44b6-b881-34439ae9c980" class="">
+</p><h3 id="1303d734-58b7-419c-a0e9-49ccd1808ecc" class="">⭐️ 2. <mark class="highlight-teal">Normalized</mark> 2nd Derivative Scale Space</h3><hr id="25aa8dcb-188f-40e9-80c1-5deabdd36a25"/><figure id="51f8590f-9401-417a-854e-ddcc1ad6663f" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.35.05_PM.png"><img style="width:576px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.35.05_PM.png"/></a><figcaption>because we HAD a <code>σ^2</code> before multiplying that is polling everything DOWN</figcaption></figure><p id="bb5f2c85-bb05-403a-8425-bcedff893ee5" class="">
+</p><h3 id="6779ba54-9971-4dbb-8426-790f52c4dc1f" class="">⭐️ 3. <mark class="highlight-teal">Normalized</mark> 2nd Derivative Scale Space for “<mark class="highlight-orange">box</mark>” image</h3><hr id="c5c22650-d79a-4aa0-bb5f-3c4379fb7503"/><p id="a6577b57-bc68-4198-a780-ee20570fa30c" class="">
+</p><figure id="e9469500-a352-498c-b4bf-5e07f0d8c6f5" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.35.20_PM.png"><img style="width:576px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-09-22_at_12.35.20_PM.png"/></a></figure><figure id="d869474a-dda1-4a50-8d77-fb5cc767a730" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.03.06_AM.png"><img style="width:576px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.03.06_AM.png"/></a><figcaption>reflective symmetry</figcaption></figure><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="a5d3db68-7ef3-4652-a1dd-7ee7e718a83d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong><mark class="highlight-gray">has minimum because </mark></strong><strong><mark class="highlight-gray"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-gray"> </mark></strong><strong><mark class="highlight-gray"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mi>w</mi><mi>i</mi><mi>d</mi><mi>t</mi><mi>h</mi><mi mathvariant="normal">/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">=width/2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span><span class="mord mathnormal">h</span><span class="mord">/2</span></span></span></span></span><span>﻿</span></span></mark></strong><ul id="44063cc0-58ce-4edc-949a-08e54b3b2e78" class="bulleted-list"><li style="list-style-type:disc">this is called a TRUE MINIMUM<ul id="14df18d5-a288-44c1-b124-3621aa71767a" class="bulleted-list"><li style="list-style-type:circle"><strong><mark class="highlight-orange_background">TRUE MINIMUM: minimum in both x &amp; σ</mark></strong></li></ul></li></ul></div></figure><p id="196e1295-4e2e-47e2-92ce-b9702105e7ec" class="">
+</p><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="197c12a9-7059-4e36-a2e8-972b8a2a7a3d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">in theory we don’t know the sizes of fetaures BUT when minimum AT certain scale → associate with this <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></span><span>﻿</span></span></div></figure><p id="a1274bcc-8d32-42a2-8d8f-4828d8910889" class="">
+</p><h2 id="649c46d3-d097-45f4-ab4f-86f31b499fd0" class="">EX. Gaussian Sacle Space for “box”</h2><hr id="edbb9b06-f0f3-41ad-bf47-af31cb77f966"/><p id="a2daefc4-8b44-41fa-b343-0955b1d74d4a" class="">
+</p><div id="e2823cb8-a1a9-4452-9a04-c5dabaecf47f" class="column-list"><div id="cf3ca10c-d156-4411-ac80-7d9cb4e7aaf6" style="width:50%" class="column"><figure id="a43778bc-415d-497e-b0cf-a8082459f964" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.04.51_AM.png"><img style="width:782px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.04.51_AM.png"/></a></figure></div><div id="9d327066-aeca-43f0-9cfb-f323bb37b624" style="width:50%" class="column"><figure id="28b863ad-838b-4a47-a68f-7c22fb55cd58" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.04.59_AM.png"><img style="width:762px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.04.59_AM.png"/></a></figure></div></div><div id="defcecb2-ac74-4f77-bcab-e0f0eb5b368e" class="column-list"><div id="7814ac6c-675d-46d1-b771-bd79f57b772a" style="width:50%" class="column"><figure id="9d412abd-2d3a-4a13-934c-87f2a17547da" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.05.07_AM.png"><img style="width:736px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.05.07_AM.png"/></a></figure></div><div id="5f5d2214-3e47-48e8-9739-02010daad1ba" style="width:50%" class="column"><figure id="064bd68d-9adb-430c-9b33-53dae6a0bc31" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.06.22_AM.png"><img style="width:726px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_5.06.22_AM.png"/></a></figure></div></div><p id="e29e866c-16b6-4ae9-b279-b8fdf465649d" class="">
+</p><p id="9b9773ac-d055-4981-8d7c-331d10144863" class="">
+</p><h1 id="7b177328-1997-424c-82e0-b405ad54c7ea" class="">Box(Blob) Detector in scale space</h1><hr id="f0646721-b210-4809-a900-82236bf1c2ff"/><ul id="8624a60c-e22e-409c-9d14-cc924ae80930" class="bulleted-list"><li style="list-style-type:disc"><strong>Filter with Laplacian of a Gaussian and look for local maxima or minima in (𝑥, 𝑦, 𝜎) scale space.</strong></li></ul><ul id="ff64f7d1-5412-4e8b-9bb3-df02ca789bbd" class="block-color-orange_background bulleted-list"><li style="list-style-type:disc"><mark class="highlight-gray"><strong><em>talk more about this after learning about SIFT feature </em></strong></mark></li></ul><p id="02ed25b1-c8d2-463f-a8e5-831eb8f7cb50" class="">
+</p><h1 id="d4102001-11b3-441c-b78c-09cbe53f1638" class="">Gaussian Properties</h1><hr id="ac2d382c-06c1-4e0b-bae3-dea83b79ded7"/><h2 id="5b221e19-9737-45df-b768-8708e1082e55" class="">1. Separability</h2><p id="aa9be03b-3033-4b72-b0e5-43e9eec8ae03" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>s</mi><mi>m</mi><mi>o</mi><mi>o</mi><mi>t</mi><mi>h</mi></mrow></msub><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo><mo>=</mo><mi>G</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">I_{smooth}(x,y) = G(x,y,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">s</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">oo</span><span class="mord mathnormal mtight">t</span><span class="mord mathnormal mtight">h</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">G</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span></span></span></span></span><span>﻿</span></span>𝛔) * <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><p id="04d83b06-98f3-46ab-b7bc-83c8f5508a2d" class="">
+</p><h2 id="e42d6bc3-def5-4676-a7f2-cc2861c5f6b3" class="">2. Semi-group property</h2><p id="8037c9ac-7512-4847-a690-22be6f7a9a34" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>3</mn></msub><mo>=</mo><msub><mi>σ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>σ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">σ _3 = σ _1+σ _2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><ul id="a943db09-3770-4088-8f13-c119c93094d9" class="bulleted-list"><li style="list-style-type:disc">can be accomplished by 2 successful convolutions<ul id="744ecc92-58d4-4a68-b628-5222f1b2bd6a" class="bulleted-list"><li style="list-style-type:circle">first convolve with <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">σ _1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><ul id="2ee32d4d-fa83-44bb-9abc-d5f1ba600216" class="bulleted-list"><li style="list-style-type:circle">then take result and convolve with <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">σ_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><figure id="7401e099-ae4f-415d-a1de-9ea7121269d0" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/IMG_9363.heic"><img src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/IMG_9363.heic"/></a></figure></li></ul></li></ul><p id="f4265974-89da-4e81-9f3c-8b9bf952fa10" class="">
+</p><p id="e2ac5d2f-a741-4ba1-876f-237f9dac77b1" class="block-color-teal_background">
+</p><p id="fabf335b-cc27-45bb-80f5-c330668bf9e2" class="block-color-teal"><span style="border-bottom:0.05em solid"><strong>Gaussian Properties</strong></span>:</p><ol type="1" id="7743d05a-b861-4eca-8717-3c422616230b" class="block-color-teal numbered-list" start="1"><li>in 3D gaussian, we can convolve with each row (nice property of gaussian)</li></ol><ol type="1" id="c4ff3354-adbf-4f34-9419-ab818f90975b" class="block-color-teal numbered-list" start="2"><li>semi group property: <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong> by 2 successive convolution</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><ul id="3e733a5d-7369-4637-8d1c-1f80d0622fb0" class="bulleted-list"><li style="list-style-type:disc">wanna convolve with <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">\sigma_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msub><mi>σ</mi><mn>1</mn></msub><mo>+</mo><msub><mi>σ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">=\sigma_1+\sigma_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.73333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="befbe021-ea7f-4ec6-af6f-83f04a9cbc16" class="bulleted-list"><li style="list-style-type:circle">can convolve with <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\sigma_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> first, then <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>σ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\sigma_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><figure id="1e332ab5-2e12-4323-ad02-0ffd7b7dafbe" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_4.21.53_AM.png"><img style="width:1032px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_4.21.53_AM.png"/></a></figure></li></ul></li></ol><p id="bbdb1221-8b83-473b-888b-c003bb8f7868" class="block-color-teal_background">
+</p><p id="15c3c693-9f9f-4bc1-937c-40581eb92bd5" class="">
+</p><p id="ecaba272-fb1d-49ef-be9e-0dd8cca48f45" class="">
+</p><p id="070c7441-dde3-43ca-a066-d5444f6905d6" class="">
+</p><p id="6a2f9e5f-8d85-46db-8ee1-d36cad8e31a7" class="">
+</p><p id="e4cd67b3-d24a-48eb-a7af-ea53911444c2" class="">
+</p><h3 id="c7088512-cf3f-480e-aab8-c139048e7b37" class="">Connection: Gaussian Blurring VS. HEAT Equation</h3><blockquote id="c86469bb-2209-4f3a-b8cc-e9a7532fb61e" class=""><mark class="highlight-teal_background">HEAT equation = Laplace’s Equation = isotropic diffusion = </mark><mark class="highlight-teal_background"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>I</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><mo>+</mo><msub><mi>I</mi><mrow><mi>y</mi><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">I_{xx}+I_{yy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">xx</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">yy</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark></blockquote><p id="6288b7cf-4d56-4df8-9656-39358e9a7b8a" class=""> <mark class="highlight-purple">Q: gaussian blurring &amp; running HEAT equation on an image? what’s connection?</mark></p><p id="636c1f20-8081-438a-bd2b-4fd4a8615363" class="">A: they are the <strong>SAME!!</strong></p><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="046d2303-08a0-424f-8cc6-83eb4bb81f55"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">convolving with a Gaussian having standard deviation <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex"> σ</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></span><span>﻿</span></span> <p id="bc2299ae-eed5-4d1b-bd9a-5c830b81965d" class="">== running the above heat equation for a total time given by <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>2</mn><msup><mi>σ</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">1/2σ^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord">1/2</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p></div></figure><p id="d65f419a-e9c6-4fb3-9b11-d42a52f711c0" class="">
+</p><ul id="87c2e8f6-5916-42ae-8af4-73fce039fc32" class="bulleted-list"><li style="list-style-type:disc">think of it as a new function as a new variable <code>t</code></li></ul><ul id="411fd2d6-0c24-4013-b94c-f361cea5d3e5" class="bulleted-list"><li style="list-style-type:disc"><strong>heat equation ⬇️</strong><ul id="8be224fe-24fb-429c-b8ea-2ad869b06259" class="bulleted-list"><li style="list-style-type:circle">if running this <strong>overtime</strong>, exactly same as gaussian blurring!!!<figure id="c8aa4c21-4f1c-4d36-94f6-b4cd4983382a" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/IMG_9365.heic"><img src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/IMG_9365.heic"/></a></figure><p id="c7520f51-b002-4ecb-9275-0590135a5c63" class="">
+</p><p id="aa648f0e-7738-4fee-af66-135a27921ec5" class="">
+</p><p id="5c2f9128-f633-4fe6-bfd6-61d8e8cf1fb3" class="">
+</p></li></ul></li></ul><p id="05a8bf57-a6bf-4121-b600-116f6250dcad" class="">
+</p><p id="ef8c066c-c853-4337-be6f-e980292429ea" class="">
+</p><h1 id="84bc9481-0e4c-4c51-a8d9-da8ec59d0ddd" class="block-color-purple">ASIDE: Isotropic VS. Anisotropic</h1><hr id="a6802703-f3f0-4e59-a9c8-107d4ae2002d"/><h3 id="138aa410-96a5-491f-97db-dca2ae457736" class="block-color-purple"><span style="border-bottom:0.05em solid">HEAT equation VS. Perona-Malik Anisotropic Diffusion</span></h3><ul id="4a0fd726-10ca-43b2-ade3-bc226f384514" class="bulleted-list"><li style="list-style-type:disc">when gradient magnitude is STRONG, meaning that there is a edge<ul id="ef6c30ba-8da3-404c-bc3c-7c8154d22732" class="bulleted-list"><li style="list-style-type:circle">we don’t blur that part</li></ul></li></ul><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="bed970f7-00ad-4f9a-8d57-976c702fde97"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">in <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>anisotropic,</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> before we take 2nd derivative, we have an EXTRA STEP<ul id="310682b5-5325-44d3-9aff-740f67d8c390" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-purple"><strong>EXTRA STEP → if edge-like, we preserve</strong></mark></li></ul></div></figure><figure id="f3cde41d-2088-40a2-a86c-8c074b6725ed" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.12.23_PM.png"><img style="width:384px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.12.23_PM.png"/></a></figure><figure id="07d8c367-cca7-4bf2-82fd-632f452987a9" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.11.10_PM.png"><img style="width:528px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.11.10_PM.png"/></a></figure><p id="0277a64b-945c-4df3-aaec-dd8ddf9ef114" class="">
+</p><p id="90eed51b-5faa-4bd6-a9e3-71886fd3b5bb" class="">→  <mark class="highlight-purple"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>about the </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark><mark class="highlight-purple"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi mathvariant="normal">∣</mi><mtext>▽</mtext><mi>I</mi><mi mathvariant="normal">∣</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(|▽I|)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord">∣▽</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">∣</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark><mark class="highlight-purple"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong> ⬇️</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark></p><figure id="b41ad3ff-3fa9-4a53-93b8-3cb9d55e7728" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.14.46_PM.png"><img style="width:526px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.14.46_PM.png"/></a></figure><p id="ce327589-6b59-42cd-af82-2e4e611dd7e1" class="">
+</p><figure id="519e669c-cbb1-48cf-96ed-cd0cb7af1a07" class="image"><a href="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.16.02_PM.png"><img style="width:1668px" src="7%20-%20Gaussian(Linear)%20Scale%20Spaces%2045ad603ac35c4dfcad4758bcc4cd5a7a/Screen_Shot_2022-10-22_at_8.16.02_PM.png"/></a></figure><p id="1aee3632-fd30-4bc9-92a8-0f43ab9cf6b8" class="">
+</p><p id="c4b8e8ec-de84-46b9-b0d0-2944ee955eaa" class="">
+</p><p id="5eae6947-8b5e-473f-a1fe-ae0abcff6147" class="">
+</p><h3 id="8f06dafb-022b-4441-b9d3-a85ea8704191" class=""><mark class="highlight-purple">Anisotropic IN-CLASS NOTES</mark></h3><hr id="b961440b-533b-4108-9678-a2608d38ed0b"/><p id="1cecef39-5159-44b6-9d74-b9c5888b9aeb" class=""><strong>HEAT diffusion equation:</strong></p><ul id="072be974-e0fc-4953-b898-e5f26fde07a1" class="bulleted-list"><li style="list-style-type:disc">first derivative is <ul id="50af2f5e-b80a-4633-a932-4e7a946eb7b1" class="bulleted-list"><li style="list-style-type:circle"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>I</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>t</mi><mo>=</mo><mtext>△</mtext><mi>I</mi></mrow><annotation encoding="application/x-tex">dI/dt =△I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord">△</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="01682942-237f-4c89-89fa-f406fd32a18d" class="bulleted-list"><li style="list-style-type:circle">gaussian blurring</li></ul></li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="d188bc1e-141f-4d32-b837-b0281355fcdc"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">because of nice property from derivative → <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>i</mi><mi>v</mi><mo stretchy="false">(</mo><mtext>▽</mtext><mi>I</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mi>I</mi><mrow><mi>x</mi><mi>x</mi></mrow></msub><mo>+</mo><msub><mi>I</mi><mrow><mi>y</mi><mi>y</mi></mrow></msub></mrow><annotation encoding="application/x-tex">div(▽I)=I_{xx}+I_{yy}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord">▽</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">xx</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">yy</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></div></figure><p id="c64c0847-70aa-4d2d-8ffe-8e8f0454361e" class=""><strong>➡️ Now WE ADD IN SOMETHING, to find the change</strong></p><p id="7dea6dc4-4583-4d60-a9b7-f10df9f71250" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>I</mi><mi mathvariant="normal">/</mi><mi>d</mi><mi>t</mi><mo>=</mo><mi>d</mi><mi>i</mi><mi>v</mi><mo stretchy="false">(</mo><mi>c</mi><mtext>▽</mtext><mi>I</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">dI/dt = div(c▽I)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">/</span><span class="mord mathnormal">d</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mopen">(</span><span class="mord mathnormal">c</span><span class="mord">▽</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="dd246c1f-3e12-48a4-87b5-ac3d380efeca"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong><mark class="highlight-yellow">c is inversely proportional to gradient.        </mark></strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>∝</mo><mi>I</mi><mi mathvariant="normal">/</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi><mtext>▽</mtext><mi>I</mi><mi mathvariant="normal">∣</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">c∝I/||▽I||</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">c</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∝</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">/∣∣▽</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord">∣∣</span></span></span></span></span><span>﻿</span></span></strong></div></figure><p id="1f6d268f-72b9-484c-ae7d-54b2c5c5c4ad" class="">
+</p><p id="a91bdd0f-e7fb-4320-a965-797aac4e1f4a" class="">take equation and add spatial constant</p><p id="6a3acf85-4a11-4395-958b-6526fc05ce56" class="">
+</p><h3 id="146a00ee-20e1-4e18-a69a-2ff5249af762" class="">Geometric HEAT Equation (non-linear)</h3><blockquote id="46297648-86fb-48d6-8746-d9fadaaf9ab1" class=""><mark class="highlight-blue"><strong>same as the diffusion eq, can also make the image anisotropic (blur without blurring the edges)</strong></mark></blockquote><ul id="5abdb1c2-795c-49d0-ad2d-dd7b083f2e7b" class="bulleted-list"><li style="list-style-type:disc">blur using local estimates of curvature</li></ul><p id="97cb7410-13ee-4717-9e9e-8f3e84b7c006" class="">geometric HEAT equation</p><ul id="3229404f-d0f6-4382-97fd-f42783ea3ea1" class="bulleted-list"><li style="list-style-type:disc">like HEAT but blur, using local estimate of</li></ul><ul id="1d39dc03-7050-470a-a271-cb23474cc355" class="bulleted-list"><li style="list-style-type:disc">like corna-molik equation</li></ul><ul id="ec3d0979-6031-479a-a4a1-9c363cd22db1" class="bulleted-list"><li style="list-style-type:disc">every level line of constant intensity, moving by curvature <ul id="a365704b-738d-45c1-82c8-abde8ce1b6dd" class="bulleted-list"><li style="list-style-type:circle">→ high curvature regions move a lot</li></ul><ul id="ee70711e-b9e4-4918-9530-ae98ac73abed" class="bulleted-list"><li style="list-style-type:circle">→ low curvature regions are not moving at all</li></ul></li></ul><p id="a5fa048c-2ed8-465d-abe7-0b11b1113075" class="">
+</p><p id="99cac609-d657-457f-9e4c-1f547ab6f376" class="">
+</p><h1 id="929c9451-08ee-4d0c-9d55-2b1eb6244e0a" class="">More on Gaussian Pyramid &amp; Laplacian Pyramid</h1><hr id="a0e534f7-ec71-49fa-a8e3-c841d90aecc7"/><h2 id="1634ab8f-a209-4843-9a8c-8e81b3ff3a56" class="">Gaussian Pyramid</h2><ul id="bf38180a-9ba3-4973-a008-da3ae7ff8723" class="bulleted-list"><li style="list-style-type:disc"><strong><strong><strong>bottom → top: </strong></strong></strong>each level is created by smoothing the previous one by convolving with a Gaussian, and then sampling every second pixel in each direction.</li></ul><ul id="273ea5a9-8eaf-4e5f-a028-f3e5ec94d897" class="bulleted-list"><li style="list-style-type:disc"><strong><strong><strong><strong><strong><strong><strong><strong><strong>top → bottom: </strong></strong></strong></strong></strong></strong></strong></strong></strong><code>`we need INTERPOLATION`</code> , the restored level can then be compared with the original level, to assess their difference</li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="9d26dec5-99d6-49ca-a59b-8689b94e61e9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">each new level is one quarter the size of the previous level</div></figure><h2 id="3f660fc3-120e-4343-b60b-5d49d4c06d24" class="">Laplacian Pyramid</h2><ul id="d57c33c1-ddd9-44e5-ac6b-cd45d35d9ef4" class="bulleted-list"><li style="list-style-type:disc">instead of storing the smoothed images, we store only the difference between the levels	<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mi>I</mi></msub></mrow><annotation encoding="application/x-tex">g_I</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>g</mi><mrow><mi>I</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">g_{I+1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.638891em;vertical-align:-0.208331em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mbin mtight">+</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><ul id="b9207a9f-c7c9-4360-b78f-fbca8e266430" class="bulleted-list"><li style="list-style-type:disc">The associated Laplacian pyramid, which is the difference between a level and its reconstruction from the next higher level by interpolation and upsampling</li></ul></div></article></body></html>

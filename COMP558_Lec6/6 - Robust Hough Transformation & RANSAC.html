@@ -1,0 +1,705 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>6 - Robust: Hough Transformation &amp; RANSAC</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2537ca40-1978-4505-87c6-b248c0893882" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">6 - Robust: Hough Transformation &amp; RANSAC</h1></header><div class="page-body"><p id="937d342e-c9d7-4310-b681-a0edaa6f2795" class=""><time>@September 20, 2022</time> </p><p id="8fd3166e-d4f8-4ab2-8dc6-10526d9f9bed" class="">
+</p><nav id="661e638f-e5cb-49e5-b9be-8aeb9598d771" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#02a3726d-2791-4675-84f1-5dd3265cec51"><mark class="highlight-gray"><strong>MOTIVATION</strong></mark><strong>: How to reduce sensitivity to outliers?</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#57810ec9-f798-4238-9eb8-15cfd8c612ba">1. “Robust statistics”</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ce19ef93-2da0-40c6-98ef-790aae70fd96">2. Hough Transform (1962)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#099e8e93-fb18-4142-84da-1e7d1ffa363f">ex 1. points on line</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5f737336-9022-40fd-b251-ae8e5b4238b6">ex 2. points on line + points NOT on line</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3c821b8d-c477-45db-b465-46521a167b4f">ex 3: points on 2 lines</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#be46775e-655f-4e15-acac-336bcfc8ca37">Discussion: HOUGH</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cc26ef43-0053-4433-a305-8c433a66958f">Application of Hough: Vanishing Point Detection</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#484eb991-08e7-4397-848f-6c7656adf9cc">3. RANSAC (Random Sample Consensus)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cda5e63e-9766-4c2d-9e02-32e333b699e8">ex 1. fitting a line thru 2 points</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4532948c-863b-4546-80e4-f519b95eaebd"><mark class="highlight-purple">RANSAC Algorithm: ✅</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a41405a7-596a-475c-9ebf-4272b656d385">Application of RANSAC: Vanishing Point Detection</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#bede8620-626a-44c8-b63a-885b10e8bef4">RANSAC is a probabilistic model</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#52b48cee-304d-4a30-807a-f7c70b459fb2"><mark class="highlight-teal">RANSAC algorithm parameters (”secret sauce”)</mark></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#98bc07fc-6aa9-40f2-a3d3-7a25da0f3ffe"><mark class="highlight-gray">AFTER CLASS EXTRA…</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d2348c68-1176-4d86-ac45-837307837ec4">youtube….</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c353e5a0-9523-4ff8-b7f7-762032f7c22b">Issues of HOUGH: </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#4363a874-4929-476c-96da-ff75345a1cad">Ex. finding circle using HOUGH</a></div></nav><p id="c6a87556-23da-48a2-a170-7e6a9f2829e4" class="">
+</p><p id="509fed00-60c4-49d9-95d5-9030526e5ba8" class="">
+</p><p id="545556b5-6c58-4bdd-95d0-9645f2d140d1" class=""><strong>Recall last lec.. least squares…..</strong></p><p id="fffc911a-1fbb-4024-abdc-bb8845355054" class=""><mark class="highlight-blue_background"><strong>LIMITATION OF LEAST SQUARES METHODS:</strong></mark></p><div id="71c3f5c1-e14b-4f14-9961-d0e14c87e708" class="column-list"><div id="fe0052ad-0184-4382-99c0-7a160c75746e" style="width:25%" class="column"><figure id="93ca82fb-cb7b-4590-93d9-a1993fea2bf0" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_5.09.21_AM.png"><img style="width:646px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_5.09.21_AM.png"/></a></figure></div><div id="2600809e-4857-4c8b-877f-8cf2fb0ceb08" style="width:75%" class="column"><figure id="f88e04fb-b135-4a30-889b-8cb151f86d8b" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_5.10.35_AM.png"><img style="width:1220px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_5.10.35_AM.png"/></a></figure></div></div><p id="2ddf735b-04fe-4099-a2e8-87229c339edf" class="">
+</p><h1 id="02a3726d-2791-4675-84f1-5dd3265cec51" class=""><mark class="highlight-gray"><strong>MOTIVATION</strong></mark><strong>: How to reduce sensitivity to outliers?</strong></h1><h1 id="57810ec9-f798-4238-9eb8-15cfd8c612ba" class="">1. “Robust statistics”</h1><blockquote id="2e9898fc-86a3-4394-8260-85dc1e3f17ab" class=""><mark class="highlight-purple"><strong>don’t penalize so heavily for large distance</strong></mark></blockquote><ul id="5bfe35d0-ac99-46fe-866a-7ea748ec595f" class="bulleted-list"><li style="list-style-type:disc">use dist rather than distance squared (L1 rather than L2)</li></ul><ul id="b0abbb64-18ef-45a2-a934-12f4c472ca45" class="bulleted-list"><li style="list-style-type:disc">beyond certain dist, make error penalty <em><strong>constant </strong></em><strong>☺️</strong></li></ul><p id="a87c968e-55c8-4919-afa6-79c0ed8927b4" class=""><div class="indented"><figure id="d76583f4-4449-4b68-b8fa-3220dc97b151" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_4.40.32_PM.png"><img style="width:1458px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_4.40.32_PM.png"/></a></figure></div></p><div id="4579f733-0cea-4f4b-937f-21648d01f82b" class="column-list"><div id="82ba290d-9388-4e28-855b-b780924ec697" style="width:56.25%" class="column"><h1 id="ce19ef93-2da0-40c6-98ef-790aae70fd96" class="">2. Hough Transform (1962)</h1><blockquote id="6bc70196-a844-4a64-ab66-84ffeae53113" class="">for each pt, <mark class="highlight-purple"><strong>vote for </strong></mark><span style="border-bottom:0.05em solid"><mark class="highlight-teal"><strong>all the lines</strong></mark></span><mark class="highlight-purple"><strong> that pass near the point</strong></mark></blockquote><ul id="3d2507c2-aa47-42e5-b7eb-53d947934229" class="bulleted-list"><li style="list-style-type:disc">define a <strong>discrete</strong> set of candiates lines <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(r,\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span><figure id="30c3d1d5-2a20-45f1-b265-e8a204c80d1c" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.16.17_PM.png"><img style="width:192px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.16.17_PM.png"/></a></figure></li></ul></div><div id="06cd16e8-4dbf-4d1d-9f86-88b96370397d" style="width:43.75%" class="column"><figure id="38d3d08f-befd-4065-8c7b-059f1b41cbdc" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.14.05_PM.png"><img style="width:628px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.14.05_PM.png"/></a></figure><p id="abf70f5f-0dc0-423a-954c-5e6ee2b7fc79" class="">
+</p></div></div><ul id="2aa7283e-d9d8-4ed6-834f-2bb8d1f9c4ca" class="bulleted-list"><li style="list-style-type:disc">for each sample point (<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x_i, y_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span><ul id="bb2bb9de-bd89-491a-bab1-c3b898c61f06" class="bulleted-list"><li style="list-style-type:circle">for each line <mark class="highlight-teal"><strong>near</strong></mark> that point, parameterized <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(r,\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> cast one vote for this line</li></ul></li></ul><ul id="c8ecb9e2-76f1-43a9-8234-e18ee7a4e03d" class="bulleted-list"><li style="list-style-type:disc">return the line <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(r,\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> that has<strong> MAXIMUM COUNT</strong></li></ul><p id="a051fbeb-ab07-4ddd-bf9c-8127aab76a64" class="">
+</p><p id="74746a59-d178-4a0f-a9c1-26df07a3d8c3" class="block-color-brown_background">We could penalize points by their squared distance from the line (or their absolute distance) up to some distance, say <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>m</mi><mi>a</mi><mi>x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">d_{max}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">ma</span><span class="mord mathnormal mtight">x</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> </p><h2 id="099e8e93-fb18-4142-84da-1e7d1ffa363f" class="">ex 1. points on line</h2><hr id="aeb8e970-d779-413e-aeb1-c907fb800288"/><p id="d35f71cd-ecd0-4868-a900-5ff40f674a1a" class="">
+</p><div id="2e05b5c0-ea47-4a39-abf5-e0e20eb5a231" class="column-list"><div id="184ed34c-02ed-49ba-94b3-a6c0b53d7db7" style="width:50%" class="column"><figure id="9aa86286-4f0e-4901-8526-2ba0f461c4cb" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.25.09_PM.png"><img style="width:1068px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.25.09_PM.png"/></a></figure></div><div id="369c1ece-3653-4807-bc11-ce325fba079a" style="width:50%" class="column"><figure id="b7967b5c-e693-4c97-9c8e-90ff1990497b" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.25.40_PM.png"><img style="width:1174px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.25.40_PM.png"/></a></figure></div></div><ul id="c32c2e78-4d09-4e73-b85a-4920bccb02e3" class="bulleted-list"><li style="list-style-type:disc">a set of points that fall on a line gives 2 H peaks<ul id="25a33f7c-244b-40cc-91c8-20fda49bdc83" class="bulleted-list"><li style="list-style-type:circle">since <strong><mark class="highlight-pink"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo stretchy="false">(</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo stretchy="false">)</mo><mo>=</mo><mi>H</mi><mo stretchy="false">(</mo><mo>−</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo>+</mo><mi>π</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">H(r,\theta)=H(-r,\theta+\pi)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-pink"> </mark></strong>where H is vote count</li></ul></li></ul><p id="46e020be-70f0-44d4-ac48-8aac58808628" class=""> </p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="b9755be8-151c-4342-beb3-15a7be46914f"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>CHOICE 1:</strong> r can be positive or negative<ul id="f41e4776-023f-4083-b82a-233660f1e8f4" class="bulleted-list"><li style="list-style-type:disc">we can ignore negative ones</li></ul><p id="33ff7109-ebf5-4f76-9153-5948f9920c55" class="">
+</p><p id="213994d0-3673-4715-b272-fe41f4750995" class=""><strong>CHOICE 2: alternatively, let </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span></span></span></span></span><span>﻿</span></span></strong><strong> = [0, </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>π</mi></mrow><annotation encoding="application/x-tex">\pi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">π</span></span></span></span></span><span>﻿</span></span></strong><strong>) ONLY, and allow both positive &amp; negative </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span><span>﻿</span></span></strong></p></div></figure><p id="e63eba8d-7a50-4066-87cf-4f23ac00f8f8" class="">
+</p><h2 id="5f737336-9022-40fd-b251-ae8e5b4238b6" class="">ex 2. points on line + points NOT on line</h2><hr id="a527692b-bb0f-4e99-9049-8340436b4d85"/><div id="f48c42fa-80ba-48e0-bf27-278b2d908be2" class="column-list"><div id="50fef177-4ed9-454b-bdbe-26111f37dc37" style="width:50%" class="column"><figure id="43255b6a-6907-4dc3-8855-312ba8bc22c0" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.33.16_PM.png"><img style="width:1186px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.33.16_PM.png"/></a></figure></div><div id="124dd129-f2cd-46f0-b7c3-775976a2a9ae" style="width:50%" class="column"><figure id="099a876e-39ff-4f2a-984a-a35d04cf0f38" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.33.26_PM.png"><img style="width:1150px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.33.26_PM.png"/></a></figure></div></div><ul id="5c0e026c-72ac-4058-8786-5b04ddc6ca12" class="bulleted-list"><li style="list-style-type:disc">noisy data -&gt; lead to this kind of histogram
+-&gt; blur the histogram</li></ul><ul id="8e520012-d004-437e-96c9-ea9e30a92a70" class="bulleted-list"><li style="list-style-type:disc">try to find peaks (saying they get MOST supports)</li></ul><p id="fcbbf781-1bb0-42d6-8ab0-f43ca498a677" class="">
+</p><h2 id="3c821b8d-c477-45db-b465-46521a167b4f" class="">ex 3: points on 2 lines</h2><hr id="63905be3-97df-429f-900b-a57c0d4221c8"/><p id="9f532308-8fcf-4c72-8266-a1c49ed13935" class="">
+</p><p id="b404246c-ec22-43b9-aa96-a3c0c1fb141e" class="">
+</p><div id="0c3e1420-9c46-4b84-8340-92777a54d56b" class="column-list"><div id="3fce992e-aa92-407b-a1dd-570860e531f7" style="width:50%" class="column"><figure id="3d4b7b39-52e5-494c-9b0f-c9aeaa64e689" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.34.08_PM.png"><img style="width:830px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.34.08_PM.png"/></a></figure></div><div id="a22a7927-1983-46aa-9735-b84bfa9219ff" style="width:50%" class="column"><figure id="8cf5b0b0-6165-4eae-8a4c-0ef5ccdc88b8" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.34.40_PM.png"><img style="width:1156px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.34.40_PM.png"/></a></figure><p id="a78847df-9d5d-415a-b823-b930015f95a6" class="">
+</p></div></div><p id="3a662720-f385-4b58-a9b7-2044291517d1" class="">NOTE: relative height of the peak →</p><ul id="75db2f86-0048-453b-b748-f33cb6de659f" class="bulleted-list"><li style="list-style-type:disc">depends on the <strong>number of points on each line</strong><ul id="6e13897b-369e-4fd1-bda3-613f26a96b42" class="bulleted-list"><li style="list-style-type:circle">more points, higher peak!!</li></ul></li></ul><p id="e0e31856-d3e3-49c7-9379-68afd15276bc" class="">
+</p><p id="6dcaeda1-a47c-4c07-87e8-82ab65d27c0b" class="">
+</p><h2 id="be46775e-655f-4e15-acac-336bcfc8ca37" class="">Discussion: HOUGH</h2><hr id="3cad8f7a-367e-4ba5-90e4-f8038eaf1e34"/><ul id="f9c5aa32-4b8f-4e08-b741-e6e6fba8d89b" class="bulleted-list"><li style="list-style-type:disc">when many lines are present, hard to detect peak<ul id="e24d66cf-7a3b-4c25-b550-83f695cef4d6" class="bulleted-list"><li style="list-style-type:circle">can smooth the voting map to <strong><mark class="highlight-yellow">remove this “noise”</mark></strong></li></ul></li></ul><ul id="e5ccbc99-9c85-4609-9c86-269e18ae93c9" class="bulleted-list"><li style="list-style-type:disc">how to choose <strong>bin size for radius &amp; angle</strong> of the lines<ul id="da695e81-ec4b-447a-bb62-93c5738ecbe3" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-yellow"><em>speed/acuracy tradeoff ☹️☹️</em></mark></li></ul></li></ul><p id="bf007c36-ab85-4450-88db-d74a11623f0e" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="daecab2a-63a0-479d-bf50-ba202e98425f"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Exercise: Can you think of another way to vote for lines, given a set of points in the image ?</strong><p id="5f469df5-e627-449e-82a1-c18583e365af" class=""><strong>Answer: Take pairs of points. Each pair defines a line, namely the unique line passing through those points. Vote for the line. So the total number of votes will be the number of pairs of points.</strong></p></div></figure><p id="35ff9f36-4791-462a-ac5a-fd0a573294cc" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="28101d7c-04f4-4772-92d8-3312cb50b968"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">The advantage of Hough:<p id="1e9154af-d981-45ad-bd06-0dfd1e94b5cf" class="">the outliers have <span style="border-bottom:0.05em solid">very little effect</span> on the estimate. 👍👍</p><ul id="cd20add1-6031-468e-b091-9946972d0e6d" class="bulleted-list"><li style="list-style-type:disc">as long as outliers don’r conspire to vote on some other model, the votes of the outliers will be spread out over the (r, θ) space</li></ul></div></figure><p id="74b0eb9a-b7f7-4239-a5ca-13bb7fc97bd6" class="">
+</p><p id="d78f728c-8bf4-4e29-8b2b-08c6a5f9f2fc" class="">
+</p><h2 id="cc26ef43-0053-4433-a305-8c433a66958f" class="">Application of Hough: Vanishing Point Detection</h2><hr id="2932eb91-ead2-4e86-918e-eb27b51ee92d"/><ul id="7a903c01-44b7-44ba-bcb3-e6862dca96c9" class="bulleted-list"><li style="list-style-type:disc">suppose a set of edge estimates <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>i</mi></msub><mo separator="true">,</mo><msub><mi>θ</mi><mi>i</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_i,y_i,\theta_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>, want estimate vanishing point <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>v</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>v</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_v,y_v)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><blockquote id="012560ec-64e7-41d4-9dd7-ffeb0fea3302" class=""><mark class="highlight-gray">Last lec, learned how to do with least squares</mark></blockquote><figure id="98bce770-8087-4eab-9e89-c00c8bc8e812" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.42.45_PM.png"><img style="width:1302px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.42.45_PM.png"/></a></figure><figure id="b4e35b90-de6e-474f-9170-51a19acf93f5" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.43.31_PM.png"><img style="width:1244px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.43.31_PM.png"/></a></figure><p id="f2f7cc11-ddc6-4fcb-b925-d7073ddc22c3" class="">easy, <code>x y</code> discrete space → for each edge(line), vote for all the points on the line → return point with max vote</p><p id="225d700f-4df9-44df-b22f-125d4052205a" class="">
+</p><h1 id="484eb991-08e7-4397-848f-6c7656adf9cc" class="">3. RANSAC (Random Sample Consensus)</h1><p id="6fa0f423-054b-48cf-afef-26a8dc163869" class=""><em>by Fischler and Bolles</em></p><hr id="c7738b56-edcf-4213-a2a0-91503edf177e"/><figure id="dc6cea79-0b9c-41d0-b0eb-d8c728ecc465" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.45.12_PM.png"><img style="width:576px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.45.12_PM.png"/></a></figure><div id="189b2c84-0ea1-4e6c-aef4-c1b099e3c7cf" class="column-list"><div id="c2404735-6c5b-4d74-ab87-61f5d7aeb185" style="width:75%" class="column"><p id="32fc94d0-7a7b-4301-9ee8-2e4e90f0cf99" class="block-color-blue_background"><mark class="highlight-pink"><strong>RANSAC idea:</strong></mark><div class="indented"><p id="307e3331-b04b-4cfd-ace3-807ce4c3290e" class=""><mark class="highlight-pink"><strong> randomly pick 2 diff points &amp; fit a line to the 2 pts</strong></mark></p><p id="c1b9748d-e138-4ec0-952e-c18d6831e353" class="">Q: then…. When can say that we have a good line model?</p><p id="c6f6188e-a1e4-4c41-a1b4-8eedfaedc72f" class="">A: good if <strong>many other points lie near</strong></p></div></p><p id="b79c538b-46d2-43fb-9ec7-0a3280d28597" class="">
+</p><p id="b45f261d-551a-4d1f-81a0-ca706923c5dc" class="">
+</p></div><div id="713721fe-2e13-4fbe-9006-5c8b1067e098" style="width:25%" class="column"><figure id="311b2686-d15a-43f7-9fc9-a15d3636b0c2" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.48.17_PM.png"><img style="width:682px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.48.17_PM.png"/></a></figure></div></div><h2 id="cda5e63e-9766-4c2d-9e02-32e333b699e8" class="">ex 1. fitting a line thru 2 points</h2><hr id="db0ef7ce-c07e-422b-b2c7-67066e58a4c7"/><figure id="021589ed-bbbf-4aa4-90da-869dd6735eb0" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.49.50_PM.png"><img style="width:1346px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.49.50_PM.png"/></a></figure><p id="a8e6a80b-de14-488a-af23-be4f7cd29763" class="">
+</p><blockquote id="77bfd1f2-d775-4086-a8d8-f763b535deb9" class="block-color-blue_background">Q: Why use the <strong>minimal number of points to fit? </strong><p id="5ecc72b3-1a77-485e-b586-a35439f02297" class="">A:  <mark class="highlight-blue_background"><strong>TRADEOFF!!!</strong></mark><div class="indented"><ul id="fd1d8617-bc20-4656-bcd1-f4620456b277" class="bulleted-list"><li style="list-style-type:disc">use more points → <span style="border-bottom:0.05em solid"><strong>potentially better model</strong></span><ul id="5101937f-b040-4e7d-841f-b5ed55dcb0f6" class="bulleted-list"><li style="list-style-type:circle">BUT onlly if extra points are inliers</li></ul></li></ul><ul id="5d677eff-ed2d-4947-90a1-efc5cf78d1ef" class="bulleted-list"><li style="list-style-type:disc">use more points → greater chance to be <strong>outlier</strong> →<strong> </strong><span style="border-bottom:0.05em solid"><strong>makes poor fit</strong></span></li></ul></div></p></blockquote><p id="cb892af6-f73d-482a-96db-e5ef54b77be4" class="">
+</p><h2 id="4532948c-863b-4546-80e4-f519b95eaebd" class=""><mark class="highlight-purple">RANSAC Algorithm: ✅</mark></h2><figure id="beb52863-79e1-4ede-ad25-3824f04e5cbb" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.55.20_PM.png"><img style="width:1370px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_3.55.20_PM.png"/></a></figure><h2 id="a41405a7-596a-475c-9ebf-4272b656d385" class="">Application of RANSAC: Vanishing Point Detection</h2><hr id="a01ce9e3-e4a0-4f31-9b1d-4d027d3d8a3a"/><p id="75976b00-0219-4ca2-9047-5b06cab4f8a2" class="">EASY: pick 2 random edges get the intersection, count # edges passes nearby from the rest <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">N-2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span></span><span>﻿</span></span> edges</p><ul id="78e61e65-361e-4d59-9444-4e80f283ee3d" class="bulleted-list"><li style="list-style-type:disc">good if most edges nearby</li></ul><p id="5fa21ab3-7170-490b-b09b-4be2775323b6" class="">
+</p><p id="a9f240ea-2c2a-405f-8e78-4dca49afa219" class="">
+</p><h2 id="bede8620-626a-44c8-b63a-885b10e8bef4" class="">RANSAC is a probabilistic model</h2><hr id="433e3353-fb33-4a36-89e5-52c4b3960d9c"/><ul id="56448ce1-47f9-4d9c-894f-a14b1470552a" class="block-color-teal_background bulleted-list"><li style="list-style-type:disc">let <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span></span></span><span>﻿</span></span> be fraction of pts that <strong>ARE INLIERS.</strong><p id="2bbc3a3b-c909-45f1-a81f-5c82123377df" class=""><mark class="highlight-gray"> (We assume that there is one correct model and “points” are either inliers or outliers.)</mark></p></li></ul><ul id="50ee35a8-bab3-4c4d-862c-5ae6d90e2a5d" class="block-color-teal_background bulleted-list"><li style="list-style-type:disc">If randomly sample <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span></span><span>﻿</span></span> points  to fit a model → then <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">p(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span></span></span></span></span><span>﻿</span></span>all n samples are inliers) <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msup><mi>w</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">= w^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><ul id="b2c9fceb-e373-404f-8803-33977ae71812" class="block-color-teal_background bulleted-list"><li style="list-style-type:disc">so <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">p(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span></span></span></span></span><span>﻿</span></span>at least 1 of n is outlier) = <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mi>w</mi><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">1-w^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="b3c06478-28c1-4c0d-8957-217d5bdeea63"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">this <strong>close to 1 when </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span></span></span></span></span><span>﻿</span></span></strong><strong> is small and </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi></mrow><annotation encoding="application/x-tex">n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span></span></span></span></span><span>﻿</span></span></strong><strong> is large, so we need to sample more times to get good fit</strong></div></figure><p id="b2f565ae-84cf-4efc-be29-02b1daf9774c" class="">
+</p></li></ul><ul id="cf19fd9b-0373-4263-8bb9-8d567ff88951" class="block-color-teal_background bulleted-list"><li style="list-style-type:disc">suppose we sample &amp; fit a model <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi></mrow><annotation encoding="application/x-tex">k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span></span></span></span></span><span>﻿</span></span> times, then….<mark class="highlight-pink"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">p(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">p</span><span class="mopen">(</span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-pink">all n samples are inliers after k times)</mark><mark class="highlight-pink"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>1</mn><mo>−</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><msup><mi>w</mi><mi>n</mi></msup><msup><mo stretchy="false">)</mo><mi>k</mi></msup></mrow><annotation encoding="application/x-tex">=1-(1-w^n)^k</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.099108em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.849108em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark></li></ul><p id="244d386a-a048-4703-a66f-8e3832015082" class="">
+</p><p id="33d77a4b-abdd-4042-b768-2f6180b30082" class="">
+</p><h2 id="52b48cee-304d-4a30-807a-f7c70b459fb2" class=""><mark class="highlight-teal">RANSAC algorithm parameters (”secret sauce”)</mark></h2><hr id="65918b6a-8cb2-4073-a0d9-75612ed8490a"/><ol type="1" id="aba5c47b-cb3c-4ab2-b255-447b0c761ead" class="block-color-teal numbered-list" start="1"><li><em>How </em><em><strong>CLOSE IS “CLOSE” to be counted??</strong></em></li></ol><ol type="1" id="bd25fe90-4ad3-4a4e-ad98-b046309b0dc2" class="block-color-teal numbered-list" start="2"><li><em>How many pts need to be in consensus set for us to think we are successful? </em></li></ol><ol type="1" id="18f75929-1988-46bb-89d0-47cc6bd6fd8d" class="block-color-teal numbered-list" start="3"><li><em>How many times do we sample (to pick points to fit a model)? </em></li></ol><figure id="a9a3b199-1d8c-46a2-a5e2-7afe05d5fec3" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_4.52.49_PM.png"><img style="width:576px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_4.52.49_PM.png"/></a></figure><p id="32b3ad94-c3de-4ece-9cf2-be3b77fc5a7a" class="">
+</p><p id="190e1007-300d-48f6-81d5-4d06d1646f1a" class="">
+</p><h1 id="98bc07fc-6aa9-40f2-a3d3-7a25da0f3ffe" class=""><mark class="highlight-gray">AFTER CLASS EXTRA…</mark></h1><h3 id="d2348c68-1176-4d86-ac45-837307837ec4" class="">youtube….</h3><figure id="33d062f9-8491-4532-add3-512d489c8261"><a href="https://www.youtube.com/watch?v=XRBc_xkZREg" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Hough Transform | Boundary Detection</div><div class="bookmark-description">First Principles of Computer Vision is a lecture series presented by Shree Nayar who is faculty in the Computer Science Department, School of Engineering and Applied Sciences, Columbia University. Computer Vision is the enterprise of building machines that &quot;see.&quot;</div></div><div class="bookmark-href"><img src="https://www.google.com/favicon.ico" class="icon bookmark-icon"/>https://www.youtube.com/watch?v=XRBc_xkZREg</div></div><img src="https://i.ytimg.com/vi/XRBc_xkZREg/hqdefault.jpg" class="bookmark-image"/></a></figure><figure id="81b4fd82-9b4a-45bd-9ca4-14395db0242c" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.40.53_PM.png"><img style="width:528px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.40.53_PM.png"/></a><figcaption>⭐️⭐️⭐️⭐️</figcaption></figure><figure id="ba41f8ee-8dc6-49ca-b0ed-6cac34b7014b" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.42.08_PM.png"><img style="width:288px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.42.08_PM.png"/></a></figure><p id="03996cda-62da-48ca-8ca2-46aa33368855" class=""><mark class="highlight-purple"><strong>better parameterization: is if we represent the line using </strong></mark><mark class="highlight-purple"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>r</mi><mo separator="true">,</mo><mi>θ</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(r,\theta)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">θ</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong></mark></p><figure id="532bbfd0-9252-4227-8013-7639011ccef2" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.45.19_PM.png"><img style="width:576px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.45.19_PM.png"/></a><figcaption>creat array with (r,θ), <strong>vote along sinusoids in that space</strong></figcaption></figure><p id="032c98df-280d-425d-bc86-82517545d2fb" class="">
+</p><h3 id="c353e5a0-9523-4ff8-b7f7-762032f7c22b" class="">Issues of HOUGH: </h3><p id="8fdb23df-6262-44f8-81ef-444d52c91d81" class="block-color-teal_background">
+</p><blockquote id="6269a155-5c6d-4da0-9e34-0e2445e7b72a" class="">Q1: how big should accumulator cells be?</blockquote><ul id="3e6ea5fd-6ff1-4329-b74e-294774615e26" class="bulleted-list"><li style="list-style-type:disc">too big, diff lines might be merged</li></ul><ul id="cf398fed-4dee-47ef-9b29-a2da87818e79" class="bulleted-list"><li style="list-style-type:disc">too small, noise causes lines to be missed <span style="border-bottom:0.05em solid">(too high resolution)</span></li></ul><blockquote id="aca085d1-bbfb-4cb8-8ff9-fd4d4d7c2be5" class="">Q2: how many lines?</blockquote><ul id="b138573c-9e1d-4941-a613-86905f47de1a" class="bulleted-list"><li style="list-style-type:disc">count peaks in accumulator array</li></ul><blockquote id="331fd502-d701-48d5-9bdd-f5b21093a83b" class="">Q3: handling iaccurate edge locations?</blockquote><ul id="a77fd1dc-3c2d-47bc-941b-764cd4da8325" class="bulleted-list"><li style="list-style-type:disc">increment patch in accumulator rather than single pt (<strong>more resilient to noise)</strong></li></ul><p id="bab08801-3a30-4727-8eb0-aadb730411ad" class="block-color-teal_background">
+</p><p id="e5f4903f-64e9-4b90-ba98-80aff1247d37" class=""><mark class="highlight-teal"><strong>EXAMPLES.</strong></mark></p><div id="fb91ab34-797d-4487-9505-ac8e472e6e40" class="column-list"><div id="d18f8319-84a5-46e2-9c5c-37e0923f21a8" style="width:50%" class="column"><figure id="168853d1-99a7-4514-a3bb-cf1ec3387d77" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.56.18_PM.png"><img style="width:2016px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.56.18_PM.png"/></a></figure></div><div id="9a95e6a6-9402-41b4-aa8b-5469df26294b" style="width:50%" class="column"><figure id="74691504-4e1b-4b53-bbee-f47889f07bce" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.56.30_PM.png"><img style="width:1934px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.56.30_PM.png"/></a></figure></div></div><h3 id="4363a874-4929-476c-96da-ff75345a1cad" class="">Ex. finding circle using HOUGH</h3><hr id="0f050282-6a0d-4a96-b068-bea7498d9964"/><p id="e457011a-2970-4422-a80e-37d9409d2893" class=""><span style="border-bottom:0.05em solid"><strong>case 1: radius in known</strong></span></p><figure id="072eaf3c-8d6c-4be2-9a4b-b54682bfb082" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.59.03_PM.png"><img style="width:528px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.59.03_PM.png"/></a></figure><p id="f30517f2-6b5c-4ef9-915f-0d4d201ee00e" class=""><strong>example. find coins…</strong></p><figure id="bf253ee2-8c0d-4261-b7d1-f75145a29bc8" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.59.43_PM.png"><img style="width:576px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_1.59.43_PM.png"/></a></figure><ul id="76164290-7136-466f-940e-5bce39973b9b" class="bulleted-list"><li style="list-style-type:disc">use different radius → to get <strong>penny OR quarter 🤩</strong></li></ul><p id="ba5bb6c7-2235-4cb1-a540-593de113d663" class="">
+</p><p id="f1ea1e20-3afd-4965-be93-20c0b1d7fa40" class=""><span style="border-bottom:0.05em solid"><strong>case 2: radius in not known</strong></span></p><figure id="77d1db47-a13c-4bd9-963a-952a828ea5f7" class="image"><a href="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_2.02.58_PM.png"><img style="width:528px" src="6%20-%20Robust%20Hough%20Transformation%20&amp;%20RANSAC%202537ca401978450587c6b248c0893882/Screen_Shot_2022-10-10_at_2.02.58_PM.png"/></a></figure></div></article></body></html>

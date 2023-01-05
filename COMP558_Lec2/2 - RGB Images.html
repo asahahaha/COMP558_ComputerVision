@@ -1,0 +1,708 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>2 - RGB Images</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="113e171e-c348-4d81-b5cf-774b9da2c6c6" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">2 - RGB Images</h1></header><div class="page-body"><p id="8756fc10-72ef-43ba-b89b-81b8a981d762" class=""><time>@September 6, 2022</time> </p><nav id="e32b3d8d-dc45-4ed2-96b3-ee37f85dc098" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#16f35c45-ddca-4bc8-aab2-5b3da8cdd9d5">Stereo</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#445ca23d-9659-45d4-9dc2-e73c4cba857f">Cameras</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7faea205-28a3-49d8-aa4a-0b82b9ad0b60">Pinhole Camera Model</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#339a3b1c-797e-4569-ad80-daa6f73176c1">Image size</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#64ee5d5b-b401-48be-bd28-c9b1b21572a6">RGB channels</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#993ed73a-a117-49af-966d-a1ff40a302fa">RGB Triplets</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#23e7d0c1-d213-4a3e-81f1-951130599041">how does images look like under these channels?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#dad70886-7cf3-4f5e-8a56-84006757eb7f">Human vision is “trichromatic”</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b58407c8-dd47-4cd0-acf7-d2cbb8ea4c63">Newton’s Discovery of Color Spectra</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e6cc9a1f-c6e9-4799-b3e5-c534526290f8">Light Spectrum</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c8a2fe9a-48da-48b6-969e-66f238e8c78d">Types of Light Spectra</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8ec3e7c3-52ac-4732-a72a-c797be41fdeb">Absorption Spectra of 3 Types of Cones</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#822133c3-6d87-444b-acfc-c1d2473fa553">Camera Mimics Human Cone Absorption Spectra</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8d7d61a6-cb67-4aba-a0e0-a1d403f2c595">Sensor: Bayer Pattern ⭐️</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2c56950d-1972-48b6-b28c-3feb5989f9d8">What determines the RGB values?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a85c2569-43aa-408d-a508-c1d9da705b2f">Analog-to-Digital conversion</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d5636aa1-71ab-44f2-bc88-328e44c94bff">So.. How to convert from RAW to JPEG?</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b62d7168-0e65-4bb9-9233-a468e917c0c5">STEP 1: <mark class="highlight-purple">Demosaicing</mark>: undo Bayer pattern</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8b2e0716-569a-4946-a6a8-a895e4ba987f">STEP 2: <mark class="highlight-purple">White balancing</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#dafb8fab-9065-459f-b559-e538fb9b21d2">STEP 3: Map to Standard Color Space: sRGB</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#032e518e-b8c5-4a60-9c1f-9ecbc98a7018">RGB Histograms</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5c6d2c45-7ac8-4a28-9e20-294c7be91e51">Recall: image noise</a></div></nav><h2 id="16f35c45-ddca-4bc8-aab2-5b3da8cdd9d5" class="">Stereo</h2><ul id="37736cd8-f699-413a-816d-d470030604f1" class="bulleted-list"><li style="list-style-type:disc">project pattern, wrt the camera, find correspondence &amp; reconstruction<ul id="5fef9d2d-aeb9-4ec4-ac6f-823e7813a71d" class="bulleted-list"><li style="list-style-type:circle">how to reconstruct? → recover rotations &amp; translation → triangulate back in worlds</li></ul></li></ul><h2 id="445ca23d-9659-45d4-9dc2-e73c4cba857f" class="">Cameras</h2><ul id="33783be2-b391-484f-9d2b-b179117c5bad" class="bulleted-list"><li style="list-style-type:disc">Digital SLR</li></ul><ul id="ff8b2a2f-33ef-4a5e-ab22-8a8f1668c3a0" class="bulleted-list"><li style="list-style-type:disc">“point and shoot”</li></ul><ul id="d6746699-5552-4881-95ae-82de9c2b92f3" class="bulleted-list"><li style="list-style-type:disc">cell phones</li></ul><p id="41a0b56d-ff02-4852-a6c6-3f64140364c2" class="">
+</p><h3 id="7faea205-28a3-49d8-aa4a-0b82b9ad0b60" class="">Pinhole Camera Model</h3><figure id="477cc374-7b22-4229-bbd4-c78915922b95" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.05.32_PM.png"><img style="width:528px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.05.32_PM.png"/></a></figure><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="682e126b-af5b-43e4-b144-ea2a0b7d2251"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>(X,Y,Z)</strong> represents in 3D scene point<p id="d9e6d03a-c573-46ad-95e1-ee110ec960da" class=""><strong>(x,y) </strong>represents in 2D</p></div></figure><ul id="83a1a51a-cb82-4e8f-b13b-37d66c7693a2" class="bulleted-list"><li style="list-style-type:disc">if you want a clear image → need the pinhole to go to arbitrary <strong>zero</strong> <ul id="986a57bc-9b3a-4b53-98a3-190849eeeed1" class="bulleted-list"><li style="list-style-type:circle">(but in this case we don’t get enough light!!) <span style="border-bottom:0.05em solid"><strong>CHALLENGE</strong></span></li></ul></li></ul><p id="d1b1d25a-72a9-4b9e-9670-c0eb30871166" class="">
+</p><h2 id="339a3b1c-797e-4569-ad80-daa6f73176c1" class="">Image size</h2><figure id="25f5c1d5-8966-4129-845d-81316128766f" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.08.17_PM.png"><img style="width:480px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.08.17_PM.png"/></a></figure><ul id="7d9dbaff-054e-49e9-ae8a-89bde0228cdf" class="bulleted-list"><li style="list-style-type:disc">pixels = “picture element”</li></ul><ul id="360439dd-cbf1-43c6-b02d-334ba4bf8815" class="bulleted-list"><li style="list-style-type:disc">1 megapixel = one million pixels</li></ul><p id="3114dc39-48fa-4d38-b2ed-8941448aec28" class=""><div class="indented"><ul id="4f9a18d7-4536-4563-aa4d-edbf27007a04" class="block-color-purple_background bulleted-list"><li style="list-style-type:disc">“720p” is 1 MP (1280 * 720 pixel , ‘p’ for progressive)<ul id="3405f12c-a506-44ad-9d1f-7c756136169b" class="bulleted-list"><li style="list-style-type:circle">1280 columns, 720 rows</li></ul></li></ul><ul id="eb2410cb-2d14-47d2-9613-e3d07848cda0" class="block-color-purple_background bulleted-list"><li style="list-style-type:disc">1080p (HD) is 2 MP (~2K * 1K pixels)</li></ul><ul id="1b258aee-0995-41e0-9037-98de19a7c9a5" class="block-color-purple_background bulleted-list"><li style="list-style-type:disc">UHD is 8MP (~4K * 2K)</li></ul><ul id="21e7f668-cf3c-4f9d-8921-b74c95c6b5a8" class="block-color-purple_background bulleted-list"><li style="list-style-type:disc">even 32 MP camera exists…</li></ul></div></p><p id="5a5368fc-8c05-4cac-8f06-cc54c7b425e1" class=""><div class="indented"><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="3fdbbc34-beb4-40fe-b335-7f2b5ba6dbb6"><div style="font-size:1.5em"><span class="icon">👌</span></div><div style="width:100%">ASIDE: ‘P’ is for progressive scan, which is in contrast to the “i” format which stands for “interlaced”<ul id="966943a8-7cee-46c3-a78b-7dc34b1fac37" class="bulleted-list"><li style="list-style-type:disc">progressive: all the lines of each frame are drawn in sequence, scan all at once</li></ul><ul id="39c65260-afc9-4a10-9e03-7542503f4d9a" class="bulleted-list"><li style="list-style-type:disc">interlace: all the odd then all the even<figure id="6bbf3600-ad68-4fd5-9878-fd0cef68356b" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-14_at_9.58.04_PM.png"><img style="width:744px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-14_at_9.58.04_PM.png"/></a></figure></li></ul></div></figure></div></p><p id="315b419a-7dc9-454a-b01e-b5929a396e29" class="">
+</p><h2 id="64ee5d5b-b401-48be-bd28-c9b1b21572a6" class="">RGB channels</h2><hr id="4b63fcda-3c48-4150-af33-0daf366c90d8"/><ul id="4d998ca9-7ef0-4056-af46-70dd39328c98" class="bulleted-list"><li style="list-style-type:disc">typically 3*<strong><span style="border-bottom:0.05em solid">8 bits</span></strong> per pixel (RGB)<em><strong> </strong></em><em><strong><mark class="highlight-purple">i.e. 3 values from 0 to 255</mark></strong></em></li></ul><figure id="0325bfbe-47a5-472f-a7c3-93473194d16f" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.09.25_PM.png"><img style="width:878px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.09.25_PM.png"/></a></figure><h3 id="993ed73a-a117-49af-966d-a1ff40a302fa" class="">RGB Triplets</h3><div id="0a307f50-2e41-4ec4-aed8-05cab6f1b964" class="column-list"><div id="658a1a87-ee57-4e0a-a81f-56610b21d707" style="width:50%" class="column"><ul id="69c41e62-d1ff-4e8b-b0fd-a292c894f9dc" class="bulleted-list"><li style="list-style-type:disc">continuous</li></ul><ul id="19205654-19d9-45ad-b5e1-259b5eba9273" class="bulleted-list"><li style="list-style-type:disc">black at the <strong>bottom left</strong>, white at the <strong>top right</strong></li></ul><ul id="e4973d50-acdf-4ca2-ac05-29a14df88b5c" class="bulleted-list"><li style="list-style-type:disc">continuous distribution</li></ul><ul id="c0208750-abd7-40c9-916b-9c8e55b7cb7c" class="bulleted-list"><li style="list-style-type:disc">HSV: hue saturation value space</li></ul></div><div id="545fc386-89ae-4e2c-befd-c7cfde139e64" style="width:50%" class="column"><figure id="a8325b34-a16d-48dd-a44b-5f4be9954d45" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.09.59_PM.png"><img style="width:702px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.09.59_PM.png"/></a><figcaption>what did he say about raw and jpg, png images??</figcaption></figure></div></div><p id="f4e64cce-8a0a-4ec9-8d69-5f672e77547c" class="">
+</p><p id="a982bf66-79ff-4a54-b371-23c1b536bbea" class="">
+</p><p id="b4f27a55-30d6-491a-b1c8-5daa755e45f9" class="">
+</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="93004933-df25-4b10-a592-d99c46459de7"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">there are formulas to change RGB values → convert to HSV or Lab <code>by one line of code</code><ul id="6427b736-1de8-41a3-a993-98193c9e18f2" class="bulleted-list"><li style="list-style-type:disc">basically they are non-linear projections(transformation</li></ul></div></figure><h3 id="23e7d0c1-d213-4a3e-81f1-951130599041" class="">how does images look like under these channels?</h3><p id="6983400c-e9bb-4c81-b29d-f28423cb314c" class="block-color-yellow_background"><strong>interesting: the </strong><mark class="highlight-purple"><strong>yellow actually has more R values than red!!!! because it’s more saturated</strong></mark></p><figure id="93e1ffab-1b5c-465c-a7f9-69a92845428b" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.44.39_PM.png"><img style="width:528px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.44.39_PM.png"/></a></figure><p id="4d048b61-aafe-4863-9433-2990abab3d1d" class="">
+</p><ul id="15afbc20-78f9-48a9-a5a7-09b9e767089e" class="bulleted-list"><li style="list-style-type:disc"><em>dark: low intensity; bright: high intensity </em></li></ul><figure id="ccb0c210-a7c7-42a5-9d66-1553ebd93cb2" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.45.34_PM.png"><img style="width:480px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.45.34_PM.png"/></a><figcaption><em>3 channels are VERY SIMILAR</em></figcaption></figure><ul id="9e62507b-cd10-4c5f-a112-3db6d9a0120e" class="bulleted-list"><li style="list-style-type:disc">RGB differences are NOT noticeable when<strong><mark class="highlight-teal"> not saturated</mark></strong></li></ul><p id="4d18be97-0a0f-4500-86b5-323d960ae457" class="">
+</p><p id="47c3c365-b460-432b-b7e4-5fe51950a23e" class="">
+</p><h2 id="dad70886-7cf3-4f5e-8a56-84006757eb7f" class="">Human vision is “trichromatic”</h2><hr id="ef386d75-dcf3-464a-a891-265bfeb9e72c"/><ul id="33d1b6fc-a8cf-4171-8f19-a837472668a3" class="bulleted-list"><li style="list-style-type:disc">WHY RGB？</li></ul><ul id="eeefb37f-9b1d-4cd5-ab6a-fbf57ff78c1d" class="bulleted-list"><li style="list-style-type:disc">human eye has three classes of colour photoreceptors, called → <mark class="highlight-orange"><strong>cones</strong></mark><ul id="332cc9b9-667a-48c0-b13c-d75ee84ad458" class="bulleted-list"><li style="list-style-type:circle">3 diff types of cones have diff sensitivities</li></ul></li></ul><figure id="94cb9f70-a074-42e3-bb8f-5e8dd0ebd0ca" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.56.36_PM.png"><img style="width:432px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-16_at_3.56.36_PM.png"/></a></figure><p id="3756cc06-933c-4674-9808-f34ca8473944" class="">
+</p><p id="43aba208-d393-4a6c-894d-5c04fa4b783a" class="">These sensitivities are important →<strong> camera sensors are – in a certain technical sense - designed to mimic the sensitivities of cones</strong></p><p id="f5eb131d-6aa8-4b4a-a33b-f8668944561c" class="">
+</p><p id="bacbb938-7abd-420c-9871-6e725c81de00" class="">
+</p><h2 id="b58407c8-dd47-4cd0-acf7-d2cbb8ea4c63" class="">Newton’s Discovery of Color Spectra</h2><p id="0dd46206-8a12-4b61-83d0-20b64e86c9ba" class="">(1666) a beam of white light consists of superimposed beams of “coloured” light, by prism light separation</p><p id="f78c63fe-b699-4a6a-8aff-7a78ae541de0" class="">
+</p><h2 id="e6cc9a1f-c6e9-4799-b3e5-c534526290f8" class="">Light Spectrum</h2><hr id="c00bde4d-7c09-4ba8-94be-e0bab80596db"/><p id="874fc39e-084c-4358-9f3c-4c752f40d210" class="">Light consists of electromagnetic waves from 400-700 nm</p><ul id="49871d21-c229-458e-abf1-11fee6d7127b" class="bulleted-list"><li style="list-style-type:disc">blue: shortest wavelength, highest frequency</li></ul><p id="a0c11552-c7d0-4f2d-afa7-923098e5fbf0" class="">
+</p><p id="773c4e07-caff-4053-a0de-0c26ab6ffbca" class=""><mark class="highlight-gray">Natural light sources do not emit light of single wavelengths in isolation tho….</mark></p><p id="5183cde4-923d-466f-8a0e-86e06acccf83" class="">
+</p><h3 id="c8a2fe9a-48da-48b6-969e-66f238e8c78d" class="">Types of Light Spectra</h3><hr id="054c9689-7a56-4632-b7d1-ad02d5b7a8d8"/><ol type="1" id="53c7586e-4af3-4134-bab1-4c4999cfb003" class="block-color-teal_background numbered-list" start="1"><li><mark class="highlight-purple">absorbed</mark></li></ol><ol type="1" id="7f7632f7-29a8-4d54-a8bf-70ce91e696da" class="block-color-teal_background numbered-list" start="2"><li><mark class="highlight-purple">transmitted thru</mark></li></ol><ol type="1" id="95c5a380-6aa4-4102-b89c-bba2560eb098" class="block-color-teal_background numbered-list" start="3"><li><mark class="highlight-purple">reflected</mark></li></ol><p id="2a941453-b9b1-40ac-b55e-336b1a646a6b" class="">how much is <strong>absorbed/emitted..? </strong> measured by <span style="border-bottom:0.05em solid">spectrum</span></p><figure id="08018dc3-645e-4e47-a30b-35e459755e4e" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.23.11_PM.png"><img style="width:480px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.23.11_PM.png"/></a></figure><ul id="c0d5cd72-1142-4d3d-a719-0dbedf580a8e" class="bulleted-list"><li style="list-style-type:disc">emission spectra: distribution of power of light emitted by a light source</li></ul><ul id="8ab45979-b798-4b0d-b8f4-9eb21ee09fea" class="bulleted-list"><li style="list-style-type:disc">transmission spectrum: the fraction of <strong>incoming</strong> light that is transmitted</li></ul><ul id="0ccb4e0f-54a2-4d16-a8e4-d56637bf992d" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-yellow"><strong>absorption: talk about this more in this class</strong></mark> → fraction of light that arrives at a surface OR volume and is absorbed (as a function of wavelength)</li></ul><p id="b4a8c290-fca2-4220-bf08-8a196923a5de" class="">
+</p><p id="57cfdaf2-0742-4a45-ac29-ceaf90e63b7f" class="">
+</p><h3 id="8ec3e7c3-52ac-4732-a72a-c797be41fdeb" class="">Absorption Spectra of 3 Types of Cones</h3><hr id="fb9804aa-caa5-4d66-bcd6-9621152919c6"/><ul id="a0be8581-0cf8-4bc3-8efe-60e763390ecb" class="bulleted-list"><li style="list-style-type:disc">normalized to 1 here</li></ul><ul id="ca56ad7f-f352-4d27-bd24-a92995030abe" class="bulleted-list"><li style="list-style-type:disc">short wavelength <strong>cone</strong> have absorption peak @ short wavelength</li></ul><figure id="27453d3c-a390-419a-8c34-cec43eda51e9" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.20.46_AM.png"><img style="width:576px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.20.46_AM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="1abbefe8-dbd5-40e1-9d26-7a3e21b74197"><div style="font-size:1.5em"><span class="icon">🆒</span></div><div style="width:100%">FACT: <em><strong>peaks are found at wavelengths</strong></em> whose pure light appears blue, green, and red → is the reason why we talk about RGB</div></figure><p id="5923d119-fd44-46bc-ab5c-5ac0ca74bb91" class="">
+</p><p id="c5dda512-9208-44c3-9a0a-37f30bbd8ff9" class="">
+</p><h3 id="822133c3-6d87-444b-acfc-c1d2473fa553" class="">Camera Mimics Human Cone Absorption Spectra</h3><hr id="8a33316a-3f5d-4853-a780-45c1bd06bad8"/><p id="92ed212e-7e8d-4494-96d4-d0993225e368" class=""><mark class="highlight-teal"><strong><em>⬇️ different cameras have different absorption spectra</em></strong></mark></p><p id="7d5f6880-4935-4ff1-b11e-fe97470fc0f1" class="">
+</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="3fd49397-0342-46db-990e-a46330bcfef7"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Q: how can we have a digital camera with NO colour sensors??</strong></div></figure><p id="7da9661e-c958-451d-b068-fe353a560d9e" class="">→ place a<span style="border-bottom:0.05em solid"><mark class="highlight-yellow"><strong> colour filter array </strong></mark></span><mark class="highlight-yellow"><strong>!!!! </strong></mark><strong>on top of the colour blind sensor</strong></p><h2 id="8d7d61a6-cb67-4aba-a0e0-a1d403f2c595" class="">Sensor: Bayer Pattern ⭐️</h2><ul id="d2e9f5f7-6371-4fd6-8d8b-26e45a4a3661" class="bulleted-list"><li style="list-style-type:disc">the CFA allow range of wavelengths to pass:)</li></ul><figure id="028157d5-6778-42fd-9234-35ec1ea78b88" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.27.11_PM.png"><img style="width:894px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.27.11_PM.png"/></a><figcaption><strong>⚠️NOTE: MORE GREEN!!! because the human eye readily picks up green, or is more sensitive to it than to red or blue light</strong></figcaption></figure><p id="f23451a9-4cbd-441c-a93e-8919a726eebd" class="">
+</p><p id="5880a6f3-9a59-4695-b13d-6bae049c7ebb" class="">
+</p><h2 id="2c56950d-1972-48b6-b28c-3feb5989f9d8" class="">What determines the RGB values?</h2><hr id="102173ed-6edd-4277-ab3f-eefda933cfef"/><figure id="1b8949a4-cffd-487c-ae35-0553b79b1f4f" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.30.34_AM.png"><img style="width:790px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.30.34_AM.png"/></a></figure><ul id="7ca35b7e-46c0-48df-b7a4-7f9bdaff26b6" class="bulleted-list"><li style="list-style-type:disc">more exposure time, longer shutter speed → fast-moving obj 🚫</li></ul><ul id="3b745e72-2423-4b9b-9292-326c54f912aa" class="bulleted-list"><li style="list-style-type:disc">ISO: dim light, high ISO</li></ul><ul id="062544e5-1cfa-4ef0-b0cd-761216df9ca3" class="bulleted-list"><li style="list-style-type:disc">aperture: dim, pupil opens more → let more light in</li></ul><ul id="1f41983b-3021-4ae6-849e-3885ef3a86b0" class="bulleted-list"><li style="list-style-type:disc">noise: <ul id="5e0b9ce4-db4b-487a-8c5e-0476c10ea3d0" class="bulleted-list"><li style="list-style-type:circle">from light source → light sources emit photons randomly</li></ul><ul id="ff48164b-2ce2-4b3b-ac90-56edf90427bf" class="bulleted-list"><li style="list-style-type:circle">from sensor</li></ul></li></ul><p id="2d71256d-ee49-4512-9650-bd564a0dab54" class="">
+</p><h2 id="a85c2569-43aa-408d-a508-c1d9da705b2f" class="">Analog-to-Digital conversion</h2><p id="77fb73bb-9f3e-4de2-9cb7-26e8e278201a" class="">this signal (including noise) is then <strong>digitized</strong>, namely quantized and then<em> coded in binary</em></p><ul id="9aa4d671-e83b-4fce-b817-4b67fca9476c" class="bulleted-list"><li style="list-style-type:disc">use more bits for each RGB value for better resolution photos</li></ul><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="926399d8-ce50-48d6-90fb-a59bc2ede40f"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-yellow"><strong>RAW images uses 12-bits!!!</strong></mark></div></figure><figure id="1f8624d6-be48-4d3e-bcdc-d19babed32eb" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.36.43_AM.png"><img style="width:576px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_2.36.43_AM.png"/></a></figure><p id="c8633f08-015a-41ae-b6fb-c0b7f00f1b0a" class="">
+</p><p id="15a501ba-5c93-4d14-8233-0efc3bce33f9" class="">
+</p><p id="98741c6b-919e-4a17-9069-f8eb1ed12020" class="">
+</p><p id="6daadcc4-67e1-4673-abf1-c00cd11f821d" class="">
+</p><p id="dd3ff9ca-bec6-4908-8557-e6a7d4d94dec" class="">
+</p><h1 id="d5636aa1-71ab-44f2-bc88-328e44c94bff" class="">So.. How to convert from RAW to JPEG?</h1><p id="d9b796a5-e125-4116-a6aa-a35d2a90c638" class="">
+</p><h3 id="b62d7168-0e65-4bb9-9233-a468e917c0c5" class="">STEP 1: <mark class="highlight-purple">Demosaicing</mark>: undo Bayer pattern</h3><hr id="b3f964bc-f2b6-4804-8266-445b1dca7cb4"/><p id="b1683b15-7d00-4582-abde-7b5231858055" class="">
+</p><figure id="e992f703-3d64-4463-b3af-04162e8bba1a" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.38.52_PM.png"><img style="width:878px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.38.52_PM.png"/></a></figure><ul id="a26852a6-135d-4a6b-80eb-a6b3fa00d1a2" class="bulleted-list"><li style="list-style-type:disc"><strong>each 2x2 square</strong> has 2 greens, 1 blue, 1 red</li></ul><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="a0ced3b8-da7f-4b1f-9fea-976b92bb08e7"><div style="font-size:1.5em"><span class="icon">🆒</span></div><div style="width:100%">each sensor element corresponds to one pixel:)</div></figure><p id="4dedcb6f-4c2a-449e-a19f-055ea47382ca" class="">
+</p><p id="729e3cc4-5343-44df-a40f-3f835ba6dff0" class=""><em><strong><mark class="highlight-purple_background">from the Bayer CFA…..</mark></strong></em></p><p id="f3ffc669-b427-4425-9a19-509a36b2bd85" class=""><mark class="highlight-purple"><strong>STEP 1</strong></mark><strong>:</strong> turn mosaic image and read the RGB values<div class="indented"><ul id="a2892f17-d864-488d-a133-5303a29289ca" class="bulleted-list"><li style="list-style-type:disc">read red</li></ul><ul id="d669e71b-311e-444f-94fc-918fe15c83c7" class="bulleted-list"><li style="list-style-type:disc">read green</li></ul><ul id="a98ad9f6-7040-4acf-b7e9-e7d65e7de3ea" class="bulleted-list"><li style="list-style-type:disc">read blue</li></ul></div></p><p id="375ab37a-79b4-421e-b156-b0fce2f6e64f" class=""><mark class="highlight-purple"><strong>STEP 2</strong></mark>: then interpolate the channels to get rid of the blank whites (how? secret)<div class="indented"><p id="1bbe06d3-23a9-4628-80c6-46ea3b49989e" class="">
+</p><p id="caae0086-5662-42eb-8954-8183edeac029" class="">
+</p></div></p><p id="e67eeeb0-e096-41d2-9c8b-d0510e38d83a" class="">
+</p><h3 id="8b2e0716-569a-4946-a6a8-a895e4ba987f" class="">STEP 2: <mark class="highlight-purple">White balancing</mark></h3><hr id="17d51b29-8921-40ab-9495-8fce2eed499a"/><blockquote id="741a5a65-322c-46d5-a630-019c6afea9a1" class="">we want whites object to appear white</blockquote><p id="0e157f37-2e85-493f-8d2d-6078ed0b1a00" class="">Example.</p><p id="e12303a9-9e3b-4e01-8d8f-90446034ce2e" class="">if you tell the camera that the light source is a <mark class="highlight-purple">tungsten light bulb </mark>(which emits <mark class="highlight-red">reddish</mark> light), then the camera would <em><strong><mark class="highlight-purple">multiply all the red values by some number that is less than 1</mark></strong></em>, to compensate for the reddish light</p><figure id="ad8481c4-cc8f-4da3-b3a1-c716facb128f" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.42.23_PM.png"><img style="width:790px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.42.23_PM.png"/></a></figure><ul id="fe5ba07a-8e31-4999-92e1-701cb56dad92" class="bulleted-list"><li style="list-style-type:disc">correct the amount of white lights, so it looks more like normal<ul id="6baf5790-8670-4cb8-af0c-87b7efcef1d9" class="bulleted-list"><li style="list-style-type:circle">example.<ul id="1fcb8451-8f5c-4e59-af8b-77ef4ae95e5f" class="bulleted-list"><li style="list-style-type:square"><strong>set to tungsen</strong>: compensate by multiplying the R channel by a <em><span style="border-bottom:0.05em solid">smaller number</span></em> to cancel the light source effect, which is assumed to be dominated by long wavelengths (red). This makes the image appear very <strong><mark class="highlight-blue">blue</mark></strong>.</li></ul></li></ul></li></ul><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="5398e9fd-5721-4149-9b5e-f95fb2ff9c23"><div style="font-size:1.5em"><span class="icon">🆒</span></div><div style="width:100%">even if a camera leaves the RGB channels exactly as they were recorded <mark class="highlight-gray">(quantizing from 12 bits to 8 per channel, by chopping off the least significant 4 bits)</mark>, you should not expect the RGB values to be identical to the physical spectrum<p id="baf07d54-c1f8-4e29-8b60-2fb28503f7a0" class="">→ REASON: color filters <mark class="highlight-blue"><strong>implicitly apply</strong></mark><mark class="highlight-blue"> different weights</mark> to different parts of the spectrum</p></div></figure><p id="a6693401-8c83-4ef1-92fd-9d957fdc2ea6" class="">
+</p><h3 id="dafb8fab-9065-459f-b559-e538fb9b21d2" class="">STEP 3: Map to Standard Color Space: sRGB</h3><hr id="8d8dffab-8319-433f-a12b-4e0b661c33f6"/><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="c78f0d32-8fa0-44ab-a7be-a2a3f2968797"><div style="font-size:1.5em"><span class="icon">🔑</span></div><div style="width:100%"><mark class="highlight-blue">conversion to 8 bits! is needed before sRGB</mark></div></figure><p id="dc1540fd-406b-4b2b-bd0b-0f17edec87ba" class="">transform to a <em>standardized </em>color space → a common one is sRGB</p><p id="13eb5fa8-891c-4754-9183-36ff59f29050" class=""><strong>2 STEPs:</strong></p><ol type="1" id="8fcce6a8-6cd3-416d-8e17-7c565faa0a78" class="numbered-list" start="1"><li>reweighting each RGB value to some (arbitrary) standard</li></ol><ol type="1" id="88ea4bb6-7f83-4e6c-9295-c67f87bf814f" class="numbered-list" start="2"><li>non-linear mapping <mark class="highlight-blue"><strong>(”gamma”) </strong></mark>is applied to the RGB values</li></ol><figure id="d55429a7-dddb-47fc-b515-77f6e1e65a66" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.45.38_PM.png"><img style="width:576px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.45.38_PM.png"/></a></figure><p id="4810e65b-2ca7-4bb6-a0aa-ac8892f18b8b" class="">
+</p><p id="feedc5e9-6cf3-43e9-83be-6f4a7bcb3f01" class=""><div class="indented"><h3 id="3e79dd42-891e-4b1b-afc1-170d8f052d9a" class="">STEP 3.2: Display Non-linearity (Gamma) → Gamma Correction</h3><p id="1c18b779-8b55-4450-aeac-fe05dff390cd" class="">gamma exponent is typically about 2</p><ul id="0c265da6-3933-40ef-aa8b-6303cae535dc" class="bulleted-list"><li style="list-style-type:disc">When each RGB value is sent to a display, the intensity is <strong>proportiona</strong>l to the RGB values raised to some power (called the “gamma” of the display)</li></ul><p id="20bd4470-fd47-469e-8755-7b069a556c15" class="">
+</p><figure id="bc4d0675-fb4f-4621-ac2d-476435e3ee29" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.47.27_PM.png"><img style="width:868px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.47.27_PM.png"/></a></figure></div></p><blockquote id="29e49b11-4023-48bd-8044-72d923ffe122" class="">Q: Why gamma correction?</blockquote><p id="40a55e74-3892-4485-b094-00a98244dc4a" class="">A: RGB display doesn’t do continuous intensities, but ONLY 256 possible ones<div class="indented"><p id="45b346a2-0e23-4e93-8ad2-9a409f9c6df6" class="">→ gamma allows you to represent the <strong><mark class="highlight-blue">lower intensity values with more precision</mark></strong> than the upper intensity values</p></div></p><h3 id="032e518e-b8c5-4a60-9c1f-9ecbc98a7018" class="">RGB Histograms</h3><ul id="5efad411-b6d9-43ad-9264-7b4e0c196f83" class="bulleted-list"><li style="list-style-type:disc"><em><strong><mark class="highlight-yellow">2 lines of code!!</mark></strong></em></li></ul><figure id="6fcf008a-7051-45fb-9d0e-3bf9723a5b3c" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.49.43_PM.png"><img style="width:782px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.49.43_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="2d3ae01e-e096-41d0-82c9-1345de333200"><div style="font-size:1.5em"><span class="icon">📖</span></div><div style="width:100%">if the image is RAW, then the R,G, and B histogram shows the frequencies of the raw values.<p id="732e7fd0-cb35-472d-9857-01718603b6bc" class="">However, if the image has <strong>already been coded as sRGB</strong>, then histogram will show these encoded values, so the values will have been raised to the power <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>g</mi><mi>a</mi><mi>m</mi><mi>m</mi><mi>a</mi></mrow><annotation encoding="application/x-tex"> 1/gamma </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">amma</span></span></span></span></span><span>﻿</span></span>already 😊😊</p></div></figure><p id="b6c2a50f-c940-46a4-bc1b-76f8e9c0340a" class="">
+</p><h2 id="5c6d2c45-7ac8-4a28-9e20-294c7be91e51" class="">Recall: image noise</h2><figure id="c60b3590-ba16-4b42-80ce-2271de90284a" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.50.45_PM.png"><img style="width:948px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-06_at_12.50.45_PM.png"/></a><figcaption>standard deviation is HIGH!!!</figcaption></figure><p id="b4baae06-49e5-4cd9-8927-2fc18a057bd4" class="">
+</p><figure id="34df2125-016a-476a-8f86-d6190a5216e0" class="image"><a href="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_3.11.23_AM.png"><img style="width:1246px" src="2%20-%20RGB%20Images%20113e171ec3484d81b5cf774b9da2c6c6/Screen_Shot_2022-09-17_at_3.11.23_AM.png"/></a></figure></div></article></body></html>

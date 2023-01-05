@@ -1,0 +1,702 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>16 - Camera Extrinsics &amp; Intrinsics</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c7409b5f-7920-4da2-9a95-7ff094c58a9b" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">16 - <strong>Camera Extrinsics &amp; Intrinsics</strong></h1></header><div class="page-body"><p id="9637572e-6e73-4b53-97d9-1999b52480d9" class=""><time>@October 27, 2022</time> </p><nav id="1f2742d3-7b7f-4277-bde6-989c5d494b0b" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a6cfa73d-f4e6-45a2-a3c3-a82aafe150b9">Goal:</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8c4b5152-82e4-4f94-a998-785425166f80">RECALL: rotation</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ddfeec5f-c46f-417c-8399-82526f8dcbd8">1. Map from World Coordinates → Camera</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#ce5d18ce-9485-414a-aae8-8513fa6682fe">using homogeneous coordinates… ⬇️</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ee114d70-1c9a-4c12-a3c1-437a220720c5">2. Project onto Projection Plane</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#94780c4f-d220-476b-8d6f-ede4bc90b55e"><mark class="highlight-blue">we get the 2D point in projection plane</mark></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c9513b4a-cc01-4753-b619-6c57094a36f9">3. <strong>Map from projection plane coordinates → pixel coordinates</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b869ea26-8ed4-4c45-bcca-fbbcd65e5857">2 issues to concern..</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#fed215cd-51c4-43c7-a981-f285c48da17e">Issue 1: Units are different → scale transformation</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#07261ab3-14d3-4f3f-9819-9a7d6595df97">Issue 2: Find the pixel center → translation </a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e3fe6756-fddb-446c-a1ba-c3d7cd1270c9">Let’s put STEP 2 &amp; 3 together…</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0dee30ae-75dc-47c5-900e-444f728a7678"><strong><mark class="highlight-teal">“Camera Calibration Matrix </mark></strong><code><strong><mark class="highlight-teal">K</mark></strong></code><strong><mark class="highlight-teal">”</mark></strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#78b735f7-448e-4db9-bb08-cf6a05db2edf">ASIDE: A more general model: adding a <code>shear</code></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4365f61c-c767-47ed-9eb2-3a8b1b4b7b09">Conclusion: Intrinsic &amp; Extrinsic</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5e22729a-4b11-41ca-be75-525bb29dcb9a">Exercises:</a></div></nav><p id="e8901899-b24c-4c9e-aa51-e6aba7eb47f6" class="">
+</p><h1 id="a6cfa73d-f4e6-45a2-a3c3-a82aafe150b9" class="">Goal:</h1><ol type="1" id="88871b6a-0683-474a-b7ec-6637b1512e0c" class="numbered-list" start="1"><li>map from world coordinates → camera coordinates</li></ol><ol type="1" id="1feaf500-1276-46cb-b505-8ca696586718" class="numbered-list" start="2"><li>project onto proj plane</li></ol><ol type="1" id="15896798-c0cf-4b99-8c25-5a4e2a656797" class="numbered-list" start="3"><li>map from projection plane → pixel coordinates</li></ol><p id="27a7dd66-1b05-49db-a636-3bf0589fcef1" class="">
+</p><p id="29535672-d5bf-40e8-8779-95c42940b952" class="">
+</p><h2 id="8c4b5152-82e4-4f94-a998-785425166f80" class="">RECALL: rotation</h2><figure id="3f50b427-9a67-40c9-b19e-d2a3f0955757" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.25.01_AM.png"><img style="width:480px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.25.01_AM.png"/></a></figure><p id="6881c1ec-619b-4db4-bf42-0c400c69c156" class="">
+</p><h1 id="ddfeec5f-c46f-417c-8399-82526f8dcbd8" class="">1. Map from World Coordinates → Camera</h1><blockquote id="27d3348c-107d-4ffe-a0de-24cf8401b887" class=""><code>u, v, n</code> are the camera coordinates</blockquote><figure id="b8b4acea-4b1c-4189-8b07-59cac2e69ee2" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.26.58_AM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.26.58_AM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="69d90460-687a-49fc-a23d-95fe41730c42"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">wanna describe dist from <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>c</mi><mi>w</mi></msub></mrow><annotation encoding="application/x-tex">c_w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">c</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>w</mi></msub></mrow><annotation encoding="application/x-tex">X_w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="34ae07cf-ee7f-4e59-a78b-080d606a8396" class="bulleted-list"><li style="list-style-type:disc"><strong>the vector = </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mi>w</mi></msub><mo>−</mo><msub><mi>C</mi><mi>w</mi></msub></mrow><annotation encoding="application/x-tex">X_w-C_w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></li></ul></div></figure><p id="7ef74bb3-85de-4396-a8fe-49fefaf487df" class="">
+</p><p id="10009991-40f1-4092-962a-a01853ad20ca" class="">
+</p><p id="f27f05f9-ff1b-4674-9214-58556371e44c" class="">then have a rotation matrix &amp; <strong>rotate 𝑿</strong>𝒘 <strong>− 𝑪</strong>𝒘 <strong>from world coordinates to camera coordinates.</strong></p><ul id="e8ad1ad6-df82-4b68-9145-93c2e2bf55f7" class="bulleted-list"><li style="list-style-type:disc">write in orthonormal camera coord
+</li></ul><figure id="7a9102c2-f647-49ce-97bb-7e5b0c1c9c4e" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.29.02_AM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.29.02_AM.png"/></a><figcaption><span style="border-bottom:0.05em solid"><strong><mark class="highlight-blue">change of basis matrix</mark></strong></span></figcaption></figure><p id="b91e29f1-184e-4221-8582-f24bbf97b214" class="">
+</p><figure id="fe4ac964-ac54-45a3-bb9a-21b7cf7b4d38" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.32.00_AM.png"><img style="width:288px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.32.00_AM.png"/></a></figure><h3 id="ce5d18ce-9485-414a-aae8-8513fa6682fe" class="">using homogeneous coordinates… ⬇️</h3><figure id="6fb774a2-5317-4606-a540-d507ee0b460a" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.32.05_AM.png"><img style="width:576px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.32.05_AM.png"/></a><figcaption>⬇️⬇️⬇️⬇️</figcaption></figure><figure id="2ca8b097-8d5a-4349-95e5-60da7f9cf780" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.33.06_AM.png"><img style="width:576px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_10.33.06_AM.png"/></a><figcaption><strong><span style="border-bottom:0.05em solid"><mark class="highlight-blue">delete the last one coord</mark></span></strong></figcaption></figure><p id="a85478bb-0457-45e0-81ee-155d70578093" class="">
+</p><h1 id="ee114d70-1c9a-4c12-a3c1-437a220720c5" class="">2. Project onto Projection Plane</h1><hr id="64982b96-f1f5-45ed-8d4d-5ea4eccb2aa2"/><blockquote id="ae62d725-034e-40e2-b1c4-07044a596c5e" class="">similiar triangle in lecture 12 </blockquote><figure id="ef031116-0c6e-4cc8-8a8d-ffa863b0a2fd" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.47.18_AM.png"><img style="width:856px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.47.18_AM.png"/></a></figure><h3 id="94780c4f-d220-476b-8d6f-ede4bc90b55e" class=""><mark class="highlight-blue">we get the 2D point in projection plane</mark></h3><figure id="0fdfef0d-82e3-4399-8b33-6d0cc93993c8" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.52.00_AM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.52.00_AM.png"/></a></figure><p id="cb2cf896-4cfa-4086-97b7-56d5c9322c5e" class="">
+</p><h1 id="c9513b4a-cc01-4753-b619-6c57094a36f9" class="">3. <strong>Map from projection plane coordinates → pixel coordinates</strong></h1><div id="7648bf36-b5a6-479b-a5bb-a82cc5c513cc" class="column-list"><div id="bd063393-537c-4c46-b43e-623c3d7f9734" style="width:56.25%" class="column"><ul id="9c997421-018a-4e28-b6be-4bf3532119c9" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-blue">units of </mark></strong><strong><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-blue"> are the SAME as units of world &amp; camera coordinates</mark></strong><ul id="56804193-60ad-4c26-a96f-0597710e0f87" class="bulleted-list"><li style="list-style-type:circle">e.g. millimeters</li></ul></li></ul><p id="6d303935-a1fc-4a75-ac19-85ff83dca95c" class="">→ transform them to pixel index coordinates</p><p id="ce663385-d4ff-4ab3-8592-61a90c95f51e" class="">
+</p></div><div id="42519149-4da8-439f-a924-32c05056ba9c" style="width:43.75%" class="column"><figure id="19a82987-fe67-4e6c-9183-b011fde0cc90" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.58.32_AM.png"><img style="width:480px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_11.58.32_AM.png"/></a></figure></div></div><h2 id="b869ea26-8ed4-4c45-bcca-fbbcd65e5857" class="block-color-blue_background">2 issues to concern..</h2><ul id="78e24217-8c7d-4235-9ba1-3a57432e46e5" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc"><strong>where is the center? </strong><em><mark class="highlight-gray"><strong>precision problem</strong></mark></em><ul id="502da15c-442b-4507-93c4-d2e643ce72bc" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-yellow"><strong><strong>Apply a translation</strong></strong></mark></li></ul></li></ul><ul id="d7e6b116-a127-4d6c-865c-765b50b5a21d" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc"><strong>units are different </strong><mark class="highlight-blue"><strong>(mm versus pixel indices)</strong></mark><ul id="78508dad-62cb-4300-8f17-9231827f177c" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-yellow"><strong>Apply a scale transformation</strong></mark></li></ul></li></ul><p id="27178d45-b795-4445-ab27-9acd439516c6" class="">
+</p><ul id="9c5e66b1-19dd-47fe-8fdc-65b4931a8253" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><em><mark class="highlight-teal"><strong>FOR intrinsic parameters, need to know about focal length</strong></mark></em></span></li></ul><p id="3ee4072a-11ba-470c-9bff-a877325adef1" class="">
+</p><h3 id="fed215cd-51c4-43c7-a981-f285c48da17e" class="">Issue 1: Units are different → scale transformation</h3><hr id="39e00179-4c7d-4278-ab52-2c32c808042c"/><ul id="ab4d1a57-8e23-4630-9fbb-1994de10eff7" class="bulleted-list"><li style="list-style-type:disc">wanna know <span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong><span style="border-bottom:0.05em solid"><strong>how many pixels per milimeter</strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></strong></span></li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="69d0ae91-478c-41d6-a800-42bbd87f8b9e"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">NOTE: spacing between x <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>can be different</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong> as spacing in y</div></figure><p id="dd7ad02b-e85e-41d2-9348-e2a204963ca1" class="">
+</p><figure id="e43e74c7-8b82-4c82-8bdd-59867ebef507" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.08.29_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.08.29_PM.png"/></a></figure><p id="8196bbb6-94d0-4446-8821-9cc99445a749" class="">
+</p><p id="a3162887-ab47-4694-9836-270074931f75" class="">⬆️ <strong><mark class="highlight-blue">above scale transformation in 2D homoenous coordinates:</mark></strong></p><figure id="14302a8e-c8c0-41aa-b200-d56e3ede63dc" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.10.52_PM.png"><img style="width:630px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.10.52_PM.png"/></a></figure><p id="5ecc88c9-9a94-4444-b7cb-ae47a0e51cb5" class="">✅</p><p id="d2abf87d-d888-4d8f-91e0-a62431c61144" class="">
+</p><p id="e7e6a8df-1291-4ba1-a72d-b495657ef1b6" class="">
+</p><h3 id="07261ab3-14d3-4f3f-9819-9a7d6595df97" class="">Issue 2: Find the pixel center → translation </h3><hr id="e8609451-c3ba-495e-ab66-769e9c4f2c1d"/><blockquote id="4318832b-c5d0-426c-bf22-e30865af7f29" class=""><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>p</mi><mi>x</mi></msub><mo separator="true">,</mo><msub><mi>p</mi><mi>y</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(p_x, p_y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">p</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong><strong> denotes the center of the pixel!  corresponds to (𝑥, 𝑦) = </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(0,0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong><ul id="74ef768e-2e94-4f69-877a-5fda7312ad73" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-blue">→ “principal point”</mark></strong></li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="5a237d5e-1511-4698-8e05-19ef170ed77f"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%"><em><mark class="highlight-gray">It might not correspond exactly to the center of the pixel grid.</mark></em></div></figure></blockquote><p id="2b2597a1-255a-405a-b0f5-82de3d6c1562" class="">
+</p><figure id="47d1f471-74a3-48b8-9e0a-642c382d1cc8" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.14.17_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.14.17_PM.png"/></a></figure><p id="e901cf01-c0ae-4e5a-837b-c73ef0a61984" class="">
+</p><hr id="95a982ae-42d2-4e2f-af1a-c93ab7482fbc"/><hr id="1f5f1241-8ff7-4f20-8b8c-382668f55232"/><p id="7dad4263-e1d9-407d-be00-95712fb97d05" class="">
+</p><p id="54680797-0e45-417e-bcf8-55a2d09a707e" class="">
+</p><h1 id="e3fe6756-fddb-446c-a1ba-c3d7cd1270c9" class="">Let’s put STEP 2 &amp; 3 together…</h1><blockquote id="53d49977-9557-4db4-b2cd-6e241578bb2d" class="">Recall:<ul id="0122c7cc-a9a8-4073-9b9d-fa5fb3c0898d" class="bulleted-list"><li style="list-style-type:disc">step 2: project to proj plane</li></ul><ul id="5f2676b6-66a8-44ce-913e-b691c13e3231" class="bulleted-list"><li style="list-style-type:disc">step 3: map to pixel coordinates</li></ul></blockquote><hr id="eaff54d6-45d0-47cd-8811-abdcd0cf5239"/><h2 id="0dee30ae-75dc-47c5-900e-444f728a7678" class=""><strong><mark class="highlight-teal">“Camera Calibration Matrix </mark></strong><code><strong><mark class="highlight-teal">K</mark></strong></code><strong><mark class="highlight-teal">”</mark></strong></h2><blockquote id="1f42e740-e299-48ac-9d3a-1220ace65a85" class=""><strong><mark class="highlight-teal">is the green part</mark></strong></blockquote><p id="e9c0c4d5-2843-4fbf-a36a-b142927ed312" class="">
+</p><p id="9be9d9e1-e2ab-4a4f-bc86-3367547d933f" class=""><strong>Assume we are starting out with a point in camera coordinates,</strong></p><p id="09863f1b-f37e-4020-bdc3-85b6530f93c9" class=""><strong>and written in homogeneous coordinates </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>𝑋</mi><mo separator="true">,</mo><mi>𝑌</mi><mo separator="true">,</mo><mi>𝑍</mi><mo separator="true">,</mo><mn>1</mn><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">(𝑋, 𝑌, 𝑍, 1)^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></p><figure id="8349f78b-df5f-46f9-9013-70a206e7fb8d" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.16.29_PM.png"><img style="width:1030px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.16.29_PM.png"/></a><figcaption><mark class="highlight-teal"><em><strong>3x3 part is invertible but the 3x4 matrix overall is not invertible since it includes projection.</strong></em></mark></figcaption></figure><blockquote id="5ba9f858-9c59-4b83-9721-1c2ec732c1be" class="block-color-blue_background"><strong>Why only one part invertible？</strong></blockquote><p id="49dd6332-d6bb-40d6-a1cc-f92177eab34a" class="block-color-blue_background"><mark class="highlight-blue_background">→ because u can of course invert from pixel coordinates to camera coordinates</mark></p><p id="0c7be87b-8b79-48c9-a0c6-59c3eec3002d" class="block-color-blue_background">→ but u cannot invert back to 3D coordinates <strong><strong>before projection</strong></strong></p><p id="e046482e-9d19-4e4a-8b1a-a55275e06834" class="">
+</p><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="0003be8e-904e-49d3-bcbc-6c4002a4e73d"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">RECALL: in linear algebra, u want to<mark class="highlight-yellow"><strong> scale</strong></mark> AND THEN <mark class="highlight-yellow"><strong>translate</strong></mark></div></figure><p id="124ea735-44d5-44fa-a419-bf005521f718" class="">
+</p><h1 id="78b735f7-448e-4db9-bb08-cf6a05db2edf" class="">ASIDE: A more general model: adding a <code>shear</code></h1><hr id="74ad6295-2271-4174-bf1c-ed14a7a4204d"/><ul id="e12c665b-c38b-41f8-a306-4d2379161146" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-blue_background">this </mark></strong><strong><mark class="highlight-blue_background"><code>shear</code></mark></strong><strong><mark class="highlight-blue_background"> is often very small, think of grid as a bit tilted… slightly</mark></strong><figure id="bcdae0f1-0d13-458e-97f3-115cd0a397d1" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.26.05_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.26.05_PM.png"/></a></figure></li></ul><p id="477c964b-1f9d-4866-8d16-1690f576d9ce" class="">
+</p><h1 id="4365f61c-c767-47ed-9eb2-3a8b1b4b7b09" class="">Conclusion: Intrinsic &amp; Extrinsic</h1><hr id="99cc4b2d-0b41-4bd9-9d7e-6681c916b5a2"/><blockquote id="1b28c6a1-0c2a-45f1-875e-c028929877d3" class="">a sequence of transformations</blockquote><p id="d4d5ca5d-1fb7-4cb8-bed1-90bacbe24abf" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-blue_background"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>extrinsic:</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark></span></p><ul id="b648ec1c-3b3a-43f0-bba4-2d9341361b29" class="bulleted-list"><li style="list-style-type:disc">from 4D homogeneous coordinate,<ul id="81f7eec6-4302-478c-8f49-0ec94cb34f2e" class="bulleted-list"><li style="list-style-type:circle">translate to get rid of camera position in world coordinates</li></ul><ul id="2e917552-0fdd-44cf-9159-a2d2abf0cd23" class="bulleted-list"><li style="list-style-type:circle">rotate to get to camera coordinate</li></ul></li></ul><p id="b3cd396b-6b46-435a-96f0-a5177a546438" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-blue_background"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>intrinsic:</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark></span></p><ul id="72bad73d-ea9e-4c1b-84f9-8bf56a5d432a" class="bulleted-list"><li style="list-style-type:disc">once in camera coordinate,<ul id="23ccf3b2-1471-4c07-b6fb-2b5fc77ef1c6" class="bulleted-list"><li style="list-style-type:circle">multiply by camera calibration matrix <code>K</code></li></ul></li></ul><p id="0e4c6e32-d156-4f12-99fb-9d64dca56e61" class="">
+</p><p id="ea21c0d9-ecec-4785-ba1c-07a8849faad8" class=""><strong>….. in the end we get a 3x4 matrix..</strong></p><figure id="f9e6d291-5af2-4b40-8dbb-9e64498ed3d6" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.32.12_PM.png"><img style="width:982px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.32.12_PM.png"/></a></figure><p id="1dc4f48f-2aa9-46be-82ac-befac562e62f" class="">
+</p><p id="887f1c19-d68b-495f-bc8a-2f855dacf4eb" class="">
+</p><h3 id="5e22729a-4b11-41ca-be75-525bb29dcb9a" class="">Exercises:</h3><hr id="3d69d9ca-bcd5-419a-8c0d-4feae23fefb6"/><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="2358d428-f409-4b4e-b0c9-a15f7c44b2ea"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong><mark class="highlight-teal">NOTE: think of </mark></strong><strong><mark class="highlight-teal"><code>P</code></mark></strong><strong><mark class="highlight-teal"> as a point that </mark></strong><ul id="60d6cd14-45ca-4356-9dfd-fe10d8a83efa" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-teal">takes a point from 3D world to 2D point in camera pixel</mark></strong></li></ul></div></figure><p id="85725d29-aebe-4390-ab43-779fdd3b1114" class="">
+</p><blockquote id="2c61988b-8506-41ce-93bf-60d41f15689f" class="">Q1: <figure id="c728478d-c55e-4642-8ccc-91fd0893c851" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.35.56_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.35.56_PM.png"/></a></figure></blockquote><ul id="a969286a-8a72-469d-929a-a85839086001" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>ANSWER: the camera position (b/c it does not change at all)</strong></mark><ul id="cbfb70e3-e21b-4500-b7d5-c58c2e295f22" class="bulleted-list"><li style="list-style-type:circle">in step 1 we get rid of camera position = =[0 0 0] </li></ul><ul id="7ac977b6-b637-4a14-9a11-fafdb135ef5a" class="bulleted-list"><li style="list-style-type:circle">then [0 0 0] times ANYTHING is [0 0 0] <ul id="f59db12d-bda0-4054-b608-7caf68bb6f2f" class="bulleted-list"><li style="list-style-type:square"><strong>→ so it must give the null space!</strong></li></ul><p id="40473d3e-64ab-46af-98e0-6dedbefd5560" class="">
+</p></li></ul></li></ul><blockquote id="2eaa1d53-9602-4e95-9e86-cde5e6f76e0b" class="">Q2:<figure id="80947da2-e27e-4e69-b860-b21670949ca2" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.41.11_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.41.11_PM.png"/></a></figure><figure id="514e6f7e-3361-4b57-86d2-08fa15fcebe6" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.49.11_PM.png"><img style="width:480px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.49.11_PM.png"/></a></figure><ul id="066a44e9-01db-473e-b837-a275757adb4f" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>ANSWER: can think of “how to isolate the 1st column?”</strong></mark><ul id="af05b4b6-a697-4005-9e66-f08627203f0e" class="bulleted-list"><li style="list-style-type:circle">we need <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mi>X</mi><mo separator="true">,</mo><mi>Y</mi><mo separator="true">,</mo><mi>Z</mi><mo separator="true">,</mo><mn>1</mn><msup><mo stretchy="false">]</mo><mi>T</mi></msup><mo>=</mo><mo stretchy="false">[</mo><mn>1</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>0</mn><msup><mo stretchy="false">]</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">[X,Y,Z,1]^T=[1, 0,0,0]^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="7c34982b-4695-4f5c-bfa1-ee2df458d3bf" class="bulleted-list"><li style="list-style-type:square"><strong><span style="border-bottom:0.05em solid"><em>what does this new matrix mean?</em></span></strong><strong><em> geometric</em></strong></li></ul><ul id="7cc0e01a-fc98-4062-b454-a11dedda7808" class="bulleted-list"><li style="list-style-type:square"><strong>→ </strong><strong><em><span style="border-bottom:0.05em solid">a point at infinity in x direction</span></em></strong><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="c5dcc94f-3cc8-404d-9bf1-939bfa5fc2bb"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-teal">recall….</mark><figure id="e317312e-1905-4eed-aebe-a576f7737891" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.47.49_PM.png"><img style="width:336px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.47.49_PM.png"/></a></figure></div></figure></li></ul></li></ul></li></ul><p id="350d13c5-2838-4684-9ce7-bfd58f999821" class="">
+</p><figure id="c04b1b55-9db4-46ad-90f4-c1e7101b730e" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.49.01_PM.png"><img style="width:576px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.49.01_PM.png"/></a></figure><ul id="cf385316-433e-4b20-a28a-810d214b3872" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>ANSWER: to isolate 4th column</strong></mark><ul id="8d80a659-048a-47f2-ae2b-c468c9407733" class="bulleted-list"><li style="list-style-type:circle"><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong><em><span style="border-bottom:0.05em solid"><strong>→ origin</strong></span></em></strong></span></em></strong></span></em></strong></span></em></strong></span></em></strong></span></em></strong></span></em></strong></span></em></li></ul></li></ul><figure id="734d7f2e-4cb1-4af4-ad7a-08356bdad45c" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.50.50_PM.png"><img style="width:628px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.50.50_PM.png"/></a></figure><figure id="b8e7d3c6-9d4f-460b-b318-926dac5b2325" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.52.01_PM.png"><img style="width:480px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.52.01_PM.png"/></a></figure><ul id="36b21720-63de-4c34-9955-09ed0804825e" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>ANSWER: think of the red equation</strong></mark><figure id="9da8ad63-4094-42bd-b06a-df568e3d41ff" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.53.06_PM.png"><img style="width:642px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.53.06_PM.png"/></a></figure><ul id="edbbfb4a-d93f-4d8f-bce8-26a5a5dd8b99" class="bulleted-list"><li style="list-style-type:circle">which plane is iit?<ul id="419062eb-201e-4d3e-a44d-58bc68b887a1" class="bulleted-list"><li style="list-style-type:square"><em><strong><span style="border-bottom:0.05em solid">Ans: the plane in world that maps to position </span></strong></em><em><strong><span style="border-bottom:0.05em solid"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span><span>﻿</span></span></span></strong></em><em><strong><span style="border-bottom:0.05em solid"> &amp; </span></strong></em><em><strong>containing the camera center</strong></em></li></ul></li></ul></li></ul><p id="3608a34d-0295-43c6-ada6-e4a73dc48d57" class="">
+</p><p id="1b802aa4-3705-41c0-a529-9d088effdc6d" class=""> </p><figure id="1f534251-0ebd-47d2-87e3-6c20c5b17ae8" class="image"><a href="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.52.15_PM.png"><img style="width:528px" src="16%20-%20Camera%20Extrinsics%20&amp;%20Intrinsics%20c7409b5f79204da29a957ff094c58a9b/Screen_Shot_2022-11-01_at_12.52.15_PM.png"/></a></figure><ul id="36954a6e-179c-4702-b417-d1ccd5426403" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>ANSWER: camera coordinates</strong></mark><ul id="fde4a54a-3c2b-4678-897f-22abb36f5976" class="bulleted-list"><li style="list-style-type:circle"><em><strong><span style="border-bottom:0.05em solid">Ans: the plane in world containing camera center &amp; normal is optical axis</span></strong></em><ul id="40019072-d6b3-41c4-9e9a-23f97833a579" class="bulleted-list"><li style="list-style-type:square"><mark class="highlight-orange">the 3-vector (P3,1, P3,2, P3,3) must be in the direction of the optical axis of the camera, - since it’s normal to principal plane</mark></li></ul></li></ul><p id="2e89cc31-7cc7-438b-838f-fb829110603d" class="">
+</p></li></ul></blockquote></div></article></body></html>

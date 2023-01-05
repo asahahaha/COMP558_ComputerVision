@@ -1,0 +1,724 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>4 - Edge Detection</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2f2d14c2-d019-4651-a117-86d3bc71f7fe" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">4 - Edge Detection</h1></header><div class="page-body"><p id="5658f32c-75f0-4d17-8294-61935fa65a23" class=""><time>@September 13, 2022</time> </p><p id="994cb98b-4972-466b-8c19-28d453d96437" class="">
+</p><nav id="d2f0d415-2458-4b67-90f3-0fe42edb4908" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#5de00938-1c6b-4123-bc76-68585700209f">Convolution</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#17b621f9-5998-4803-b78a-4a11e52cfcae">STEPS</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d2084655-9ea1-48dc-a7d4-9f5e3331823c">Linear Systems: linearity!!!</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#d1f1fac3-be08-4281-ab82-c94e49cb54dd">Shift invariance</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b1575a4d-8319-4144-8e89-4da3362c778c">Convolution Theorem</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#6afc4e60-58cb-498b-8806-d55eee066876">Edge Detection</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d85bfe20-d649-4cd9-b30a-d11258ef5bb2">Classcal Edge Detection…</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a2ba066d-16ba-4dad-96df-73d265b7f577">1. by threshold</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f54f67ea-0c70-4330-8bb6-1dc721cb2cb3">Many ways to define gradient-like kernels (filters)…</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e4597b9c-b5da-4fdb-b0c8-ab1b35278f2d">👁 ex. Prewitt &amp; Sobel (1960’s)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#80266ee8-29a6-48cb-8345-5a2e090e3f4d">2. by 2nd Derivative</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#54a0479a-9365-4688-be75-ece3930c05ec">example. step edge</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#7f11d749-bb28-4bab-9f4a-4e792df28d84">Problem → <mark class="highlight-orange">smooth</mark> and <span style="border-bottom:0.05em solid">then</span> edge detection!</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#110487b4-99a9-4e8a-8c29-574fa515773e">.. Derivative of Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#637fd45e-6492-4ba5-ae41-9e44abd97be5">.. gradient of smoothed images</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d15d0a3b-4afa-4885-b22c-4b46e06ea382">example. edge detection using 2nd derivative + gaussian smoothing</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#94158d16-f5cd-4468-a621-414350a4774a">2nd Derivative of(with) Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e2af796c-782c-49b8-b57f-aee80951f29a">Laplacian ⭐️</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6afbf635-b5a8-4425-8da0-b96a08705a9e">Laplacian of a Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#4a92ef21-7838-4df9-8c15-c150857704de">ex1. vertical image edge</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#4f500af1-fd33-4e96-bedb-24f6e2bf0158">ex2. horizontal image edge</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a8b46d8b-6084-4b7c-88be-f33baab8b670">ex3. edge of arbitary orientation</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c649192d-8cf1-4271-b1f1-ae031590aca2">👁 ex. Marr-Hildreth edge detection (1979)</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#0e278f4c-ea70-41f2-962a-ae69058e5a8a">- NOTES on Marr-Hildreth…</a></div></nav><h2 id="5de00938-1c6b-4123-bc76-68585700209f" class="">Convolution</h2><ul id="0a7264d9-b459-4b4e-8781-36c1e4eb8427" class="bulleted-list"><li style="list-style-type:disc">convolution with a kernel,<ul id="9ec1d60f-059d-46a5-943a-457412593e76" class="bulleted-list"><li style="list-style-type:circle">x(n)*I(n) = ∑u s(n-u)I(u)</li></ul><p id="d3664f27-5937-446f-926b-0705081ffa08" class="">
+</p><ol type="1" id="c0841e44-7fd1-4aa8-9389-557491c3e7a0" class="numbered-list" start="1"><li><strong>reflection</strong>: by y axis <mark class="highlight-pink"><span style="border-bottom:0.05em solid"><strong>x(-u)</strong></span></mark></li></ol><ol type="1" id="05ca5817-73a3-415e-adfb-6cf3f200a690" class="numbered-list" start="2"><li><strong>translation</strong>: shift by n <span style="border-bottom:0.05em solid"><mark class="highlight-pink"><strong>x(-u+n)</strong></mark></span></li></ol></li></ul><p id="414c6816-039c-4ded-a3ec-cefed34bf62e" class="">
+</p><p id="d6501f3a-18cc-477f-9b01-2019e2733f09" class="">
+</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="c2503579-6289-44d0-8993-cd887dfa7b05"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">give a sense of these steps</div></figure><h2 id="17b621f9-5998-4803-b78a-4a11e52cfcae" class="">STEPS</h2><ol type="1" id="1cfd17b8-3ff1-4f5c-b476-29ab134dac4c" class="numbered-list" start="1"><li>draw <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x_2(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ol><ol type="1" id="2f8a43cd-05eb-4368-9bfc-bdeca1162f23" class="numbered-list" start="2"><li>draw <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mo>−</mo><mi>u</mi><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">x_1(-u),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span></span><span>﻿</span></span> reflect across y axis → slide first aff onto the 2nd</li></ol><ol type="1" id="4ed09bce-4f34-4695-aea8-af30628cdac2" class="numbered-list" start="3"><li><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo stretchy="false">(</mo><mo>−</mo><mi>u</mi><mo>+</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x_1(-u+n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord">−</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ol><hr id="a77317b2-4c48-40bd-9e24-46ba37ed9ac1"/><hr id="3d19e73c-df80-4b36-b89f-58fb24f5de3d"/><p id="c0c9b8ae-b560-43a1-ad89-e51cebbebff8" class="">
+</p><h2 id="d2084655-9ea1-48dc-a7d4-9f5e3331823c" class="">Linear Systems: linearity!!!</h2><p id="82101412-a6b6-49f4-a7cf-7021ed36d6c2" class="">
+</p><figure id="e3e491b9-a71b-4e3b-9b2e-6c5f71578240" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.01.36_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.01.36_PM.png"/></a><figcaption><span style="border-bottom:0.05em solid">scalar multiplication + additivity → </span><span style="border-bottom:0.05em solid"><strong>superposition</strong></span></figcaption></figure><p id="0728a593-9af6-4432-bd53-27472e083870" class="">
+</p><p id="bae9a9ee-4392-4a4f-8583-121c3a17fd6b" class="">
+</p><h2 id="d1f1fac3-be08-4281-ab82-c94e49cb54dd" class="">Shift invariance</h2><hr id="79c5fbcc-2411-4c42-b5f4-cdc146410072"/><ul id="b38e929e-c599-41cb-a147-8743c075aaab" class="bulleted-list"><li style="list-style-type:disc">if linear, it is <span style="border-bottom:0.05em solid">shift invariance</span><ul id="711f2e2a-baf8-48d6-aa59-d8f46dd0ba12" class="bulleted-list"><li style="list-style-type:circle">shape doesn’t change when same input at diff time</li></ul></li></ul><p id="228e347d-bf16-48bd-9951-c45dfdb30481" class="">
+</p><figure id="1abed0dd-9bf6-46ae-9632-52de981f4791" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.12.41_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.12.41_PM.png"/></a></figure><p id="5c88c637-6810-4b9d-9f3f-06f3ee8708db" class="">
+</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="7645f029-fd51-4786-b6ba-a0f9eeab4007"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-purple"><strong>translating input → get same output but translated</strong></mark></div></figure><p id="fdc6651f-f46f-4dc8-a2a3-3a8f685404fd" class="">
+</p><p id="e6f9754d-f307-4844-83e0-7baa927b866b" class="">
+</p><h2 id="b1575a4d-8319-4144-8e89-4da3362c778c" class="">Convolution Theorem</h2><hr id="dd4e4fdb-3626-4240-8dc7-f0fef83208c6"/><ul id="afe21489-f40e-4b04-86b7-6f540efb583f" class="bulleted-list"><li style="list-style-type:disc">linear → completely characterized by impulse response!!!</li></ul><p id="8b1ee239-d38c-4206-aed8-761c72b49baa" class="">
+</p><figure id="0e0d62d8-8867-4251-9be4-3776d66ce387" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.21.43_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.21.43_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="0e6769b9-26fb-49d3-9371-10c0028f4142"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">let h(x) be impulse response! then <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> for any <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> is…..</div></figure><p id="486ecf67-9aad-4f58-bd7f-99b44ab052c8" class="">
+</p><h1 id="6afc4e60-58cb-498b-8806-d55eee066876" class="">Edge Detection</h1><hr id="02f0a71d-478f-48a4-b256-e22b2c1ac121"/><p id="cdf59ca5-f344-44a2-8e81-6a894d1276b9" class=""><strong>is to…</strong></p><ul id="28e55488-43b7-4b0d-8ad0-8b27f4849839" class="bulleted-list"><li style="list-style-type:disc">find boudaries of objects<ul id="32610410-777f-41be-abbd-9d01310cdee2" class="bulleted-list"><li style="list-style-type:circle">recgnize shapes based on 2D silhouettes</li></ul><ul id="9bd5065d-36b2-40f4-97d2-3b3743d3b1dd" class="bulleted-list"><li style="list-style-type:circle">estimate scene layout</li></ul></li></ul><ul id="bd535780-418d-438e-9152-3fa423fe7082" class="bulleted-list"><li style="list-style-type:disc"><strong>match</strong> image “features” from one image to the next<ul id="93949167-40c2-41ad-b292-dc89a763be50" class="bulleted-list"><li style="list-style-type:circle">binocular vision(stereo)</li></ul><ul id="be10f2f9-4a90-47f2-a8b3-4bfce0270c14" class="bulleted-list"><li style="list-style-type:circle">image motion(video)</li></ul></li></ul><h2 id="d85bfe20-d649-4cd9-b30a-d11258ef5bb2" class="">Classcal Edge Detection…</h2><ol type="1" id="bf199e02-201f-4029-a62f-1acd239df0d5" class="numbered-list" start="1"><li>prewitt and sobel (1960)</li></ol><ol type="1" id="a05ade70-cde6-4d21-add7-b20fcec2a04e" class="numbered-list" start="2"><li>marr &amp; hildreth (1979)</li></ol><ol type="1" id="1e6a3cec-e237-4768-8dae-565f9315cb05" class="numbered-list" start="3"><li>canny (1986)</li></ol><p id="c967a0f3-98ba-4a2f-918e-4cb289b8929b" class="">
+</p><h2 id="a2ba066d-16ba-4dad-96df-73d265b7f577" class="">1. by threshold</h2><ul id="c65221d2-9990-463e-a8c7-16914b3f690e" class="bulleted-list"><li style="list-style-type:disc">compute central differences.       it’s convolution so it got fliapped!<figure id="24fe0563-05b0-489f-a451-a32b55646fff" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.26.05_PM.png"><img style="width:1160px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.26.05_PM.png"/></a><figcaption><mark class="highlight-orange"><strong>𝛕(tau) is arbitary threshold</strong></mark></figcaption></figure></li></ul><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="39b58a91-c1af-4556-85f7-d8d615204d5d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">good for vertical edges, but bad at finging vertical edges (understandale)</div></figure><figure id="23f516ee-54eb-4757-a2f6-1062ba2df334" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.28.56_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.28.56_PM.png"/></a></figure><p id="28c3ac2d-60c6-4d27-9f56-d06214fd9ba1" class="">might lose low-contract pixels:(</p><p id="488f02ee-506b-4e3d-9071-35cda5d0e7f2" class="">
+</p><p id="25ee1671-b94d-46fa-bd02-0771f27f6b59" class=""><strong>recall from last lec: image gradient……</strong></p><hr id="0aef454b-ed5b-418b-9181-2847b3ca2e8c"/><figure id="93cf2d6e-101d-461f-8503-2dcb0aef219a" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.29.58_PM.png"><img style="width:480px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.29.58_PM.png"/></a></figure><hr id="f7af7a62-4519-4714-a062-da16090afc5d"/><h3 id="f54f67ea-0c70-4330-8bb6-1dc721cb2cb3" class="">Many ways to define gradient-like kernels (filters)…</h3><figure id="6a61c5f6-1350-4b8d-81ff-712225f786ba" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.31.21_PM.png"><img style="width:432px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.31.21_PM.png"/></a><figcaption>别忘记convolution是反着的</figcaption></figure><ul id="b4cc8d75-bfd8-486e-8d4c-e9498d0f1e8f" class="bulleted-list"><li style="list-style-type:disc">rather than <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>∗</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">1*3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>∗</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">3*1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span><span>﻿</span></span> kernels fro partial dierivatives, just expand放大一点, <strong><mark class="highlight-orange">use </mark></strong><strong><mark class="highlight-orange"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>∗</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">3*3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-orange"> kernels</mark></strong><p id="84c3c373-6878-48ef-89e0-07426aaf2851" class=""><mark class="highlight-pink"><strong>and then compare </strong></mark><mark class="highlight-pink"><span style="border-bottom:0.05em solid"><strong>magnitude of image gradient</strong></span></mark><mark class="highlight-pink"><strong>, to the 𝛕 (threshold!!!)</strong></mark></p><figure id="50d4006e-3e97-482c-940d-8c0de3e69828" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.37.05_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.37.05_PM.png"/></a></figure><p id="476cc891-e40e-435e-ba25-41c5bef3b72d" class=""><strong>find locations (𝑥, 𝑦) such that</strong></p><figure id="5cfe0717-d939-48dc-b3f9-add482a37bc1" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.37.13_PM.png"><img style="width:240px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.37.13_PM.png"/></a></figure></li></ul><p id="72c3c0f9-ddf7-4382-8c65-845aabed0e45" class="">
+</p><p id="cff97a99-4ae3-4c9c-b7f5-87790d8998c8" class="">
+</p><h2 id="e4597b9c-b5da-4fdb-b0c8-ab1b35278f2d" class="">👁 ex. Prewitt &amp; Sobel (1960’s)</h2><figure id="59b2565f-b406-43c6-8597-1055bde76ab9" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.27.59_PM.png"><img style="width:528px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.27.59_PM.png"/></a><figcaption>middle weight in middle wieigh more!!!</figcaption></figure><p id="1d92d2ea-2eaa-4a14-bb30-56bd55f4ba63" class="">
+</p><figure id="11c95a9e-6cf9-4223-82c8-7332e8f1f703" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.38.47_PM.png"><img style="width:432px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.38.47_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="316e6bf3-9d0b-42f3-a8fe-1e9f016c1904"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong><mark class="highlight-brown">example by prewitt → get edges of ALL orientations!!</mark></strong><p id="49770a97-0407-4e0a-b933-ab46d1c0901c" class="">Note: edges are noisier than Canny….</p></div></figure><p id="b67c473c-cc4c-4e89-8df2-3a1cc3b71335" class="">
+</p><hr id="06a74ff4-116f-4377-8e53-e45ffceaec07"/><p id="0566a567-edfc-4946-a85a-85599a349218" class="block-color-gray_background"><strong>2 issues to deal with…</strong></p><ol type="1" id="086218f7-5072-4746-bd1e-dc69dd119c23" class="block-color-gray_background numbered-list" start="1"><li>edges any orientation</li></ol><ol type="1" id="8cd75915-a0a0-429e-a5c8-0031932b117b" class="block-color-gray_background numbered-list" start="2"><li>edges should be thin (preferably 1 pixel wide)</li></ol><p id="33c9c04c-7776-4ffc-8bb3-56e7964c4c06" class="block-color-gray_background">
+</p><p id="d06114a9-35b4-4fad-9781-17b861cbbfae" class="block-color-gray_background"><strong><mark class="highlight-brown">now let’s look at 2 other methods….</mark></strong></p><hr id="c5aac180-015b-4467-87a7-62fed701c342"/><p id="54545269-79de-4e90-968a-4c5b3535a798" class="">
+</p><p id="814b9100-16b4-4007-8013-b5f4d4883eea" class="">
+</p><p id="0b86690b-35bc-416f-b311-cc0d301b6019" class="">
+</p><h2 id="80266ee8-29a6-48cb-8345-5a2e090e3f4d" class="">2. by 2nd Derivative</h2><hr id="79e019a4-d70a-41de-b6a4-78cebaf7ad3b"/><ul id="7ede3e24-6a52-49fb-a91e-5dfae52684d9" class="bulleted-list"><li style="list-style-type:disc">forward difference - backward difference</li></ul><figure id="ae132160-b063-44bb-b84b-04e89074f092" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.42.31_PM.png"><img style="width:720px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.42.31_PM.png"/></a><figcaption>✅</figcaption></figure><p id="a8fce78e-9e09-4b47-b6ea-79ce538bf9de" class="">
+</p><h3 id="54a0479a-9365-4688-be75-ece3930c05ec" class="">example. step edge</h3><hr id="521e81f6-d478-4056-9eb0-2ba69e9fd3bf"/><figure id="dcc52ac2-0794-4d13-a289-c125f9611b92" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.49.37_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.49.37_PM.png"/></a></figure><figure id="482d2d43-0a0c-45b6-b2be-3faff63a9008" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.50.23_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.50.23_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="f36de2d4-bf65-4312-ade4-ed556c97f775"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-orange"><strong>edge  = maximum of 1st derivative = zero-crossing at 2nd derivative</strong></mark></div></figure><p id="a65e619e-d670-41f1-9e88-3638051c61f1" class="">
+</p><hr id="ea8dd90d-cf5d-4d3e-8fed-2b3167901eda"/><p id="f4983631-9031-48e8-a068-229c8832b216" class="">
+</p><h3 id="7f11d749-bb28-4bab-9f4a-4e792df28d84" class="">Problem → <mark class="highlight-orange">smooth</mark> and <span style="border-bottom:0.05em solid">then</span> edge detection!</h3><p id="21239f9d-7ce7-496c-b252-289d0420327d" class="">
+</p><blockquote id="6a0d32d9-bf86-4f2d-a94b-5bd18c575926" class="">NOTE:  2nd derivatives will be <span style="border-bottom:0.05em solid"><strong>sensitive to imge noise</strong></span>, so we need to smooth image to reduce noise….</blockquote><p id="00804b1d-9533-4f31-85fd-3f4b35f61334" class=""><div class="indented"><p id="d6346f3c-d2aa-40ff-addf-52339650d59c" class="">PROBLEM: ☹️ if we smooth image, also smooth edges</p></div></p><p id="13c11e62-e16b-4832-ae84-3e3cc9b5df5d" class="">we will use gaussian smoothing, with 𝛔 being standard deviation, so we can <span style="border-bottom:0.05em solid"><strong>adjusts amount of smoothing</strong></span></p><p id="caedd4bf-f3ef-431c-8c09-83bed00ad38d" class="">
+</p><p id="8f39847e-1340-49be-865e-68f53f919e71" class="block-color-teal"><strong>Example. blurred step edge (NO NOISE😀😀😀)</strong></p><hr id="08bee298-619e-4987-9c24-922cf0f77fd4"/><figure id="e7f3c0b7-8937-4e44-98d4-20a2dd05b1e7" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.41.22_PM.png"><img style="width:672px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.41.22_PM.png"/></a></figure><p id="28985d63-b073-493f-a4e7-c3fc8c4605ae" class="">
+</p><p id="c49bfb6f-55c6-4dfd-b08c-e9f23af955a5" class="">
+</p><p id="3bab115e-f882-4d1a-b3a2-b90fc1e13708" class="">blurring data a little bit before computing derivatives - local max of intensity changes</p><p id="9397ca9e-a706-4807-865d-3676b4c4c0fe" class="">
+</p><p id="7fa5ea45-b274-4dc1-ad4a-32ed56970605" class="">
+</p><hr id="ea4aed3b-efaa-4d1e-8ceb-59262dee5614"/><p id="66561766-5396-43db-afd6-e6d7aed976c7" class=""><strong>Recall associativity of convolution…</strong></p><figure id="7d09d6ad-053f-4000-a99a-9e166ce9806e" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.59.10_PM.png"><img style="width:336px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.59.10_PM.png"/></a></figure><figure id="dd8be22a-a31a-41cc-b510-b86b3411bfdf" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.59.18_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_12.59.18_PM.png"/></a></figure><p id="219232de-ec88-443d-aab7-1ccc98e5de07" class=""><span style="border-bottom:0.05em solid">🤩 WOW! derivative can be written as a convolution!!!, so for discrete functions, derivatie is approximated by local difference</span></p><p id="d47b827a-cf7e-4ba3-b0eb-739bd6d6b04f" class="">
+</p><h3 id="110487b4-99a9-4e8a-8c29-574fa515773e" class="">.. Derivative of Gaussian</h3><figure id="6a400fbf-3187-493e-8ce1-577da4165e01" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.02.35_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.02.35_PM.png"/></a></figure><hr id="9d566c0e-9a1e-42ef-96c4-2bcca2ecb220"/><p id="6e4cd325-ad16-46f9-a426-7d89f765234f" class="">
+</p><p id="79a41f97-06f3-4cf0-a779-695d6b846cf0" class=""><strong>Recall 2D Gaussian….</strong></p><figure id="4b46cbb2-df4a-4e10-9563-e7eb4e90e4b7" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.03.19_PM.png"><img style="width:384px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.03.19_PM.png"/></a></figure><p id="1e8db21c-aed3-4b4d-8db5-8b69ce8a849d" class="">Also, since we’ve found drivative can also be applied to convoltion as a function….</p><blockquote id="cd6f2bc9-06ab-49cc-8305-993c5571826a" class="">let’s do <strong>2D derivative of Gaussian</strong></blockquote><p id="4bb85845-a9c7-4020-8017-5b32059a1708" class="">
+</p><div id="2bb2dbff-6e1b-4630-b4d4-007490d23e21" class="column-list"><div id="379c18a8-aa9a-4fd3-842b-663c9a8cb653" style="width:56.25%" class="column"><figure id="d29e9e13-f99e-4818-8dd2-a22f77103034" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.06.40_PM.png"><img style="width:1112px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.06.40_PM.png"/></a></figure></div><div id="dc7fd3cf-77bf-44cb-b36f-a18850c52d6c" style="width:43.75000000000001%" class="column"><figure id="52105948-c2a3-4502-923b-1dab362a03fe" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.06.48_PM.png"><img style="width:996px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.06.48_PM.png"/></a></figure></div></div><h3 id="637fd45e-6492-4ba5-ae41-9e44abd97be5" class="">.. gradient of smoothed images</h3><figure id="c9f37fae-8ebf-4660-8d2e-5003de22d462" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.08.03_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.08.03_PM.png"/></a></figure><p id="0bbc1532-35f2-4632-a5c4-1437060adc63" class="">
+</p><p id="fd5206a5-ea79-469c-817a-28fed95994f3" class="">
+</p><h3 id="d15d0a3b-4afa-4885-b22c-4b46e06ea382" class="">example. edge detection using 2nd derivative + gaussian smoothing</h3><figure id="efd15f75-7931-47f5-bb85-02cb990df7bb" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.09.29_PM.png"><img style="width:624px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.09.29_PM.png"/></a></figure><p id="8cbec678-d043-43d8-ae84-9a622d9baa66" class="">
+</p><h3 id="94158d16-f5cd-4468-a621-414350a4774a" class="">2nd Derivative of(with) Gaussian</h3><hr id="7b2b8561-e75c-4722-9473-17f431e33662"/><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="aa119f0b-9121-41d5-b62e-5fa276157541"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><span style="border-bottom:0.05em solid"><em>recall the kernel for 2nd derivative…</em></span><figure id="5d7e1d12-218d-4427-871a-10f95a59d40b" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.10.38_PM.png"><img style="width:192px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.10.38_PM.png"/></a></figure></div></figure><figure id="7756447c-332d-4c95-94d6-97622073fd8c" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.11.03_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.11.03_PM.png"/></a></figure><hr id="1ad20114-b813-46dc-a0ed-3cd2976504d9"/><p id="6d79b231-f93a-4930-b0b9-173aed469b0d" class="">ASIDE:</p><ul id="426f29ae-f0b7-4870-bbbf-54853df0bc0b" class="bulleted-list"><li style="list-style-type:disc">the zero padding is causing the weird things happening near the end</li></ul><p id="839c81d3-6143-4610-9f40-b6fcce1320ae" class="">
+</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="7804f7bc-341b-4c45-9238-768f5009f0d9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">2D gaussian is product of two 1D gaussians</div></figure><p id="9758d042-e972-4d7f-a152-f9694532f874" class="">
+</p><p id="f0e96362-1f9a-48c5-bc13-30e01f7e3f4c" class="">
+</p><h1 id="e2af796c-782c-49b8-b57f-aee80951f29a" class="">Laplacian ⭐️</h1><hr id="12030e0e-ebb8-4db2-850a-4b9e4d7cc1cf"/><p id="c25d285e-be0b-42c7-b317-faef659ff924" class="">
+</p><figure id="04feb1d9-e911-44ea-9389-a6ca26624ce1" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.51.54_PM.png"><img style="width:480px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-09-13_at_12.51.54_PM.png"/></a></figure><blockquote id="b0c1cd5c-5a36-4e1f-a2e7-b66dc863dcc4" class="">Laplacian is the <span style="border-bottom:0.05em solid"><strong>sum of 2nd derivaties</strong></span></blockquote><h2 id="6afbf635-b5a8-4425-8da0-b96a08705a9e" class="">Laplacian of a Gaussian</h2><hr id="3a28ab29-55fb-4361-abf3-bcff3aab9671"/><figure id="243eac31-659c-4991-b215-c755d77782bd" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.23.56_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.23.56_PM.png"/></a><figcaption>NOT DIFFICULT BUT HAVE NOT SHOWN YET</figcaption></figure><p id="283b192a-95c7-4733-ad56-86c89ad0791f" class="">
+</p><p id="50a8a321-209c-4160-8230-a6de06c37b66" class="">
+</p><h3 id="4a92ef21-7838-4df9-8c15-c150857704de" class="">ex1. vertical image edge</h3><hr id="0e4d118c-cc2e-4a48-a5b7-767afeb2046a"/><blockquote id="db0593f0-0fb0-4a33-962e-e78ddf014396" class="">Q: what if we convolve wtih laplacian of gaussian?</blockquote><figure id="afacb50f-4377-4bc6-a3e2-573f492b909c" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.28.57_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.28.57_PM.png"/></a></figure><p id="41cb4fe2-c36f-4a31-b6f5-885db4b6f2fa" class="block-color-blue_background">
+</p><ul id="c2f769ae-496f-4627-81da-b0d5a33a9b7b" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-blue">1st derivatie of y is zero, 2nd derivative is ALSO zero, so…..</mark></strong><figure id="a9a67782-758a-4452-a1ac-915c6f19bd5c" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.33.06_PM.png"><img style="width:1296px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.33.06_PM.png"/></a></figure></li></ul><p id="90ade725-e567-4a42-872d-a00378232a0e" class="block-color-blue_background">
+</p><p id="913e4904-2f78-4080-b549-369800acf42e" class="">
+</p><p id="014d50f7-371f-4cf3-9c9b-b0495e8b13a1" class=""><mark class="highlight-blue_background">A: same as in 1D ⬇️⬇️, we get </mark><mark class="highlight-blue_background"><em>a zero crossing at edge!!!</em></mark></p><figure id="85714660-6dfa-4f2a-a094-3056987126ef" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.34.28_PM.png"><img style="width:432px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.34.28_PM.png"/></a><figcaption>in 1D, just x</figcaption></figure><p id="8eaceba8-f5d5-4870-be20-70810ac0553c" class="">
+</p><p id="f2ee5be2-f4eb-4a1d-9b59-f69ad43e8674" class="">
+</p><h3 id="4f500af1-fd33-4e96-bedb-24f6e2bf0158" class="">ex2. horizontal image edge</h3><hr id="61ec6697-ce75-4137-8b0a-79f9317483bb"/><figure id="3ac6fe45-e21c-450e-a5ff-66f4df9e8036" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.35.31_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.35.31_PM.png"/></a></figure><p id="57207d16-23c5-4753-94f1-c789fc05f3af" class="">
+</p><p id="7d688c50-6006-46fb-bccd-38e1651bbeb6" class=""><mark class="highlight-blue_background">A:  by similar steps⬇️⬇️, we get </mark><mark class="highlight-blue_background"><em>a zero crossing at edge!!!</em></mark>, <span style="border-bottom:0.05em solid">but now 2nd derivative for x = 0</span></p><figure id="ff8efc08-836b-4148-aafa-0e05ee3cf2b7" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.35.47_PM.png"><img style="width:480px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.35.47_PM.png"/></a></figure><p id="b503543a-8df9-46fd-8ea6-c302cc94da94" class="">
+</p><h3 id="a8b46d8b-6084-4b7c-88be-f33baab8b670" class="">ex3. edge of arbitary orientation</h3><hr id="aabc828b-b8de-4c4a-9bd4-7b8bd8f363a6"/><div id="b083b7a2-7c4f-4c5e-b4a0-40eedad33366" class="column-list"><div id="5b930371-36b7-4844-a1c6-2a5e2f54738e" style="width:37.5%" class="column"><figure id="c2311759-6b39-44c4-ab56-ff5ddb8aa731" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.38.52_PM.png"><img style="width:634px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.38.52_PM.png"/></a></figure></div><div id="f7a4604c-d2a1-4466-bbc1-1b49474dcc32" style="width:62.5%" class="column"><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="4866409e-38c8-4320-a8f4-ed14f7a179c9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-yellow">RECALL: </mark><p id="413744c4-6325-41fb-be90-d4ba747a5700" class=""><mark class="highlight-yellow"><strong>2D gaussian is </strong></mark><span style="border-bottom:0.05em solid"><mark class="highlight-yellow"><strong>radially symmetric</strong></mark></span><mark class="highlight-yellow"><strong>!!!!</strong></mark></p></div></figure><p id="1e9e3ec7-ab25-43cc-90da-7c0f710fbf7a" class="">
+</p></div></div><figure id="7b0893f5-cd67-47cc-8d54-ae5b100a8cc4" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.37.16_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.37.16_PM.png"/></a></figure><ul id="9c3b0224-adb1-42af-96e3-f0ae241749c6" class="bulleted-list"><li style="list-style-type:disc"><em><span style="border-bottom:0.05em solid">since radially symmetric, have zero-crossing along ANY ORIENTATION, we can safely use 2nd derivative (laplacian) to get edge!</span></em></li></ul><p id="cb913628-c79b-49cd-82f0-b9a4b5e76465" class="">
+</p><h2 id="c649192d-8cf1-4271-b1f1-ae031590aca2" class="">👁 ex. Marr-Hildreth edge detection (1979)</h2><figure id="ef4a0cef-ad60-4b20-8675-3433591711f0" class="image"><a href="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.44.00_PM.png"><img style="width:576px" src="4%20-%20Edge%20Detection%202f2d14c2d0194651a11786d3bc71f7fe/Screen_Shot_2022-10-09_at_1.44.00_PM.png"/></a></figure><h3 id="0e278f4c-ea70-41f2-962a-ae69058e5a8a" class="">- NOTES on Marr-Hildreth…</h3><ul id="8f6da499-5a27-4630-a72d-9e8174282c42" class="bulleted-list"><li style="list-style-type:disc">laplacian  is rotaitonally invariant, sum fo 2nd partil derivative is <span style="border-bottom:0.05em solid"><strong>ANY 2 LOCALLY ORTHOGONAL DIRECTIONS!!! </strong></span></li></ul><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="48fc751a-9464-4a0e-a73c-21348f1a6507"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">in these edge detections, <span style="border-bottom:0.05em solid"><strong>assume </strong></span><strong>linear variation of intensities close to an edge</strong></div></figure><p id="62760b4a-c45c-45d5-828a-ce16f64b7916" class="">
+</p></div></article></body></html>

@@ -1,0 +1,707 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>23 - RGBD Cameras</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="e9e7899c-7566-4928-83d5-fa87f81ca4b8" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">23 - RGBD Cameras</h1></header><div class="page-body"><p id="4cf43296-80e3-4ea9-81a8-6636f0a8abbe" class=""><time>@November 24, 2022</time> </p><p id="171f36dc-1dd4-43b4-8490-d4ed2f77699c" class="">
+</p><nav id="918f0050-9095-40d8-8678-52e4377b481e" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#994606ea-ee89-44f2-83b5-712567c20d2b">Review of Stereo:</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#20d43178-f0a5-42c8-8d3c-b99af44109a3">What if?</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#13cb98d9-ee00-4f8f-ad9c-b8b1a3d7d77d">RGBD Camera</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8f3cf58b-2b0d-40e5-995b-a747cf8945a3">How does depth camera work? to match depth…</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5ee3d5fb-8c2a-4cb8-bb67-c35b3851212f"><strong>
+How Do We Align Different Views?</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f13b3b54-44ef-454e-ac46-1aed6c8fa444">Iterative Closest Points (ICP)</a></div></nav><p id="03dd73e8-ba59-437f-8f5b-b874c03bd70e" class="">
+</p><p id="4a9efb0a-7e14-40cd-b1ec-64b63a7f0edb" class="">
+</p><h3 id="994606ea-ee89-44f2-83b5-712567c20d2b" class="">Review of Stereo:</h3><figure id="2f5f7058-27d3-4cd4-b294-d383fb67ef92" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.05.38_PM.png"><img style="width:576px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.05.38_PM.png"/></a></figure><p id="c42a2983-cee1-4a9d-b58e-db377938484f" class="">
+</p><ul id="177323e1-7c88-4eab-9f50-729e210c722c" class="bulleted-list"><li style="list-style-type:disc">match with SIFT</li></ul><ul id="6bc4ff29-c608-4f74-871c-be28f86c7229" class="bulleted-list"><li style="list-style-type:disc">estimate F</li></ul><ul id="54506285-e391-49d3-935e-a8cf416ae013" class="bulleted-list"><li style="list-style-type:disc">refine by RANSAC<ul id="d70fb873-ff6a-4d39-bf48-2968d135e26e" class="bulleted-list"><li style="list-style-type:circle">remember to use RANSAC</li></ul></li></ul><p id="01f2f7c5-5596-4be5-b805-f896c382d5cc" class="">
+</p><p id="e43ddfd9-0cc6-4828-a641-e45741df4062" class="">
+</p><h3 id="20d43178-f0a5-42c8-8d3c-b99af44109a3" class="">What if?</h3><ul id="9d9480d8-87b4-4836-aaaa-c3d77cc96017" class="bulleted-list"><li style="list-style-type:disc">had a calibrated stereo rig where positions of cameras wrt each other.<ul id="f84dac3c-8d4e-4800-8b9b-c55c97943c94" class="bulleted-list"><li style="list-style-type:circle">in other word, we knew <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub><mo separator="true">,</mo><msubsup><mi>R</mi><mn>1</mn><mi>T</mi></msubsup></mrow><annotation encoding="application/x-tex">R_2,R_1^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>  and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><msub><mi>T</mi><mn>1</mn></msub><msub><mo stretchy="false">]</mo><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">[T_1]_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">]</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><p id="78c92f37-d973-4730-9b9a-82f5e437057e" class="">→ then a 3d poiny can be rendered in 3D wrt to any of the 2 cameras</p></li></ul><p id="55815f52-f168-4706-99f0-9d6bdeda199f" class="">
+</p><h1 id="13cb98d9-ee00-4f8f-ad9c-b8b1a3d7d77d" class="">RGBD Camera</h1><hr id="1cff45fe-5409-4b10-a7ac-9b0101e32be3"/><figure id="6f9a5abb-9492-4a96-b403-03d8bf8772e3" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.07.25_PM.png"><img style="width:576px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.07.25_PM.png"/></a></figure><p id="5ec522a7-3b1d-41b1-8ec4-48f0077e8245" class="">
+</p><p id="4cd1fab5-5a25-4af6-9d47-6a465c05e9af" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub><mo>=</mo><msub><mi>R</mi><mn>2</mn></msub><mo separator="true">,</mo><mi>T</mi></mrow><annotation encoding="application/x-tex">R_1 = R_2,T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span><span>﻿</span></span></p><ul id="02c6a080-e409-4fd5-82b5-540382dbf79f" class="bulleted-list"><li style="list-style-type:disc">emmiter project infrared <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>dots to the scene point</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></li></ul><ul id="eae61325-814e-4b8a-a58f-955580d5da49" class="bulleted-list"><li style="list-style-type:disc">then sensor senses</li></ul><p id="d185e2c4-696e-42b5-9398-07cda746f698" class="">
+</p><ul id="0bf116e2-43f8-46e8-bb5c-85f6d2d9cc72" class="bulleted-list"><li style="list-style-type:disc"><em><strong>emitter &amp; sensor has same rotation matrices (except for vector </strong></em><em><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>T</mi></mrow><annotation encoding="application/x-tex">T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span></span></span></span></span><span>﻿</span></span></strong></em><em><strong>, translation)</strong></em></li></ul><p id="6ad22dd2-363b-4fab-8bd3-d4ae89d7e3b6" class="">
+</p><h2 id="8f3cf58b-2b0d-40e5-995b-a747cf8945a3" class="">How does depth camera work? to match depth…</h2><pre id="ac991f78-52e8-47ed-9257-2d5a2b0278f3" class="code"><code>HOW DOES IT WORK?
+1. IR emitter &amp; IR sensor define a stereo system
+2. R_1 = R_2^T = I and T_1 is just the sensor&#x27;s position in 1st cam coordinate frame
+		-&gt; ONLY DIFFERENCE!!! is T
+3. world coordinate is attached to LEFT camera
+4. hardware inside uniquely find matches by looking at similarity in pattern
+					between Left &amp; Right 
+3. so we can reconstruct the scene from the POV of the left</code></pre><hr id="3ddd9ac4-5066-433e-afb5-6f33a215b55e"/><div id="a352df9a-15c6-4084-b258-ca5778206d94" class="column-list"><div id="86e56a57-e7f1-4a06-a8ce-d10c1a3dd684" style="width:56.25%" class="column"><figure id="0e7e58cd-0267-4267-92f6-85b6661b2066" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.20.37_PM.png"><img style="width:576px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.20.37_PM.png"/></a></figure></div><div id="b2ee0985-a2cf-4c74-9fc7-76045797b46e" style="width:43.75%" class="column"><figure id="ad9b1a5e-a08b-4755-b0a4-edb655ec4bc6" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.00_PM.png"><img style="width:1216px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.00_PM.png"/></a></figure></div></div><div id="c0a14fcb-9b40-4f38-aa7f-2c6bec15f809" class="column-list"><div id="6c7d8675-89c4-442c-9347-ad815fe89aca" style="width:43.75%" class="column"><figure id="786c7d38-6eae-476a-b99a-5afd2ad1343a" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.15_PM.png"><img style="width:1002px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.15_PM.png"/></a></figure></div><div id="86d6f019-dd2b-4d63-b350-ec204cc7ec1c" style="width:56.25%" class="column"><figure id="74a9440e-8a49-4636-aab6-d8cb8b2deb88" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.30_PM.png"><img style="width:1268px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-11-24_at_12.21.30_PM.png"/></a></figure></div></div><p id="76be009d-5303-4a2c-bfdc-e9f7f69145d5" class=""> have emitter &amp; sensor, geometry simialr, diff <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi></mrow><annotation encoding="application/x-tex">f</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span></span></span></span></span><span>﻿</span></span></p><ul id="ab9ee941-bf8e-4965-afbf-0729e846f2fd" class="bulleted-list"><li style="list-style-type:disc">convert image pixel coord→world coordinate </li></ul><p id="8a38097e-849f-4c1e-ae4e-0e9151c06a62" class="">
+</p><p id="d0902a79-cafa-44b1-9417-db15ee67234f" class="">
+</p><h2 id="5ee3d5fb-8c2a-4cb8-bb67-c35b3851212f" class=""><strong>
+How Do We Align Different Views?</strong></h2><hr id="fe4de584-bc6d-4273-918f-dc73f756b9ca"/><figure id="818ea4a6-0730-4fb0-b9d6-02424b72c6ed" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.34.16_PM.png"><img style="width:624px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.34.16_PM.png"/></a></figure><p id="64f67a7a-be6f-49ea-a9c9-7587247a9ff8" class="">
+</p><figure id="ac090521-c2ee-46ae-943c-f8e6da2d33ad" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.34.54_PM.png"><img style="width:432px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.34.54_PM.png"/></a></figure><p id="e4fbb234-cf03-4d41-89a7-9b4035937a87" class="">
+</p><h3 id="f13b3b54-44ef-454e-ac46-1aed6c8fa444" class="">Iterative Closest Points (ICP)</h3><hr id="577cf3e7-fe9d-4c31-933d-9968723ddf60"/><ul id="1f70c445-8c0d-4486-a5a4-63a1b80aa8bb" class="bulleted-list"><li style="list-style-type:disc">to register 2 sets of geometric enetities in 3D</li></ul><div id="c26486f4-eeb2-4b9a-893d-2f353038f74f" class="column-list"><div id="738bbfaf-3a7d-485b-9f16-1184b79936a2" style="width:43.75%" class="column"><p id="6ed6a294-ddbd-4151-8ecb-8a27b30f8a28" class=""><strong><strong><strong><strong>Assumptions:</strong></strong></strong></strong></p><ul id="e30a273f-cf37-43e4-847b-079b97ae3342" class="bulleted-list"><li style="list-style-type:disc">related by a <strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange"><strong><mark class="highlight-orange">rigid transformation</mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong> (a rotation &amp; translation)</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></li></ul></div><div id="e21669cb-da88-45d3-9137-bf989393209b" style="width:56.25%" class="column"><figure id="26a94496-ff8a-44fb-b6e4-595b9f1ef511" class="image"><a href="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.36.27_PM.png"><img style="width:1276px" src="23%20-%20RGBD%20Cameras%20e9e7899c7566492883d5fa87f81ca4b8/Screen_Shot_2022-12-05_at_5.36.27_PM.png"/></a></figure></div></div><p id="5feb4154-d7c6-45b7-af73-8a45b0350503" class="">
+</p><p id="3eb814f8-f256-4e84-895f-052f3edbaa6f" class="block-color-orange_background"><span style="border-bottom:0.05em solid"><strong><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange"><mark class="highlight-orange">Algorithm</mark></mark></mark></mark></mark></mark></mark></mark></mark></strong></span></p><ol type="1" id="0f8a8c39-dca1-49e8-9907-4607bbb726e0" class="numbered-list" start="1"><li>for each <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">S_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>, the closest point in Euclidean distance is chosen from  <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">S_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="550e9516-53c2-4c42-8969-fa1c31fe5787" class="bulleted-list"><li style="list-style-type:disc">if this distance is beyond a certain tolerance, that point in <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>S</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">S_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.05764em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> is ignored</li></ul></li></ol><ol type="1" id="1d3bb7a6-5b49-4e0a-9156-f7409c2dd986" class="numbered-list" start="2"><li>Then the avg of Euclidean distances between the matched points is </li></ol><p id="243ab764-3ece-492d-984f-6cb358598e0a" class="">
+</p><p id="e40a95a2-6744-4656-8cb6-5ed2eef1f119" class="">
+</p><pre id="e261224c-4a3f-4c5e-8e08-544b3ba2503e" class="code"><code>1. compute correspondence
+2. compute cross-convariance of matrice K 
+		&amp; mean values of each correpondence dataset (P,Q)
+
+3. find rotation &amp; translation -&gt; update data
+		[U, S, V] = svd(K)
+				R = U*V*R_prev
+				T = Qmean - R*Pmean
+		-&gt; find R and T
+4. compute error
+
+
+5. the process iterates till the average point-to-point error below a threshold.</code></pre><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="9bfa15f3-7086-4314-8600-e3c01bb31148"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">can be improved by combining with RANSAC,<p id="edef4594-bce9-44e1-b24a-03ad5f0d021a" class="">if wish to ignore outliers</p></div></figure></div></article></body></html>

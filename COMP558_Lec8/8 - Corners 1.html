@@ -1,0 +1,688 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>8 - Corners 1</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c7758994-8428-4043-8811-56b019bae3b0" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">8 - Corners 1</h1></header><div class="page-body"><p id="375d51f7-5ecb-448d-9150-a7809efcbb60" class=""><time>@September 27, 2022</time> </p><nav id="e281e1f9-b772-46e2-a977-9924bc3f0170" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#204a97a0-dc97-4461-9c3a-ee7d8886646a"><strong><mark class="highlight-teal">ex. basketball, corner detection</mark></strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e4d5784b-8791-47fc-b959-25dcadcf9d92"><span style="border-bottom:0.05em solid"><mark class="highlight-orange">more general approach:</mark></span></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a56ab330-b960-4903-b851-232a7e8715f4">Structure Tensor &amp; 2nd Moment Matrix</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#11d66284-ef1d-4c9d-9e9f-62386f9c84e0">Weighted 2nd Moment Matrix</a></div></nav><p id="ffa7196e-f391-4edb-8f02-530f181b0c68" class="">
+</p><p id="c2417a32-9588-4966-9f87-0056662c25a5" class="">
+</p><p id="9e798ba2-14ea-450a-8873-a576068e62b6" class=""><strong><mark class="highlight-yellow">Review on matrix:</mark></strong></p><ul id="66011db9-3b8e-4cf2-a825-6e9baa1046cb" class="bulleted-list"><li style="list-style-type:disc">determinant</li></ul><ul id="474e23ed-5dc3-431e-9721-566d2338abf7" class="bulleted-list"><li style="list-style-type:disc">e-value</li></ul><ul id="b4d775ab-6e75-4a6d-a40a-c9ffb646d7ef" class="bulleted-list"><li style="list-style-type:disc">linear independance &amp; rank (# linearly indepent rows)<ul id="af25e392-c8c9-4891-ab30-cbd03f5f6ea3" class="bulleted-list"><li style="list-style-type:circle">if doesn’t have <strong>full rank</strong>, <span style="border-bottom:0.05em solid"><strong>no inverse</strong></span><strong>🙁</strong></li></ul></li></ul><ul id="148a8b4d-38a1-4a17-92ca-c7bb749cee6c" class="bulleted-list"><li style="list-style-type:disc">SVD: taking a square matrix and convert<ul id="4cf81e38-615b-4247-bb25-17f9729443b5" class="bulleted-list"><li style="list-style-type:circle">entries on diagonal would be e-values</li></ul></li></ul><ul id="70aa1305-5e18-4dde-9334-987c3ce468ac" class="bulleted-list"><li style="list-style-type:disc">inverse of matrix</li></ul><hr id="7f659291-1e3f-4202-9764-e33722c152c1"/><p id="e6af71d9-44ac-4af8-a0ef-531e24c8bf49" class="">
+</p><div id="2cf4a70a-646a-48d8-aff8-2851becf9366" class="column-list"><div id="426b04e6-8441-4248-b6f9-f395b3012fb1" style="width:50%" class="column"><figure id="29ea5374-7c05-40c8-90e9-19af7de9ff34" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.25.03_PM.png"><img style="width:884px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.25.03_PM.png"/></a></figure><p id="828293ba-f528-4a70-9967-32b16847dc4f" class="">
+</p></div><div id="d37d8078-9b5a-497f-b0b0-3144d2828d1e" style="width:50%" class="column"><figure id="b419c315-a919-4b85-9ee1-1f8c1c59eda6" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.25.10_PM.png"><img style="width:888px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.25.10_PM.png"/></a></figure></div></div><h3 id="204a97a0-dc97-4461-9c3a-ee7d8886646a" class=""><strong><mark class="highlight-teal">ex. basketball, corner detection</mark></strong></h3><blockquote id="0f92df42-bc1b-4656-8c2a-bd6a6d6c1763" class=""><em><strong><mark class="highlight-teal">“corner” =  “interest point” =  “keypoint” = “locally distinctive point”</mark></strong></em></blockquote><figure id="4469ddf5-ed5b-4ad9-861a-16c8e082ffc5" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.42.01_PM.png"><img style="width:576px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.42.01_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="79a8a60b-2df4-4e46-bbc1-3f19a6de87b0"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Here we look at discrete pixel steps (Δ𝑥,Δ𝑦)
+e.g. we could check all 8 immediate neighbors.</strong></div></figure><blockquote id="091443c5-469b-4887-a36a-d96cf59db4b3" class="">How to check intensity change?</blockquote><p id="7df54370-4983-48ef-8729-8deef507dbd0" class="">→ <strong>We examine sum of squared differences.</strong></p><p id="f8b8690f-6800-42ed-8e98-7144dd7718ab" class="">
+</p><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="6b411f0b-587a-4495-8cc1-a39ce3074401"><div style="font-size:1.5em"><span class="icon">❇️</span></div><div style="width:100%">Important:<ul id="5d06c2c9-7a35-4309-8e8c-a53319fa9ee7" class="bulleted-list"><li style="list-style-type:disc">for <strong>edges,</strong> gradient is ONLY <strong><strong><strong><strong>big when </strong></strong></strong></strong><strong><strong><strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⊥</mo></mrow><annotation encoding="application/x-tex">\perp</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mrel">⊥</span></span></span></span></span><span>﻿</span></span></strong></strong></strong></strong><strong><strong><strong><strong> to edge</strong></strong></strong></strong></li></ul><ul id="68003ed3-e5de-4547-8d09-251f503a3ed3" class="bulleted-list"><li style="list-style-type:disc">for <strong><strong><strong>corners, image intensity chage is ALWAYS big</strong></strong></strong></li></ul></div></figure><div id="17f9350a-f736-400c-b2f5-4cd6b388b0df" class="column-list"><div id="2475ea92-005f-4511-875f-0b37dde23ee1" style="width:50%" class="column"><figure id="72ad5e7b-fe3c-4d82-91a5-eee79a8af619" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.46.18_PM.png"><img style="width:528px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.46.18_PM.png"/></a></figure></div><div id="e41fa5fa-2bf1-4cf1-b907-8995f535707a" style="width:50%" class="column"><figure id="3f594c81-900e-40cd-9e30-a6f4d5ed883b" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.49.17_PM.png"><img style="width:1122px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.49.17_PM.png"/></a></figure></div></div><p id="c205412f-fb84-43c3-ade3-50f878f71025" class="">keypoints won’t change a lot in most directions</p><p id="ea96d34a-2efb-42d6-83b8-573c1010f78c" class="">
+</p><p id="52e3927f-4649-406f-baf7-516aaef7f8b9" class=""><span style="border-bottom:0.05em solid"><strong><mark class="highlight-orange">CONCLUSION:</mark></strong></span></p><figure id="163fd208-a9f9-4583-93a0-794336fc881a" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.52.14_PM.png"><img style="width:480px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.52.14_PM.png"/></a></figure><h3 id="e4d5784b-8791-47fc-b959-25dcadcf9d92" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-orange">more general approach:</mark></span></h3><p id="a959dffc-32db-4464-8d35-e6b286d8b06d" class="block-color-blue_background">
+</p><figure id="70ddfde0-3d13-45ba-bb1b-044942cf8ca4" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.54.45_PM.png"><img style="width:624px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.54.45_PM.png"/></a></figure><figure id="060ac9ea-692a-41a4-9ca3-432adb52d507" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.55.26_PM.png"><img style="width:576px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.55.26_PM.png"/></a></figure><figure id="6aa838dc-9633-4440-9b2d-455b3ec564bf" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.56.44_PM.png"><img style="width:432px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.56.44_PM.png"/></a></figure><figure id="282de8f3-094a-486a-9e0e-018b86284301" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.57.12_PM.png"><img style="width:480px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.57.12_PM.png"/></a><figcaption><strong><mark class="highlight-yellow">= (Δx, Δy) * 2nd Moment Matrix * (Δx, Δy) ^T</mark></strong></figcaption></figure><p id="5105a6f4-5120-4c41-bc25-bb0c333c72c5" class="">
+</p><h2 id="a56ab330-b960-4903-b851-232a7e8715f4" class="">Structure Tensor &amp; 2nd Moment Matrix</h2><hr id="8a74d041-faf6-4fdd-b793-ad6ef5572fe3"/><p id="bc43e860-0537-4be1-af6f-87edf6027539" class="">
+</p><figure id="7a14dc9d-416e-45cf-97a5-15331de7ed6b" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.58.34_PM.png"><img style="width:528px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_10.58.34_PM.png"/></a></figure><figure class="block-color-yellow_background callout" style="white-space:pre-wrap;display:flex" id="5e90cf93-09d8-4573-a0cb-a319e4073b7b"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">then taking the sum of structure tensors over (x,y) neighbourhood, <p id="61ac605a-5cf9-4551-9b1c-f94522138c76" class="">       we get <span style="border-bottom:0.05em solid"><strong><mark class="highlight-yellow">second moment matrix</mark></strong></span></p><figure id="9621f2d5-d6a3-4cc0-a10f-0b9e62095459" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_11.02.15_PM.png"><img style="width:1078px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_11.02.15_PM.png"/></a><figcaption><strong>Each matrix element is a sum over the local neighborhood</strong></figcaption></figure></div></figure><p id="fb357069-9411-47b9-918c-433fd6e2be1f" class="">
+</p><h3 id="11d66284-ef1d-4c9d-9e9f-62386f9c84e0" class="">Weighted 2nd Moment Matrix</h3><hr id="114381fc-6612-43dd-9965-b0d81c30f0a0"/><figure id="8b875cec-6193-47c3-9d40-3f420422e13b" class="image"><a href="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_11.04.11_PM.png"><img style="width:624px" src="8%20-%20Corners%201%20c775899484284043881156b019bae3b0/Screen_Shot_2022-10-22_at_11.04.11_PM.png"/></a></figure><p id="606fb45e-a24b-4bdf-8ef7-c907c05a70fb" class="">
+</p><p id="7998e9a7-4f2e-45d8-8c79-a4fdaf663f62" class="">
+</p><p id="1dae6569-7184-4407-9c29-fa1430bb8561" class="">
+</p><ul id="a05ca7b1-d60e-42f1-af2f-8d4148e69c73" class="bulleted-list"><li style="list-style-type:disc">gradient:<ul id="3c235f5c-afbc-47ba-b1a3-cc3daaae2ceb" class="bulleted-list"><li style="list-style-type:circle">gradient <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⊥</mo></mrow><annotation encoding="application/x-tex">⟂</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mrel">⊥</span></span></span></span></span><span>﻿</span></span> edges (gradient is accross the edge)</li></ul></li></ul><ul id="c7519d15-ef45-48fb-a2c9-6d8b2564aa7e" class="bulleted-list"><li style="list-style-type:disc">isotope = contour = intensity crossing some height</li></ul><p id="3ca75dbe-3d09-477f-a91a-75db2726d9b1" class="">
+</p><ul id="7db65923-5d68-4a87-9905-ffef58fd9792" class="bulleted-list"><li style="list-style-type:disc"><strong>look at locally how image eintensity is changing in the neighbourhood</strong></li></ul><p id="6554e7fe-e456-4925-b1c8-a597f472e0e2" class="">
+</p><p id="329bb5b7-406a-4a24-9d3b-19241430b4f8" class="">
+</p><p id="ec7b852d-d2fa-46d4-9a71-40867918f92b" class="">
+</p><p id="64d8873d-1af4-41f7-a704-aba24620ad9c" class="">
+</p></div></article></body></html>

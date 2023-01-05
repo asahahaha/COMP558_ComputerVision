@@ -1,0 +1,716 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>11 &amp; 12 - Image Registration </title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="7c33a66e-80fd-4d15-9eb7-f23fb5e9192d" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">11 &amp; 12 - Image Registration </h1></header><div class="page-body"><p id="52155810-3a9c-421e-987d-17aa3315fe3c" class="">
+</p><nav id="e57d8908-63fe-4a71-a000-2c31ea648c41" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#75a04911-86a3-4b62-9ccb-348a586826d3">1D version of registration problem</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5e23bbaf-7035-40c7-8da2-ec450982d014">how to get <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span>?</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a10a57f7-7dc7-496b-8e8f-9383550bcf45"><span style="border-bottom:0.05em solid"><mark class="highlight-pink">Q: Assumptions computing minimal shifts?</mark></span></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#819f757d-54cd-4e90-bd6d-d6b33d468d16">Iterative Method, to get better solution of <code>h</code></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d150d9b2-b3c7-4f3c-9249-43d6ed86764b">Iterative method: STEPS</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#08b0edc5-9f17-4883-a447-c46044be9407">2D Image Registration</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0842e19a-1bcf-4ebf-9751-8fa97aaa5fcb"><mark class="highlight-pink">2D Image Registration Assumptions</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8903aeea-191e-40e5-9786-ab4f6ed42791">2D Image Registration - Iterative method</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#80337445-923e-459b-af1c-f11025346364">“Coarse-to-fine” Image Registration</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9fed86bf-1078-41b2-ba86-29118bf62a5b">Related Problems with Image Registration</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6a7d15dd-dfb0-4d3e-90a3-0079de2ed2e7">1. Optical Flow (L<strong>ucas-Kanade)</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#099b3047-15a9-4af6-ba42-7d08450a175d">Example of optical flow</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#dd488ff4-8e8f-4451-9375-aae2b087ed95">Color Coded Motion Field ✅</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#e8485fe2-b533-4066-96e2-657c0a36648a">2. “KLT” Tracking (<strong>Kanade, Lucas, Tomasi, 1991</strong>)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#89236b38-a7a7-4e5f-8adb-56a99649b181">3. Tracking using <strong>a more general motion model (Shi &amp; Tomasi, 1994)</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d63266ef-8afb-4c7b-92e0-0d22a4de1683"><mark class="highlight-gray">RECALL: scale, shear, rotation matrices….  🧮</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#951abe81-9dae-431e-bf17-50788b9a3c8d"><mark class="highlight-blue"><span style="border-bottom:0.05em solid">In Shi &amp; Tomasi, we need to minimize 6 variables….</span></mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1015a60f-1150-471f-827b-acd03d19529f">Shi &amp; Tomasi SUMMARY:</a></div></nav><h1 id="75a04911-86a3-4b62-9ccb-348a586826d3" class="">1D version of registration problem</h1><hr id="0d421acc-cd18-45b1-8d6f-b2231c853472"/><ul id="f8b287aa-c695-423e-a56a-35816b72b867" class="bulleted-list"><li style="list-style-type:disc">sacrifice local precision to get content</li></ul><ul id="0a3f2f9f-0964-48f2-a379-a76b8a87b320" class="bulleted-list"><li style="list-style-type:disc">for <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⊕</mo><mi>h</mi></mrow><annotation encoding="application/x-tex">⊕h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord">⊕</span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span>, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x+h) </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> moves <mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong><mark class="highlight-yellow"><strong>left by h 👇</strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></li></ul><div id="2dc274c9-4ece-4c38-9ba4-27374f410e3d" class="column-list"><div id="4bfe0518-3d1d-4d27-942f-a059859bbe5d" style="width:50%" class="column"><figure id="4d974d20-df50-49a9-8112-796c21f5e01a" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.00_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.00_PM.png"/></a></figure></div><div id="31f064ca-51a4-4688-bcad-64b9ff4933b5" style="width:50%" class="column"><figure id="e772919f-b09b-4ed1-acdc-5e3a70cf0e8a" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.33_PM.png"><img style="width:1394px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.33_PM.png"/></a></figure></div></div><figure id="329a5198-92de-47e0-aac3-42249e846409" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.45_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.00.45_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="67cce544-9308-4659-a161-a70783a658b4"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">first-order derivative, <strong>assume the higher order ones are SMALL</strong></div></figure><p id="6d3410df-f0b6-47d9-abb9-d93349becb38" class="">
+</p><blockquote id="54a5b010-d786-4224-ab6f-1d31e0e98d5b" class="">We draw a BIG neighbourhood, what if our image is COMPLEX?<ul id="e765bfb0-a40d-45d4-a52a-9e9cde6291af" class="bulleted-list"><li style="list-style-type:disc">but the window is small enough</li></ul></blockquote><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="e7c27ee7-4e2c-461b-b71e-1f4ee81dfa04"><div style="font-size:1.5em"><span class="icon">🫒</span></div><div style="width:100%"><mark class="highlight-blue"><strong>We are NOT assuming 𝐼(𝑥) is linear over the whole neighborhood 𝑁𝑔𝑑(</strong></mark><mark class="highlight-blue"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">x_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></mark><mark class="highlight-blue"><strong>)</strong></mark></div></figure><figure id="dca4f9a9-4aec-40ec-b8be-57865fc03ba6" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_6.59.00_PM.png"><img style="width:624px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_6.59.00_PM.png"/></a></figure><figure id="5d0463ae-f6b9-4d2e-97b8-bcec075d9238" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_6.59.50_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_6.59.50_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="56acd8d1-e62c-4e57-b9ff-2ea8fa358c25"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">now compute <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span> that minimizes it 🙂<ul id="68dfc327-f297-48d3-95d7-ffc83f21d5d0" class="bulleted-list"><li style="list-style-type:disc">use chain rule ⬇️</li></ul></div></figure><h2 id="5e23bbaf-7035-40c7-8da2-ec450982d014" class="">how to get <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span>?</h2><ul id="4f4e6f63-c32a-4318-b5ad-b2b6dd5517e0" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-pink"><span style="border-bottom:0.05em solid"><strong>by least squares </strong></span></mark></li></ul><hr id="b2a3f786-6a65-4782-a7d9-c122c29a8ca2"/><figure id="ff039859-0afe-4f5d-9e95-e85be41cd6e5" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.00.57_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.00.57_PM.png"/></a></figure><ul id="b7ac76fe-425f-44c3-8d58-2387afbe4e4e" class="bulleted-list"><li style="list-style-type:disc">normalizations just rearrangement of <strong>terms</strong>, <ul id="eeb0572a-fca7-4f63-b2e3-5c30739cfc80" class="bulleted-list"><li style="list-style-type:circle">when do deriv</li></ul><p id="749db381-6f3c-406b-b8c8-f0ac354f450a" class="">
+</p></li></ul><h3 id="a10a57f7-7dc7-496b-8e8f-9383550bcf45" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-pink">Q: Assumptions computing minimal shifts?</mark></span></h3><hr id="0fa099b3-c7ef-4c9d-b294-c63ecb91159c"/><ol type="1" id="67679c6e-14e8-4cc0-83b9-3ca5b3ba97f1" class="block-color-pink_background numbered-list" start="1"><li>both <code>I(x)</code> and <code>J(x)</code> are <strong>smooth!!</strong><ul id="e700f994-7545-441d-972f-97632a0585b3" class="bulleted-list"><li style="list-style-type:disc">otherwise <strong>derivative might not exist</strong></li></ul></li></ol><ol type="1" id="0db87fc2-f34f-484d-a6e2-5f5abfacb216" class="block-color-pink_background numbered-list" start="2"><li>shift <code>h</code> is small, so <span style="border-bottom:0.05em solid"><em><strong>first order Taylor is valid</strong></em></span><ul id="412dbcee-bb45-44e5-9bdf-32b329e54725" class="bulleted-list"><li style="list-style-type:disc">so 1st ordrer good enough, <mark class="highlight-pink">so we only use </mark><mark class="highlight-pink"><span style="border-bottom:0.05em solid"><em><strong>1st order term of derivative!!!</strong></em></span></mark><mark class="highlight-pink"><em><strong> → in taylor series expansion</strong></em></mark></li></ul></li></ol><ol type="1" id="e0e66076-4b2e-43df-af66-9cb731f479a1" class="block-color-pink_background numbered-list" start="3"><li>shift <code>h</code> varies<strong> slowly</strong><ul id="a5e83658-675c-4c14-9f7b-13b0e6a93a3f" class="bulleted-list"><li style="list-style-type:disc">model assumes <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><mi>h</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x+h) </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">h</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">J(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> correspond for <mark class="highlight-pink"><strong>a single vlaue of </strong></mark><mark class="highlight-pink"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span></strong></mark> in <em><strong><span style="border-bottom:0.05em solid">whole neighbour of x</span></strong></em><p id="df827acc-f5b4-4b99-9ae7-60e94b458e79" class="">
+</p></li></ul></li></ol><p id="a158f005-b02c-48f0-a544-ef998794c757" class="">
+</p><p id="f0624bc7-4951-45db-8d3e-7ac2e9747a47" class="">
+</p><p id="d841a7cc-cdb5-4a67-87b4-8524645e2cca" class="">
+</p><p id="4cd39fdf-1f97-4597-93c4-52df9e3e9a30" class="">
+</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="e1ad5014-f1d9-40c0-bb8d-9475ac0f378d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><span style="border-bottom:0.05em solid"><strong>Iterative approach</strong></span>: KEEP refining, so gets better after 1st estimate shift!</div></figure><h2 id="819f757d-54cd-4e90-bd6d-d6b33d468d16" class="">Iterative Method, to get better solution of <code>h</code></h2><hr id="62ee0613-71b3-4891-85f3-d1a2a98788d1"/><figure id="cdcbab8c-797f-45ab-bed3-aca6a9dac682" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.13.19_PM.png"><img style="width:432px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.13.19_PM.png"/></a></figure><p id="98ab0bd5-a2c9-4ef7-b08a-010681064204" class="block-color-blue_background">
+</p><figure id="55f96901-c9dc-4212-9b1a-193a4d46fb94" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.44.59_PM.png"><img style="width:528px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.44.59_PM.png"/></a></figure><ul id="da21cb45-f463-4979-94ba-ab9e21184aee" class="bulleted-list"><li style="list-style-type:disc">use it to find new <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo>+</mo><msub><mi>h</mi><mn>0</mn></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x+h_0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">J(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.09618em;">J</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="cbb99e23-cc7d-44d7-a6d2-6aeeded7387f" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue"><strong>get deformation of initial estimate and get better ones!!!!</strong></mark></li></ul><p id="cf7ddbff-54a5-454b-b933-9a92140931ff" class="">
+</p><p id="0199da0b-acad-42e6-bfff-2b6e4a38d030" class=""><span style="border-bottom:0.05em solid"><strong><mark class="highlight-blue">ASIDE:</mark></strong></span></p><figure id="3535f410-5a00-490e-a83d-1c0294c9a598" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.45.31_PM.png"><img style="width:480px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.45.31_PM.png"/></a><figcaption><span style="border-bottom:0.05em solid"><em>NOTE: don’t worry abt iterpolation YET</em></span></figcaption></figure><p id="63c763bc-c051-4af3-8763-b3a5be5d321b" class="">
+</p><h3 id="d150d9b2-b3c7-4f3c-9249-43d6ed86764b" class="">Iterative method: STEPS</h3><hr id="291e5327-1c5a-400e-92b0-f3bd05585859"/><blockquote id="c40a1b2d-c169-4768-bc36-c94945a9a0d6" class="">adding together multiple <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>h</mi></mrow><annotation encoding="application/x-tex">h</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">h</span></span></span></span></span><span>﻿</span></span>’s</blockquote><p id="5cbc1cbb-9aa7-43d2-8dd2-d0dc3e901a60" class="block-color-blue_background">
+</p><figure id="c653b50e-3a80-4733-b41d-d08a21ff96fb" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.48.49_PM.png"><img style="width:480px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_7.48.49_PM.png"/></a><figcaption><strong><mark class="highlight-blue">- It is NOT guaranteed to converge.</mark></strong><mark class="highlight-blue">😟 😖</mark></figcaption></figure><p id="8a1c336b-c573-403d-ad85-dc6cf8c6b5ca" class="">
+</p><p id="cc5fa510-4cc9-4117-96b9-c47a52ef8f49" class="">
+</p><h1 id="08b0edc5-9f17-4883-a447-c46044be9407" class="">2D Image Registration</h1><ul id="9fe605d0-7588-4c21-97e6-4c285927f450" class="bulleted-list"><li style="list-style-type:disc">to look nice, we write in matrices</li></ul><hr id="579c7c88-c991-4ff4-8ac7-404a9b621284"/><figure id="d56d25ba-a02f-4b31-b69a-1d2eddcca644" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.15.32_PM.png"><img style="width:528px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.15.32_PM.png"/></a></figure><figure id="6f188b9a-729d-4d95-aaed-a059f362bc4b" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.15.40_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.15.40_PM.png"/></a></figure><p id="cc44dcd5-a87b-49bd-b94c-350166133ddb" class="">
+</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="05594f10-a4f4-49cf-b640-31e7f94743b2"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">minimize sum of square differences → between deformed source &amp; target<ul id="8e7f554f-4324-431f-bee8-f557e0af4287" class="bulleted-list"><li style="list-style-type:disc">we also have a weighting function (like a 2D gaussian)</li></ul><ul id="3f2aaf30-00ca-4e2d-8d62-2bde761d3626" class="bulleted-list"><li style="list-style-type:disc">use for 2D </li></ul></div></figure><p id="e8b08a67-d061-417d-89c4-140543c048bc" class="">
+</p><h3 id="0842e19a-1bcf-4ebf-9751-8fa97aaa5fcb" class=""><mark class="highlight-pink">2D Image Registration Assumptions</mark></h3><hr id="60a1fec5-eeb8-482a-8728-fd2ac0ed0443"/><ol type="1" id="6316fc60-76ac-4bdd-bc19-66d01cbf88a0" class="block-color-pink_background numbered-list" start="1"><li><code>i</code> and <code>j</code> smooth<ul id="d7756eef-11f8-48c4-b7af-be2b01e49f86" class="bulleted-list"><li style="list-style-type:disc">need 1st deriv exist</li></ul></li></ol><ol type="1" id="6f078490-7488-46e5-8506-154362f37696" class="block-color-pink_background numbered-list" start="2"><li><code>h</code> small<ul id="09ac360d-4faa-4fe3-8e12-4772fcee47d6" class="bulleted-list"><li style="list-style-type:disc">do 1st order Taylor approximation is good</li></ul></li></ol><ol type="1" id="b6079c3e-98a6-4e30-9e9a-e5f1a564f3ca" class="block-color-pink_background numbered-list" start="3"><li><code>h</code> doesn’t varies fast<ul id="a25637dd-8f26-4746-91d8-ef4ffe84819c" class="bulleted-list"><li style="list-style-type:disc">bc assumes a <span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid"><span style="border-bottom:0.05em solid">single vlaue of h</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span> in whole neighbourhood</li></ul></li></ol><p id="533270e1-7fbb-401d-b4b2-b8efcbdf0aed" class="">
+</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="8c779178-6cce-427b-b469-afa7546903c6"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">NOTE (<strong><strong><strong><strong><strong>for rectangular bias</strong></strong></strong></strong></strong>):  if wanna avoid rectangular bias, use circular windows (but in most algo, they use rectangular ones) → doesn’t rlly matter here </div></figure><p id="def20a3d-1194-4975-a92d-f28a415163fa" class="">
+</p><ul id="7c5a2b41-83b8-44fe-96a9-714098ebb0a6" class="bulleted-list"><li style="list-style-type:disc">wanna find <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>u</mi></mrow><annotation encoding="application/x-tex">u</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">u</span></span></span></span></span><span>﻿</span></span> that<mark class="highlight-pink"> </mark><mark class="highlight-pink"><span style="border-bottom:0.05em solid"><strong>minimize the product </strong></span></mark></li></ul><p id="751a6d4e-83ea-4cdf-a348-2c9b7711cc18" class="">
+</p><figure id="fed8424d-a6e6-4804-818d-492ef6370008" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.28.54_PM.png"><img style="width:624px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.28.54_PM.png"/></a></figure><p id="7a00b1c2-85f7-4bc4-b8a7-8ed662f270d6" class="">
+</p><h3 id="8903aeea-191e-40e5-9786-ab4f6ed42791" class="">2D Image Registration - Iterative method</h3><blockquote id="f40044be-16ad-4648-933a-c40f611b368c" class="">Similar to the 1D case, just having two <code>h</code>s</blockquote><figure id="7a920c7e-da5f-4550-b389-4f1cc2c6f50e" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.13.04_PM.png"><img style="width:624px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.13.04_PM.png"/></a></figure><p id="27ed97d5-dfc6-44a0-9707-56553415ae02" class=""><strong><mark class="highlight-teal">We repeat until we converge (or if we don’t converge then we give up).</mark></strong></p><p id="a88ec571-abcb-40fa-9231-bca3a276f5bc" class="">
+</p><p id="61772079-81f8-4335-b9fd-52f053f8ad9d" class="">
+</p><p id="e60fe5c4-331b-40e7-bd96-ab8c0c93006d" class="">
+</p><p id="1a8d1e6d-d1e4-4bed-8715-077679f85bc9" class="">
+</p><p id="aa35c6e9-0476-4530-b7c7-fddd9021795c" class="">
+</p><h2 id="80337445-923e-459b-af1c-f11025346364" class="">“Coarse-to-fine” Image Registration</h2><hr id="365c503e-47f0-4f48-a065-9bc267ae756b"/><figure id="ba4c67bd-5f43-4b49-b20b-66ee2db4db94" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_9.20.50_PM.png"><img style="width:1136px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_9.20.50_PM.png"/></a></figure><ul id="8bc858c2-ae68-4bee-9ec3-ba2d60017faf" class="bulleted-list"><li style="list-style-type:disc">first cycle is from coarse → fine level</li></ul><ul id="053a7b8f-d1cf-4c4d-ad18-ae49b77e80f8" class="bulleted-list"><li style="list-style-type:disc">second cycle is 2D image registration iteration!! till we converge</li></ul><ul id="d7210674-994e-409c-87be-59f55ca4a6d1" class="bulleted-list"><li style="list-style-type:disc">when computing (hx, hy) ⬇️⬇️<figure id="8e239370-5e36-4e90-a3e2-05e34f6c3036" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_9.26.09_PM.png"><img style="width:1172px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_9.26.09_PM.png"/></a></figure><p id="21c06d3d-9e2e-4a15-9b79-3f30c21f2151" class="">
+</p></li></ul><p id="3f69fae6-6fcd-4ccc-a1a9-67578f26627e" class="">
+</p><p id="672f296e-85a0-42c7-a2de-c9a72ca0a81d" class="">
+</p><p id="6eb664ee-2311-480b-8473-62c017789d5f" class="">
+</p><p id="fe92c9ce-231c-479e-830b-fbcb6495b35a" class="">
+</p><p id="3c892182-633f-4e8a-ba1e-6795f4562b40" class="">
+</p><p id="4a6b0693-aace-489b-a5f1-23c4e2040e39" class="">
+</p><p id="83968e3a-de09-4a4f-a87e-34c5270f90ff" class="">
+</p><hr id="61040f37-7171-4937-adef-7f3b7a907be5"/><hr id="61cfe45e-08c7-42c4-a0d5-5bcf5e1c3f18"/><p id="5d1debac-114a-4c63-956c-d85f0b0849af" class="">
+</p><h1 id="9fed86bf-1078-41b2-ba86-29118bf62a5b" class="block-color-teal">Related Problems with Image Registration</h1><h2 id="6a7d15dd-dfb0-4d3e-90a3-0079de2ed2e7" class="">1. Optical Flow (L<strong>ucas-Kanade)</strong></h2><p id="5b88ebd8-6bee-43c3-8780-dd33b3bfaacb" class="block-color-blue_background">
+</p><figure id="28a0934a-8843-4980-bfe0-c8b9d3ed335b" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.35.51_PM.png"><img style="width:432px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.35.51_PM.png"/></a></figure><figure id="0faf5a32-66e1-4956-9462-710392a89dcd" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.36.04_PM.png"><img style="width:624px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.36.04_PM.png"/></a></figure><p id="9bf97f9a-d81a-471a-b907-220a33d3a77d" class=""><strong><mark class="highlight-blue_background">therefore, this term in a general image registration problem becomes……</mark></strong></p><figure id="04133756-080e-4955-a5f6-305133f12f90" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.37.41_PM.png"><img style="width:1272px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.37.41_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="a5e6fdaf-0a98-469d-ab23-e4633d74beb4"><div style="font-size:1.5em"><span class="icon">☑️</span></div><div style="width:100%"><mark class="highlight-blue"><strong>In Lucas Kanade, we are to get the motion vector ==⇒</strong></mark><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong> motion field</strong></mark></span><figure id="fc52450c-d66e-49c5-a736-75d0ed2ebe22" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.48.36_PM.png"><img style="width:240px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.48.36_PM.png"/></a></figure></div></figure><hr id="bc983d49-4686-48ff-831f-dca923c2bf7c"/><p id="4ecb7484-7c2a-45ba-afe3-31250a01ad49" class="">
+</p><figure id="0339540a-39ab-4614-8447-b5fde43295a1" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.42.24_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.42.24_PM.png"/></a></figure><h3 id="099b3047-15a9-4af6-ba42-7d08450a175d" class="">Example of optical flow</h3><hr id="2fb7783d-7264-4940-9b53-800665ec3a70"/><ul id="d5a71652-ff9a-4b71-ad69-59e95b47659b" class="bulleted-list"><li style="list-style-type:disc"><em><mark class="highlight-blue"><strong>challenging cases: </strong></mark></em><em>
+such as “occlusions” (object passing in front of another) and “textureless regions”.</em><figure id="073ea5ae-0c4c-4008-b750-35f5977fd10d" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.45.03_PM.png"><img style="width:1440px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.45.03_PM.png"/></a></figure></li></ul><p id="cd46265e-43fd-4111-999b-2e18f5a343fd" class="">
+</p><h3 id="dd488ff4-8e8f-4451-9375-aae2b087ed95" class="">Color Coded Motion Field ✅</h3><hr id="117c2694-b9c3-4d26-a281-4af1f973fa07"/><figure id="0c018ca5-56ce-4231-91aa-fc46962ac2f1" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.50.30_PM.png"><img style="width:672px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-06_at_12.50.30_PM.png"/></a></figure><p id="0f32b7c6-1ee2-445b-816c-8bc5fb37b185" class="">
+</p><p id="a31bb867-b12d-4f35-ad20-1aaeed54e418" class="">
+</p><p id="bc80ca9d-9db3-409a-8b94-e644ffec6f3d" class="">
+</p><h2 id="e8485fe2-b533-4066-96e2-657c0a36648a" class="">2. “KLT” Tracking (<strong>Kanade, Lucas, Tomasi, 1991</strong>)</h2><ul id="c508aa45-9e59-4271-951b-63759176f73e" class="bulleted-list"><li style="list-style-type:disc"><strong>Track locally distinctive points (corners) over </strong><em><strong>multiple </strong></em><strong>frames.</strong></li></ul><figure id="607266a5-3737-476b-a268-c253e2d82c8f"><a href="https://nanonets.com/blog/optical-flow/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Introduction to Motion Estimation with Optical Flow</div><div class="bookmark-description">In this tutorial, we dive into the fundamentals of Optical Flow, look at some of its applications and implement its two main variants (sparse and dense). We also briefly discuss more recent approaches using deep learning and promising future directions.</div></div><div class="bookmark-href"><img src="https://nanonets.com/blog/favicon.png" class="icon bookmark-icon"/>https://nanonets.com/blog/optical-flow/</div></div><img src="https://nanonets.com/blog/content/images/2019/04/of-2.gif" class="bookmark-image"/></a></figure><p id="cca3c96b-4616-4e6e-812c-784b9dd9fb93" class="">
+</p><h2 id="89236b38-a7a7-4e5f-8adb-56a99649b181" class="">3. Tracking using <strong>a more general motion model (Shi &amp; Tomasi, 1994)</strong></h2><ul id="80cb5d7c-b71a-40be-abfd-6079dd07ac45" class="bulleted-list"><li style="list-style-type:disc">take into account<ul id="49904887-64e8-48f9-807f-1fe814270b03" class="bulleted-list"><li style="list-style-type:circle">translation</li></ul><ul id="48377215-05a6-4e15-8f41-33a2abe978ef" class="bulleted-list"><li style="list-style-type:circle">deformation: translation, shear, rotation</li></ul></li></ul><figure id="d254a8fb-fe4d-437b-b9ec-66347f850573" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.54.41_PM.png"><img style="width:624px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.54.41_PM.png"/></a></figure><h3 id="d63266ef-8afb-4c7b-92e0-0d22a4de1683" class=""><mark class="highlight-gray">RECALL: scale, shear, rotation matrices….  🧮</mark></h3><figure id="fa73ffde-03ca-43f5-b1a1-6682e8862dfd" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.56.07_PM.png"><img style="width:528px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.56.07_PM.png"/></a></figure><p id="5994e7b2-f028-4d46-bb2a-175c663b46e0" class="">
+</p><h3 id="951abe81-9dae-431e-bf17-50788b9a3c8d" class=""><mark class="highlight-blue"><span style="border-bottom:0.05em solid">In Shi &amp; Tomasi, we need to minimize 6 variables….</span></mark></h3><ul id="055c0c20-67a6-4dde-951e-86e0ca12344a" class="bulleted-list"><li style="list-style-type:disc"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>h</mi><mi>x</mi></msub><mo separator="true">,</mo><msub><mi>h</mi><mi>y</mi></msub><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">h_x,h_y, </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.980548em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="a04a5c2a-6eb3-423d-bb6e-dc706581606c" class="bulleted-list"><li style="list-style-type:disc">4 entries in the defrormation matrix<figure id="f0163443-864e-4f73-9fe0-9e3893c8a235" class="image"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.58.22_PM.png"><img style="width:576px" src="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/Screen_Shot_2022-10-24_at_8.58.22_PM.png"/></a></figure></li></ul><div id="43f3ec5b-b9f8-411b-bfdb-4113e68d2f55" class="column-list"><div id="3a1b3b99-1527-4453-8c2f-643c920acaed" style="width:31.25%" class="column"><p id="bffb3e83-7499-428a-aee2-3af9e0ba71a1" class="">answer in lecture notes →</p></div><div id="c78a949d-8404-4671-a9ca-e805109ecc6b" style="width:68.75%" class="column"><figure id="f5234135-6464-458c-8de7-06d5911f4892"><div class="source"><a href="11%20&amp;%2012%20-%20Image%20Registration%207c33a66e80fd4d159eb7f23fb5e9192d/11-registration2.pdf">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/53954e91-ee1e-414a-8bc2-65cb6ac08f3e/11-registration2.pdf</a></div></figure><p id="fa9158b6-66ee-4963-9062-69f8478fcc6b" class="">
+</p></div></div><p id="837d2202-7f41-4fdb-8ef7-b6a7cca5a758" class="">
+</p><h3 id="1015a60f-1150-471f-827b-acd03d19529f" class="">Shi &amp; Tomasi SUMMARY:</h3><ul id="cc52e58e-9cc4-476a-af10-98dfa035a233" class="bulleted-list"><li style="list-style-type:disc"><strong>we </strong><span style="border-bottom:0.05em solid"><strong>only</strong></span><strong> track the motion of a feature set of pixels</strong><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="e3336fbc-b78e-453f-95de-8081140756e2"><div style="font-size:1.5em"><span class="icon">🙅‍♂️</span></div><div style="width:100%"><strong><mark class="highlight-blue">Unlike optical flow</mark></strong>, we do NOT track motion at all pixels &amp; for 2 frames</div></figure></li></ul><p id="bc119c63-82fc-479c-ab83-2d85aeaaa00c" class=""><strong>
+</strong>
+</p></div></article></body></html>

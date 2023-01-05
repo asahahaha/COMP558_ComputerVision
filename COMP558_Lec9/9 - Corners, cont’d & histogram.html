@@ -1,0 +1,737 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>9 - Corners, cont’d &amp; histogram</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="a8ec012a-cb96-408a-afdf-6ca286dc8d17" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">9 - Corners, cont’d &amp; histogram</h1></header><div class="page-body"><p id="9219d7e3-448a-4f7f-ab29-86af72eeedf2" class=""><time>@September 29, 2022</time> </p><nav id="fb76664e-8c1a-41f6-8409-753374571656" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a9f08d19-d102-44ae-8a7e-848606f805c4"><mark class="highlight-gray">RECALL …</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#159edfec-2a20-490f-b9e6-9f663f0de7a1"><mark class="highlight-gray">non-linear diffusion</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#911039df-b43a-4d0c-80af-31bf244ed3dc">Corners</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d6b8225e-0790-4557-a94f-9789d9972b5e">contour can be interpreted differently</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d34ffe05-5ba3-4bd9-a0c9-0fc334d56689"><mark class="highlight-blue">structure tensor</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#7aad2882-43f7-46c5-beaa-adcee99bf917">Localized<mark class="highlight-blue"> sturture tensors → </mark><em><mark class="highlight-blue">usually weighting by Gaussian⭐️</mark></em></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9a2cc1f3-9929-43b7-8854-5a7f4fd147ef">Locally distinctive</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c563eaf5-1fcb-4913-a8a1-826ac849a0ad">REVIEW Linear Algebra</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7d2d3bb6-4160-4c07-9b92-7b1dd0f810fe">symmetric matrix</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#dcce6f87-d0a5-4418-8d8d-8e56444faea1">after the proof</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#49c84917-7c62-4e02-abfa-640986e695c0">EXAMPLEs, locally distinctive?</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#bccea329-7769-4cd0-9a67-541e64e2e8e5">IMPORTANT, cases:</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1b507c7e-a403-4d2a-9941-43f575e3993a">again how do we find the determinants &amp; traces? (review)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#1a599b33-e526-4f06-829c-318dccbc3b94">1. Harris Corner Detector (1988)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#8d5138d9-079d-45f0-ab60-d4c75681c4bd">2. Alternative Corner Detectors</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3d492899-0593-495a-9caf-7cb30f935498"><strong>Where are the corners/keypoints/locally distinctive points ? with examples….</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#68a83252-eec3-4831-a628-77b31d4250ba">Notice: Non-maximum suppression 👍</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#26334044-77bf-41a7-96c6-a5a60191182a">One final thought… </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c003b9f7-7f1a-4275-9e43-00ec97172a04"><span style="border-bottom:0.05em solid"><em>inner scale VS. outer scale</em></span></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#9b4f7c5a-b504-4893-8605-7f214673aace">Lecture 9 - Features 2, histograms</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#caecb06c-5063-4dba-8ba0-3a7799e4abb4">an example: (3D shape distributions)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6a22cff6-47e2-4fd5-8dc9-bce4eeafd1fc">Comparing Histograms:</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#ba22118d-11fe-44fe-bb2b-2eb0a4ee0e59"><mark class="highlight-pink">1. normalized correlation</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#fe98f9eb-4db8-4d89-95d5-65524e2700d2"><mark class="highlight-pink">2. chi-square</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#8bd07a5e-ae8c-44d9-be72-376a4d69ed29"><mark class="highlight-pink">3. Bhattacharya</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1266d5c7-036a-4109-af73-6579dbaa2701">Issues with Histograms</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a58c5d29-5f17-457c-9ead-016ae97ca1ad">SOLUTION:  Histogram Equalization</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#cb2f6042-0393-474c-851d-34115fbd7c7f">SOLUTION: Histogram of Oriented Gradients <mark class="highlight-yellow">(HoG)</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d39905a5-b7bf-4b0a-88b6-733f55225c53">HoG STEPS:</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#08605464-9044-4d45-b961-055bdd93a6b4">Ex. Person detection in ML</a></div></nav><p id="52527432-d988-40e1-a67b-c66961ee183a" class="">
+</p><p id="cbb9e01f-07bd-4d3b-bb81-d5d1e6edede7" class="">
+</p><h1 id="a9f08d19-d102-44ae-8a7e-848606f805c4" class=""><mark class="highlight-gray">RECALL …</mark></h1><ul id="04c1d693-46a6-4bdf-bba6-f184b6e33177" class="bulleted-list"><li style="list-style-type:disc">Gaussian blurring: gives relationship between <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></span><span>﻿</span></span> and  Gaussian → iteartive process</li></ul><h2 id="159edfec-2a20-490f-b9e6-9f663f0de7a1" class=""><mark class="highlight-gray">non-linear diffusion</mark></h2><ul id="19d8f4d1-fde0-44cd-8394-874b201ac508" class="bulleted-list"><li style="list-style-type:disc">Anisotrpic HEAT: adding a constant</li></ul><ul id="500a8e1b-f286-4879-a366-ced7d6b2b4b2" class="bulleted-list"><li style="list-style-type:disc">last equation → isotopes moving by curvature<ul id="73c92550-834b-444b-adb1-54e1fd6fe447" class="bulleted-list"><li style="list-style-type:circle">isotope, level line of intensity</li></ul></li></ul><ul id="9d23bb0f-eb8f-474e-99ab-e46014c47193" class="bulleted-list"><li style="list-style-type:disc">→ geometrix HEAT equation </li></ul><p id="d989a81b-d47d-4fa2-9041-400f740fd79c" class="">
+</p><h2 id="911039df-b43a-4d0c-80af-31bf244ed3dc" class="">Corners</h2><ul id="8ba2ecd5-4855-4b6a-9582-1448af96f573" class="bulleted-list"><li style="list-style-type:disc">On tuesday,<ul id="a7e91fd3-2c45-4c66-a55c-110a1e8f6ed1" class="bulleted-list"><li style="list-style-type:circle">consider arbitary shifts (<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>x</mi><mo separator="true">,</mo><mi mathvariant="normal">Δ</mi><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">Δx, Δy)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">Δ</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">Δ</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>→ intensity variations<ul id="15690a6c-06a1-44ba-a004-e777e1e03a84" class="bulleted-list"><li style="list-style-type:square">at a window,<strong> sum up pixels in the central window</strong></li></ul><ul id="e99d89c2-3866-4152-ab36-35d074227b96" class="bulleted-list"><li style="list-style-type:square">we model the intensity at shifted location → using taylor series </li></ul><p id="1b8b83c4-d43d-48d7-8c7e-5ce42832200b" class=""> 1st derivative of intensity of x y +</p></li></ul></li></ul><p id="efc41c8a-ddec-4bf6-bff9-2e3f950a27de" class="">
+</p><p id="582b8e39-1b36-46f1-adca-50440a6bf51f" class="">
+</p><p id="ea6c774b-6e06-4e7d-a0db-b8697b4deb0e" class="">
+</p><p id="751384ae-3cf1-4940-bafd-36558f201fa8" class="">
+</p><h3 id="d6b8225e-0790-4557-a94f-9789d9972b5e" class="">contour can be interpreted differently</h3><hr id="b0f37c30-94f8-4074-b1f6-9da094137b18"/><ul id="a9092911-ea3a-4014-b9d3-dc7aa33ee59b" class="bulleted-list"><li style="list-style-type:disc">CNN can recognize by texture &gt; lines</li></ul><ul id="d5900b92-49d0-4fac-9352-8becb233e328" class="bulleted-list"><li style="list-style-type:disc">human recognize lines &gt; texture</li></ul><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="8133e5b3-4555-4fda-b9e2-e6afe7245684"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">debate between computer vision VS. human vision</div></figure><p id="38dbf5d1-61f7-4e23-9778-4bc462379099" class="">
+</p><p id="b9f01699-826d-49dc-bbe1-41df9b344422" class="">return to tuesday stuff..</p><ul id="f40a88e1-ecbe-4450-8405-d132443400d7" class="bulleted-list"><li style="list-style-type:disc">consider arbitary chicks? from delta x and delta y<ul id="dbdabee8-a6d0-4307-8168-4c43a0c2450d" class="bulleted-list"><li style="list-style-type:circle">sum up pixels in the central window</li></ul><p id="bac365c7-82e4-4c59-b5d6-c67694e7731d" class="">
+</p></li></ul><ul id="425dd7ed-4791-44c8-b63c-d0e61bc50c5e" class="bulleted-list"><li style="list-style-type:disc">model intensity at a shifted location, delta x &amp; delta y using taylor series<ul id="137d4ef1-0461-426a-829c-45813d315715" class="bulleted-list"><li style="list-style-type:circle">there are higher order terms but  the approaches we have</li></ul><ul id="7a6d92c8-0470-4350-b17e-47d699de7f03" class="bulleted-list"><li style="list-style-type:circle">assume higher order terms are small!</li></ul><p id="8c5e85f7-3b7e-47d1-827b-bafec037a6dd" class="">
+</p></li></ul><figure id="98e0e5a9-67e5-426c-9666-8b635baebec6" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.56.05_AM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.56.05_AM.png"/></a></figure><figure id="f602c6ab-b743-4265-8007-fc288a3f74a2" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.56.15_AM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.56.15_AM.png"/></a></figure><p id="29758853-e2c4-4397-be6d-f076f3263be6" class="">
+</p><ul id="89a20d9f-9301-4a0d-af29-a1a54036da10" class="bulleted-list"><li style="list-style-type:disc">when we say vectors, usually use column vectors</li></ul><ul id="ca8f5a79-ea29-4148-816b-94937a53d2cb" class="bulleted-list"><li style="list-style-type:disc">now rewrite whole thing with</li></ul><figure id="46b3ecb0-b9db-454b-b1e9-b8dfc3171bb4" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.57.43_AM.png"><img style="width:576px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_11.57.43_AM.png"/></a></figure><ul id="3d9365e4-9dd4-4191-9ed6-ec92de10eec8" class="bulleted-list"><li style="list-style-type:disc">inside curly bracket? what is it?⬇️</li></ul><h2 id="d34ffe05-5ba3-4bd9-a0c9-0fc334d56689" class=""><mark class="highlight-blue">structure tensor</mark></h2><hr id="febf04f5-1f5c-4fbe-8e1e-07cdcafa3c4c"/><ul id="597bf905-f64e-4003-9b51-aa873a794233" class="bulleted-list"><li style="list-style-type:disc">closely related to 2nd movement matrix ( kinda like <strong>average of structure tensor matrix)</strong></li></ul><ul id="5bb115b1-caf2-40f5-8099-b3e5d5bad95d" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue"><strong>when u sum over some neighbourhood ⬇️</strong></mark></li></ul><p id="aec0daba-3965-4785-8a87-913629dd39f4" class=""><div class="indented"><h3 id="1eae97ac-7ceb-4663-b53e-96904ea11b74" class=""><mark class="highlight-blue">second moment matrix </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi></mrow><annotation encoding="application/x-tex">M</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span></span></span></span></span><span>﻿</span></span></mark></h3><hr id="ac6f029d-5ae4-4b20-8d00-da78b3f8dd7a"/><ul id="70356456-b044-4da9-8223-1256dd4d32f6" class="bulleted-list"><li style="list-style-type:disc">it’s like an<mark class="highlight-blue"><strong> average </strong></mark>of the struture tensors in this neighbourhood</li></ul><h3 id="81cebece-3f11-4a43-8437-ef8db19627f6" class="">2nd moment matrix is → </h3><figure id="693acebd-e7c2-4cc4-83e5-fa05bd679577" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.00.19_PM.png"><img style="width:528px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.00.19_PM.png"/></a></figure></div></p><p id="1a13d9b7-0a46-4c67-b94a-a62fb190916a" class="">
+</p><p id="e98426d4-0a1e-4d93-b6cc-565596273c1e" class="">
+</p><h3 id="7aad2882-43f7-46c5-beaa-adcee99bf917" class="">Localized<mark class="highlight-blue"> sturture tensors → </mark><em><mark class="highlight-blue">usually weighting by Gaussian⭐️</mark></em></h3><hr id="e67c24a4-3489-4e99-86e9-49a71e97882f"/><ul id="428974ba-3cc3-4cd0-8394-af4d00fed9ee" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-purple">when averaging structure tensor matrix, want to </mark><span style="border-bottom:0.05em solid"><strong><mark class="highlight-purple">weigh more </mark></strong></span><mark class="highlight-purple">in the </mark><mark class="highlight-purple"><strong>center</strong></mark></li></ul><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="87afd8af-1e05-4538-aaae-fed7c0166096"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%"><strong>points further away, plays lesser role , </strong><span style="border-bottom:0.05em solid"><strong>weighted!</strong></span></div></figure><figure id="50348085-5ef2-4898-a5b6-22e811fcaefb" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.01.41_PM.png"><img style="width:576px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.01.41_PM.png"/></a></figure><p id="c20d23a5-5f79-480b-b87b-3b2dd2df68c1" class="">
+</p><p id="56253896-ad5f-4515-aa2e-3e33e0339037" class=""><strong><mark class="highlight-gray">above are all reviews from last lecture….</mark></strong></p><p id="538a53eb-c329-41a1-b42e-e2ce2117276c" class="">
+</p><p id="abb4f5d8-7621-4abc-b1ad-86102e54fcde" class="">
+</p><p id="190d7601-cad3-4338-a3cb-27a0550f813f" class="">
+</p><h2 id="9a2cc1f3-9929-43b7-8854-5a7f4fd147ef" class="">Locally distinctive</h2><blockquote id="51ad9377-7cda-48b8-9b28-a2796f0e7b3e" class=""><em><strong>QUESTION:</strong></em> have a column vector, <span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>how is the local intensity vary in a neighbourhood?</strong></mark></span><ul id="48e86c97-b05a-4cc4-99be-a9bab377773c" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue"><em>Solution: look at e-values &amp; e-vectors</em></mark></li></ul></blockquote><hr id="e5689ef9-4bc6-40d4-b7c3-11d4387366b7"/><p id="da2110f2-b26b-4cbb-bc37-bddd6d9022d2" class="">Using the formula drived above, we get the </p><figure id="cdcc6e5e-11c3-48c2-bab9-df84d70d378b" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-23_at_4.03.41_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-23_at_4.03.41_PM.png"/></a></figure><p id="040ed7de-915d-4bf9-937c-4e8f9cdcb2de" class="">
+</p><p id="25b77769-0de9-428f-9198-2dbf12503c0a" class="">
+</p><p id="d6e4eceb-64ec-434f-9144-b7f6c3c4ee14" class="">
+</p><p id="0c58f659-7e5f-4cfd-b577-e069976e03b3" class="">
+</p><p id="41f54fe1-2272-4ed4-9a89-d76e3b028c82" class="">
+</p><h1 id="c563eaf5-1fcb-4913-a8a1-826ac849a0ad" class="">REVIEW Linear Algebra</h1><h2 id="7d2d3bb6-4160-4c07-9b92-7b1dd0f810fe" class="">symmetric matrix</h2><hr id="a04f488e-a3fc-42d6-b360-0fbf9ed4df3d"/><ul id="50d30a16-2ed1-4aec-958b-855ef53c4a27" class="bulleted-list"><li style="list-style-type:disc">same after reflected, square matrix</li></ul><ul id="55249aec-7aa3-4aa8-b976-101407c306d9" class="bulleted-list"><li style="list-style-type:disc">have 2 eigenvectors</li></ul><p id="6d04267a-d8ad-4e69-aa9f-391b1d59da66" class="">
+</p><ul id="b934f9be-f5fe-4801-bc50-cd27ebd85df2" class="bulleted-list"><li style="list-style-type:disc">what do we know about the directions of the eigenvectors?<ul id="6ad360ae-f318-4eb4-9ffa-bebbec0ee5d2" class="bulleted-list"><li style="list-style-type:circle"><mark class="highlight-purple"><strong>they have to be orthogonal! </strong></mark></li></ul><p id="3b6f225b-e184-4212-990c-245ed5e038b4" class="block-color-brown_background"><mark class="highlight-teal">Proof: claim v1 ⟂ v2</mark></p><p id="25ba194f-ee3a-4871-a54e-aa31419ecddc" class="block-color-brown_background">suppose start with <code>v2</code> has property when <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>M</mi><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><mtext>ƛ</mtext><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">Mv_2=ƛv_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord latin_fallback">ƛ</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><p id="cda7c85a-582c-4f9e-8e6a-05dfd5a68396" class="block-color-brown_background">
+</p></li></ul><p id="9c740ff5-c155-4197-9fbd-bd884aba442d" class="block-color-brown_background">LHS: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><mi>M</mi><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mtext>ƛ</mtext><mn>2</mn></msub><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><msub><mtext>ƛ</mtext><mn>2</mn></msub><mo>∗</mo><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_1^T*M*v_2=v_1^T * ƛ_2*v_2 =  ƛ_2*v_1^T *v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> because </p><p id="05c442fc-d7a3-4e33-96b4-099ec6627d5e" class="block-color-brown_background"><code>2nd recording</code></p><p id="8a4bfa0f-aac7-4fdc-9375-703d3d26076f" class="block-color-brown_background">RHS: <strong><mark class="highlight-teal">since M is symmetric</mark></strong><div class="indented"><p id="a43dfa14-6ac3-439b-ae40-586886442381" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msup><mi>M</mi><mi>T</mi></msup><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_1^T*M^T*v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> , then by property of linear algebra, whole thing transpose = reverse order in bracket + each transpose</p><p id="6d6306d6-b35d-44b8-8066-5b409a5303c5" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo></mrow><annotation encoding="application/x-tex">=</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span></span></span></span></span><span>﻿</span></span><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msubsup><mi>v</mi><mn>2</mn><mi>T</mi></msubsup><mo>∗</mo><mi>M</mi><mo>∗</mo><msub><mi>v</mi><mn>1</mn></msub><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">(v_2^T*M*v_1)^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><p id="87c869c6-3720-4905-bd1d-0ad8cec55936" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo stretchy="false">(</mo><msubsup><mi>v</mi><mn>2</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mtext>ƛ</mtext><mn>1</mn></msub><mo>∗</mo><msub><mi>v</mi><mn>1</mn></msub><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">=(v_2^T * ƛ_1*v_1)^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><p id="19b818b5-7e34-4b00-bba6-2abd088330f6" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mo stretchy="false">(</mo><msubsup><mi>v</mi><mn>2</mn><mi>T</mi></msubsup><mo>∗</mo><msup><mtext>ƛ</mtext><mn>1</mn></msup><mo>∗</mo><msub><mi>v</mi><mn>1</mn></msub><msup><mo stretchy="false">)</mo><mi>T</mi></msup></mrow><annotation encoding="application/x-tex">=(v_2^T * ƛ^1*v_1)^T</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0913309999999998em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><p id="72b9742a-c9be-4562-9639-2654759e3205" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><msub><mtext>ƛ</mtext><mn>1</mn></msub><mo>∗</mo><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">=ƛ_1*v_1^T*v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p><p id="599a86a3-5b15-4e87-9f94-56949452032c" class="">✅</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="8162340c-03f7-47d4-8c2e-450899728eb9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">conclude: LHS = RHS<ul id="3931cf3c-4230-462a-afe9-92d0dfb1de9d" class="bulleted-list"><li style="list-style-type:disc"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mtext>ƛ</mtext><mn>2</mn></msub><mo>∗</mo><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub><mo>=</mo><msub><mtext>ƛ</mtext><mn>1</mn></msub><mo>∗</mo><msubsup><mi>v</mi><mn>1</mn><mi>T</mi></msubsup><mo>∗</mo><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">ƛ_2*v_1^T *v_2 = ƛ_1*v_1^T *v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord latin_fallback">ƛ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.0894389999999998em;vertical-align:-0.24810799999999997em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-2.4518920000000004em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">T</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24810799999999997em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><p id="c9d122fe-3ab6-416f-bd13-fe3a711aeb2a" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-teal">so they must be </mark></span><span style="border-bottom:0.05em solid"><mark class="highlight-teal"><strong>orthogonal! </strong></mark></span><span style="border-bottom:0.05em solid"><strong>since </strong></span><span style="border-bottom:0.05em solid"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo mathvariant="normal">≠</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\lambda_1 ≠\lambda_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel"><span class="mrel"><span class="mord vbox"><span class="thinbox"><span class="rlap"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="inner"><span class="mord"><span class="mrel"></span></span></span><span class="fix"></span></span></span></span></span><span class="mrel">=</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></span><span style="border-bottom:0.05em solid"><strong>, has to be </strong></span><span style="border-bottom:0.05em solid"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⊥</mo></mrow><annotation encoding="application/x-tex">⟂</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mrel">⊥</span></span></span></span></span><span>﻿</span></span></strong></span></p></div></figure></div></p><p id="3ab596a6-1e3d-43d6-a273-a0d4b3766fa5" class="">
+</p><p id="375abd33-4f5d-4ef5-9537-ca04c0cbdc5f" class="">
+</p><h2 id="dcce6f87-d0a5-4418-8d8d-8e56444faea1" class="">after the proof</h2><figure id="c7564d39-3e9b-4696-b912-41f545830103" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.15.24_PM.png"><img style="width:384px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.15.24_PM.png"/></a></figure><p id="7a5585e5-0284-4e2f-92e8-49274834701e" class="">light grey: neighbourhood</p><p id="3ab0014f-b677-4899-a02d-8cd16c2b6b21" class="">dark grey: change in image intensity</p><p id="b622db45-f9c3-4e93-8d80-3f41c8406b67" class="">
+</p><p id="66138c73-8033-4d75-b75f-3d572127034d" class="">
+</p><h2 id="49c84917-7c62-4e02-abfa-640986e695c0" class="">EXAMPLEs, locally distinctive?</h2><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="00ba3c2a-75d5-40b6-af6c-3820d29454ef"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">NOTE: we need <strong><strong><strong><strong>2 e-values to let it be locally distinctive</strong></strong></strong></strong></div></figure><hr id="cd148b5a-bf2a-462d-96d1-d62a80c3efde"/><p id="48cc62bf-5a5d-4885-a368-a4edc6ffaa8e" class="">
+</p><ol type="1" id="1c265ebc-4283-4363-9847-95d27949da3c" class="numbered-list" start="1"><li><strong>uniform</strong><figure id="1aeffa37-630f-4061-addb-156222fe0145" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.18.24_PM.png"><img style="width:1498px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.18.24_PM.png"/></a></figure></li></ol><ol type="1" id="c726eede-ed05-4d14-a114-2452530712f5" class="numbered-list" start="2"><li><strong>step edge</strong><figure id="2051f04c-293e-484f-a8dc-d27258e1f0ee" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.18.45_PM.png"><img style="width:1508px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.18.45_PM.png"/></a></figure><ul id="f9ede495-650b-4da5-a75e-dd8ab63b85c9" class="bulleted-list"><li style="list-style-type:disc">partial deriv in x is changing, but in partial deriv iny is <code>zero</code></li></ul></li></ol><ol type="1" id="42835a97-a507-40a7-b0a2-16cf4fdb00a2" class="numbered-list" start="3"><li><strong>step edge</strong><figure id="23b33a9f-1418-47be-ac10-af005f02a35e" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.19.12_PM.png"><img style="width:1488px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.19.12_PM.png"/></a></figure></li></ol><ol type="1" id="89c8331a-dd24-4c8e-84e8-b26f11199124" class="numbered-list" start="4"><li>corners <strong>are locally distinctive!</strong><figure id="194de6b4-b9f9-4e6e-9742-424bc7775064" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.19.53_PM.png"><img style="width:1486px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.19.53_PM.png"/></a></figure></li></ol><p id="d1ff7f76-f7cc-4200-8762-6e860a1f8da8" class="">
+</p><p id="a41d78dd-9067-40ba-900b-7ddc25a931b3" class="">
+</p><h3 id="bccea329-7769-4cd0-9a67-541e64e2e8e5" class="block-color-blue_background">IMPORTANT, cases:</h3><ol type="1" id="329bc1a8-e260-4a3c-ac86-b9216706ba45" class="block-color-blue_background numbered-list" start="1"><li><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Homogeneous Region: </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><mark class="highlight-blue">both near constant, gradients </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub><mo>≈</mo><msub><mi>λ</mi><mn>2</mn></msub><mo>≈</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\lambda_1≈\lambda_2≈0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span><span>﻿</span></span></mark></li></ol><ol type="1" id="efda5a81-8af6-41a6-8305-dc5e35aa3bd1" class="block-color-blue_background numbered-list" start="2"><li><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>Linear Step Edge: </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong><mark class="highlight-blue">if </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>λ</mi><mn>1</mn><mo>&gt;</mo><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">λ1&gt;λ_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.73354em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">λ</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-blue">, and </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub><mo>≈</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">λ_2 ≈0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-blue">, intensity is constant along </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-blue"> → step edge</mark></li></ol><ol type="1" id="8d5e806d-8605-4a64-b7a6-b6bc3da6c724" class="block-color-blue_background numbered-list" start="3"><li><strong><strong><strong><strong><strong><strong><strong><strong>Corner: </strong></strong></strong></strong></strong></strong></strong></strong><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\lambda_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-blue"> and </mark><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>λ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">\lambda_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">λ</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark><mark class="highlight-blue"> are BOTH  great → corner</mark></li></ol><p id="faa3eaad-0dc5-411a-8bb5-6a1cd7727942" class="">
+</p><p id="a48e3a50-5b2c-40b5-b10f-9bf584b7f749" class="">
+</p><ol type="1" id="9c222de9-eb04-498d-aa6d-9712c688557e" class="numbered-list" start="5"><li>stripe on ball 🏀 <figure id="f0ccbd7f-0522-4917-9cbe-18f9a0d447ef" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.28.58_PM.png"><img style="width:1508px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.28.58_PM.png"/></a><figcaption>step edge 👎👎</figcaption></figure></li></ol><ol type="1" id="1cd539a4-162d-4cbf-b1f3-601222b66c4e" class="numbered-list" start="6"><li>eye<figure id="2017748c-d9da-4beb-b4d4-9edc1b322638" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.29.03_PM.png"><img style="width:1436px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.29.03_PM.png"/></a><figcaption>corner👍👍</figcaption></figure></li></ol><p id="b7f94682-bcb4-43da-89fa-b1f69cf7f20a" class="">
+</p><h2 id="1b507c7e-a403-4d2a-9941-43f575e3993a" class="">again how do we find the determinants &amp; traces? (review)</h2><ul id="f1924c46-a007-45a8-bf61-adbc44da3411" class="bulleted-list"><li style="list-style-type:disc">trace: sum of diagonals</li></ul><figure id="695992ef-1fbc-41fb-b693-3e2a0f4097f0" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.30.28_PM.png"><img style="width:336px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.30.28_PM.png"/></a></figure><figure id="a68c1256-defc-4ee8-bcc2-8dc111347a28" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.30.39_PM.png"><img style="width:528px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.30.39_PM.png"/></a></figure><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="e1904e4a-fb32-4e6f-9cbb-79c29c49352c"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">property:<ul id="d1f443b4-b402-4cfc-a5ad-078b9b52cd9a" class="bulleted-list"><li style="list-style-type:disc">sum of e-values =  <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>r</mi><mo stretchy="false">(</mo><mi>M</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">tr(M)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="148ae3d0-3429-40b0-9db8-6cc284d44eff" class="bulleted-list"><li style="list-style-type:disc">product of e-values = <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mo stretchy="false">(</mo><mi>M</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">det(M)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul></div></figure><p id="6ff31a7e-aa6f-414b-a954-7129c411e95f" class="">
+</p><p id="3987f483-4aff-4a2a-af59-225e5cfac403" class=""><em><span style="border-bottom:0.05em solid"><mark class="highlight-blue_background">done with lin alg review…</mark></span></em></p><p id="c48e7a0e-c813-49ea-9de3-4b39f912e1dc" class="">
+</p><h1 id="1a599b33-e526-4f06-829c-318dccbc3b94" class="">1. Harris Corner Detector (1988)</h1><hr id="0e45cd47-b8dd-4fdb-80ab-ec4604eae2b0"/><p id="2a3acdc3-fb6e-4602-90c9-c192bb388a38" class="">
+</p><ul id="cab896c6-2aac-4c9a-b8ec-03467513384a" class="bulleted-list"><li style="list-style-type:disc">harris &amp; stevens observed that we really just want to separate out corner VS. edge VS. uniform<figure id="267653c8-f0dc-4e4b-9a25-ad5872267250" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.33.49_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.33.49_PM.png"/></a></figure><p id="8e5e4ec6-a903-4f69-8d64-02b8b26a7c3b" class="">
+</p></li></ul><figure id="41d19ac8-6fcd-4d4a-8691-2ac4dd8fe9c7" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.34.14_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.34.14_PM.png"/></a><figcaption>closer to yellow, better</figcaption></figure><ul id="3b96f432-dbb4-4727-8a3e-bca4150cceca" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><mark class="highlight-pink"><strong>increase more non-linear</strong></mark></span></li></ul><h1 id="8d5138d9-079d-45f0-ab60-d4c75681c4bd" class="">2. Alternative Corner Detectors</h1><hr id="de5c45c3-a674-407e-8cbe-3d4941bccdbc"/><ul id="bf472707-48b0-40d6-9743-ec6c6afb573d" class="bulleted-list"><li style="list-style-type:disc">the ratio between <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">det</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">tr</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span><span>﻿</span></span><figure id="81c7439a-5fee-431c-b36b-bdfd502305a6" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.36.33_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.36.33_PM.png"/></a></figure></li></ul><ul id="02ae1140-cbb5-46f8-bfce-c82546e93980" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><strong><mark class="highlight-pink">increase more uniformly than harris</mark></strong></span></li></ul><p id="a54befe1-86fa-4702-8b21-5aec8e9fcbb8" class="">
+</p><p id="43ccce81-1fc6-4e24-a25d-14b43b2886f5" class="">
+</p><h2 id="3d492899-0593-495a-9caf-7cb30f935498" class=""><strong>Where are the corners/keypoints/locally distinctive points ? with examples….</strong></h2><figure id="fa119a64-f010-4e3f-91ac-7a237f0c6495" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.37.28_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.37.28_PM.png"/></a><figcaption>Top 1% of Harris responses, after non-maximum suppression</figcaption></figure><p id="78714acf-32a5-4e47-9e4d-1e7bbd12cb4d" class="">
+</p><figure id="8b2bd70b-e86d-4cad-9b84-91c83033a54a" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.37.49_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.37.49_PM.png"/></a><figcaption>top 5% of Harris responses, after non-maximum suppression</figcaption></figure><p id="2a56431e-b82b-432d-a56f-8ffade140d6e" class="">
+</p><h2 id="68a83252-eec3-4831-a628-77b31d4250ba" class="">Notice: Non-maximum suppression 👍</h2><hr id="4de1bfd6-12f6-4239-9be5-d5d5fef36a9a"/><ul id="9fe468a8-ce0a-4c34-83c3-abcf9b49d2c5" class="bulleted-list"><li style="list-style-type:disc">to avoid having a clump of points in a neighborhood that are all greater than threshold and hence would all be interest points. </li></ul><h1 id="26334044-77bf-41a7-96c6-a5a60191182a" class="">One final thought… </h1><h2 id="c003b9f7-7f1a-4275-9e43-00ec97172a04" class=""><span style="border-bottom:0.05em solid"><em>inner scale VS. outer scale</em></span></h2><ul id="a78489ec-dc9f-4dc2-9bb9-abd4ef6309e6" class="bulleted-list"><li style="list-style-type:disc">recall: we blurred image with a <strong>Gaussian before estimating the intensity gradient</strong></li></ul><ul id="e677c9e2-dbcf-492d-8d18-dcf0cc2ef90f" class="bulleted-list"><li style="list-style-type:disc">sigma of this blur is <mark class="highlight-pink"><strong>inner scale </strong></mark><strong>→ typically </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>i</mi><mi>g</mi><mi>m</mi><mi>a</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">sigma = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">ma</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></span><span>﻿</span></span></strong></li></ul><p id="238d3e9b-42cc-44c8-901f-680177753e5e" class="">
+</p><ul id="7a034547-ada1-4949-9ef3-5bda960b5152" class="bulleted-list"><li style="list-style-type:disc">We also used a <strong>weighted average of the structure tensor</strong> (outer product of gradients), where the <strong><mark class="highlight-blue">weights were a Gaussian</mark></strong>.</li></ul><ul id="6299b2c2-73cc-464e-96a4-f2c66259e2f7" class="bulleted-list"><li style="list-style-type:disc">The sigma of this weighting function is called the <mark class="highlight-pink"><strong>outer scale</strong></mark>. Typically 𝜎 = 2 or more.</li></ul><p id="720836bf-2a37-4b04-8155-982ad673f55a" class="">
+</p><p id="dc584a93-37aa-4bda-88a1-a90e083769ef" class="">
+</p><hr id="53632193-10a9-44db-9a77-fb9f06b36ba7"/><hr id="a2a1f48c-84f8-44ce-80b5-2f32e0d6056a"/><hr id="2100b933-1f71-43a1-bb9e-e4ecad3b8e9f"/><p id="92d33831-06c1-4095-aa47-affeb3732de7" class="">
+</p><p id="a5bc0dac-cf25-48db-bc7d-b9d8b2cf2846" class="">
+</p><h1 id="9b4f7c5a-b504-4893-8605-7f214673aace" class="">Lecture 9 - Features 2, histograms</h1><figure id="063c89a7-8697-4cc3-b69d-078a2c48e0b2"><div class="source"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/9-features2.pdf">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/2c1c1ff0-434f-4227-8117-42e7e7b966ad/9-features2.pdf</a></div></figure><figure id="d336d61a-360d-42ae-9f43-322af5eb03e5" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.42.41_PM.png"><img style="width:480px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.42.41_PM.png"/></a></figure><p id="c716e00f-de5e-4571-a0ca-70de93b55d2b" class="">
+</p><h2 id="caecb06c-5063-4dba-8ba0-3a7799e4abb4" class="">an example: (3D shape distributions)</h2><hr id="076ca6fb-50c5-429f-9664-396b50c72eca"/><ul id="221c8927-c5a5-41fa-beea-a9b170f421e7" class="bulleted-list"><li style="list-style-type:disc">take a 3D mesh model and <strong><mark class="highlight-pink">randomly select pairs of points </mark></strong>on its surface</li></ul><ul id="437494b9-7d13-429a-828d-02e692f4f588" class="bulleted-list"><li style="list-style-type:disc">for each such pair of pts record the euclidean distance btwn them</li></ul><p id="4dc96d20-806e-4d3e-b662-2d53652660a9" class="">→ <mark class="highlight-blue"><strong>Build a histogram of pair-wise Euclidean distances</strong></mark><strong>
+</strong></p><figure id="1d302a53-28aa-4eda-ba3b-23e38c2930d8" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.44.41_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.44.41_PM.png"/></a></figure><p id="272b6e21-5f24-4abc-8a46-c5ef5ff3dd8a" class="">… their shape distributions.. (just compute 1D histograms)</p><figure id="7e176b93-f08e-4992-a1b5-1ac2abbadc8d" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.45.11_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.45.11_PM.png"/></a></figure><p id="efc432d9-bbe9-4f69-b09b-6a2a35e7470e" class="">
+</p><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="2d4cb2e4-6edb-4491-a91c-364ddd3f160b"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">so we have some <strong>popular ways to compare histograms..</strong></div></figure><p id="e0131405-9d79-45a4-8af7-689fd1b5cbd0" class="">
+</p><figure id="045c5c78-edb6-4747-8e35-da44befed76f" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.45.38_PM.png"><img style="width:480px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.45.38_PM.png"/></a></figure><p id="18355d21-28d4-409f-9917-90a339334785" class="">
+</p><h2 id="6a22cff6-47e2-4fd5-8dc9-bce4eeafd1fc" class="">Comparing Histograms:</h2><p id="6b0d57dc-fb84-4bd0-ae93-d39c18b53768" class="">
+</p><h3 id="ba22118d-11fe-44fe-bb2b-2eb0a4ee0e59" class=""><mark class="highlight-pink">1. normalized correlation</mark></h3><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="c556cbcd-5f5c-40e0-8815-bb750cd52e05"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">RECALL correlation: convolution without reflection</div></figure><figure id="c65be1a8-3061-4b27-8068-993b74f8d86b" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.01_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.01_PM.png"/></a><figcaption>N is number of bins in the histogram</figcaption></figure><p id="c2b08b4a-86e4-432f-9403-6ee619cc936c" class="">
+</p><h3 id="fe98f9eb-4db8-4d89-95d5-65524e2700d2" class=""><mark class="highlight-pink">2. chi-square</mark></h3><figure id="5f3ad827-110d-48e7-b620-665676057b03" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.18_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.18_PM.png"/></a></figure><p id="680b8b05-def2-4a3d-980a-d4a391fde562" class="">
+</p><h3 id="8bd07a5e-ae8c-44d9-be72-376a4d69ed29" class=""><mark class="highlight-pink">3. Bhattacharya</mark></h3><figure id="43daeb01-b304-47c4-817f-3625edf3b1a5" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.28_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.50.28_PM.png"/></a></figure><p id="981202d8-6e77-4f5f-8fa6-a648b0ad905e" class="">
+</p><p id="6d273c51-033b-4b9f-a275-54224b6d0128" class=""><div class="indented"><p id="35c10e5e-ecd0-42d6-89d4-65e086b4658e" class="">
+</p></div></p><h2 id="1266d5c7-036a-4109-af73-6579dbaa2701" class="">Issues with Histograms</h2><hr id="575880ea-b557-4c4a-bc94-6323f86a6b23"/><figure id="74d04bdf-cb80-42c9-90e1-b4dcd5dbc552" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.21.33_PM.png"><img style="width:576px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.21.33_PM.png"/></a></figure><p id="9eeb0010-f13b-4eac-b0b1-799984e976be" class="">
+</p><p id="bd2e1c3a-3252-4479-a8f9-bb09ec60f2f9" class="">
+</p><h2 id="a58c5d29-5f17-457c-9ead-016ae97ca1ad" class="">SOLUTION:  Histogram Equalization</h2><hr id="52c4c329-e5bb-4442-8e21-da19a2899354"/><ul id="af023d27-eb48-46b0-a670-3a94e977fc0e" class="bulleted-list"><li style="list-style-type:disc">try to bit all intensities and stretch out the bins…</li></ul><figure id="eb967a7d-c2da-4fc1-bbda-e6a887b3d271" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.51.46_PM.png"><img style="width:624px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.51.46_PM.png"/></a></figure><ul id="3824c418-af6c-42e7-bc06-8b1f3c96fdef" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-yellow">much smaller difference (smaller contrast) → stretch out intensities, when there is not enought light when picture was taken</mark></strong></li></ul><figure id="2c660b88-4504-4e83-87ed-be9c55e295fb" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.28.22_PM.png"><img style="width:384px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.28.22_PM.png"/></a></figure><p id="d7e21c8b-923f-4ecf-b67e-e8584a83a2f4" class="">
+</p><h3 id="cb2f6042-0393-474c-851d-34115fbd7c7f" class="">SOLUTION: Histogram of Oriented Gradients <mark class="highlight-yellow">(HoG)</mark></h3><hr id="c281ccdb-657c-410e-8cfc-89edef55f650"/><ul id="9a082a40-7192-47c4-aa75-2388f3d99610" class="bulleted-list"><li style="list-style-type:disc"><strong>normalized local histograms of image gradient orientations in a dense grid
+</strong>
+</li></ul><h3 id="d39905a5-b7bf-4b0a-88b6-733f55225c53" class="">HoG STEPS:</h3><ol type="1" id="ddbe0575-2248-46c1-86d1-2b5fe5179d05" class="numbered-list" start="1"><li>divide image window into <strong><strong><strong><strong><strong>small</strong></strong></strong></strong></strong> blocks (cells)</li></ol><ol type="1" id="3942b474-7d91-4f6b-add3-f787572bd3a4" class="numbered-list" start="2"><li>Within each cell compute 1D histogram using image gradients at each pixel</li></ol><p id="92729625-71b2-4216-b94d-eadca8e986fd" class="">
+</p><ul id="83e791ba-5c91-43e8-97d2-651695af52e1" class="bulleted-list"><li style="list-style-type:disc">for invariance to illumination changes, shadowing….<ul id="21f26a78-3f45-4305-8493-d64f30e75804" class="bulleted-list"><li style="list-style-type:circle">normalize all cell to larger region (a block) by computing <mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow">a measure of histogram energy</mark></mark></mark></mark></mark></li></ul></li></ul><ul id="eac03151-1761-42be-9ca0-e164d3944444" class="bulleted-list"><li style="list-style-type:disc">tile the detection window with denser overlapping grid of HoG descriptors</li></ul><figure id="cb6d220a-1f53-40f9-a3c0-e4ce84a7a519" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.55.31_PM.png"><img style="width:1254px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.55.31_PM.png"/></a></figure><ul id="176545af-6fd0-40df-9111-4c1ad4acabd4" class="bulleted-list"><li style="list-style-type:disc">bigger window or smaller window? u decide</li></ul><p id="fdf77af5-57d4-4879-b6ed-cb1c64895108" class="">
+</p><p id="d274fb63-e6b0-49e9-858b-aa90af081f1c" class=""><span style="border-bottom:0.05em solid"><strong>example of elfel tower, regardless of contrast and color</strong></span></p><ul id="90205b0b-5ef0-4f30-83e7-5f8ec194926d" class="bulleted-list"><li style="list-style-type:disc">opposite to CNN</li></ul><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="b8b00866-8265-45b4-aa58-da0f12e9371c"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><mark class="highlight-pink">do very well in detecting ppl in scene!</mark></div></figure><figure id="fd91a90d-b1fb-46ed-b1ce-122a78fe94aa" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.56.02_PM.png"><img style="width:672px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-09-29_at_12.56.02_PM.png"/></a></figure><figure id="6d3a3e64-9510-454a-bad6-f968eb64a1eb" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.40.18_PM.png"><img style="width:672px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.40.18_PM.png"/></a></figure><ul id="5947887c-ceaa-409e-9d2b-7d3eea9d69ab" class="bulleted-list"><li style="list-style-type:disc">scale invariance</li></ul><ul id="5b43aed0-3d67-4479-adc9-0fc2467a2342" class="bulleted-list"><li style="list-style-type:disc">rotation invariance</li></ul><ul id="2fe150b2-555c-4110-9c81-035b759c5981" class="bulleted-list"><li style="list-style-type:disc">translation invariance</li></ul><ul id="988ef7e1-d7cf-456c-9882-1f91740d77f8" class="bulleted-list"><li style="list-style-type:disc">illumination invariance</li></ul><p id="c9290171-9349-4073-a51d-d8473b6c99a7" class="">
+</p><p id="8eb3edc0-6cd3-4e4f-a9eb-b1881f2f55ed" class="">
+</p><p id="fe69a9b7-1971-4ae4-8644-c1d8cbd94d3d" class="">
+</p><h3 id="08605464-9044-4d45-b961-055bdd93a6b4" class="">Ex. Person detection in ML</h3><hr id="0fc555f4-9cef-4983-bcbe-ddd90272a8a3"/><figure id="0e4ab270-fe3c-4be2-8a17-3f780488b352" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.41.34_PM.png"><img style="width:384px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.41.34_PM.png"/></a></figure><p id="620109b9-2440-4875-b6ac-b855234365cf" class="block-color-red_background"><mark class="highlight-orange_background">we compute BOTH positive &amp; NEGATIVE example to train SVM(Support Vector Machine) 👍👍👍👍👍👍👍</mark></p><figure id="d9ff0122-efd9-4fb1-a39e-37f324fd0ae5" class="image"><a href="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.42.55_PM.png"><img style="width:528px" src="9%20-%20Corners,%20cont%E2%80%99d%20&amp;%20histogram%20a8ec012acb96408aafdf6ca286dc8d17/Screen_Shot_2022-10-24_at_2.42.55_PM.png"/></a></figure><p id="f88646e4-e43f-4fef-8de4-1973dbe50c26" class="">
+</p></div></article></body></html>

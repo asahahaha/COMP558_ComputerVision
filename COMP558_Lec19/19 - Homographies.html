@@ -1,0 +1,709 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>19 - Homographies</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="be32d6ee-ee8e-4ea6-a541-f3525296af63" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">19 - Homographies</h1></header><div class="page-body"><p id="1f73c2e5-a4b7-45ec-95a6-8f4fb0dab87e" class=""><time>@November 10, 2022</time> </p><p id="d28d2fb0-4ef9-4505-a469-35b71020dc7d" class="">
+</p><nav id="5ead81c4-ceb7-4b36-bfb2-fb0d14b5a4dd" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0f9d1be1-fe85-4742-9947-cbbff0f18926">Overview</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#6ddaf338-06c1-4738-bab5-6b0cc6596f71">CASE 1: Scene plane to image pixels</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#3ce2aa9d-ae79-4dac-96e4-5b1f427c37c7">H is invertible</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#6eed6380-a458-4571-a718-58f12b0ecd68">CASE 2: Two Cameras, One Scene Plane</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f3169a38-2b6d-42c5-b750-27df6e4e4a77">CASE 3: Panoramas &amp; Image Stitching</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#4d5eb4b3-ff3f-49a0-9165-d84ca1886b63">CASE 4: Image Rectification</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0cc3bdd2-146b-411d-88fd-81f08e774226"><mark class="highlight-blue">step 1: apply H that virtually rotate each REAL camera so</mark></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#f913433c-81b2-44a7-96ee-f137e4a0a3fa">let’s deal with x axis …. so it becomes CASE 2</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c836c4ae-95a0-4d8b-acda-cfe14d7baa39">STEP 2: rotate real camera 2 to parallel to virtual camera 1 coord system</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#afb93b63-37d4-4786-aa1f-6a60abb0b907">STEP 3: deal with intrinsics <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#02f9187c-a921-48ce-bc97-850a468fa495">3.1 → give virtual camera 1 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#7d8b0e04-e2b4-4611-9904-d295cbf21176">3.2 → give virtual camera 2 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#04088f22-ccfc-4af0-b78c-499a6b8a1685">PROBLEM: Given 2 images, <strong>how do we fit a homography? How to combine 2 images?</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9816fd6f-0f53-4d59-8014-dce9442771c9">1. Naive: </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#cf99281c-daa3-402b-8cb1-4003e69c83ae">A trick: Data Normalization</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#f6c3f2d2-a9e9-422c-a230-72c535c291fd">2. Using RANSAC → BRUTE FORCE</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#54949f67-82ee-4afa-b677-616f73c88973"><strong>Random Sample Consensus ALGORITHM</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#205c8e5c-0e1a-4f91-9de8-38a5acf7024f">How to put them together?</a></div></nav><p id="ac2b2ce4-0428-4a56-9cf1-56c514d0727b" class="">
+</p><h1 id="0f9d1be1-fe85-4742-9947-cbbff0f18926" class="">Overview</h1><ol type="1" id="6b51e366-9b1f-4c85-adcb-86c6d93ae390" class="numbered-list" start="1"><li>a camera looking at a parameterized homographies</li></ol><ol type="1" id="80c52fac-fce9-4914-bb9f-b9621a0b7712" class="numbered-list" start="2"><li>2 diff cameras looking at a scene plane</li></ol><ol type="1" id="448b8669-268d-4f16-af76-a92785c1efaa" class="numbered-list" start="3"><li>rotating one camera</li></ol><ol type="1" id="4c3884f7-1956-43cc-ad72-7761189b35ae" class="numbered-list" start="4"><li>2 cameras looking at  non-planar 3D scene</li></ol><p id="29439b03-9f88-48fa-8f20-096acabf76bd" class="">
+</p><h1 id="6ddaf338-06c1-4738-bab5-6b0cc6596f71" class="">CASE 1: Scene plane to image pixels</h1><hr id="0f6e8bdd-8e6a-4c4b-9bd4-b2e278c8240c"/><p id="d73c3fbe-e299-48c2-855c-44239f17b35e" class=""> suppose we have a planar surface in world  → a wall, ground plane</p><ul id="5c1da94a-9b19-412e-9922-f85feac6b442" class="bulleted-list"><li style="list-style-type:disc">&amp; view it with a camera wiht projection matrix P</li></ul><ul id="7422a1a9-7da2-49cd-892c-396b051f905b" class="bulleted-list"><li style="list-style-type:disc">the planar sureface is 2D &amp; so we can give it a coord system <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>t</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(s,t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><figure id="4efd42fa-2457-4832-8994-2ee3f1c2d35a" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.30.32_PM.png"><img style="width:528px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.30.32_PM.png"/></a></figure><ul id="5709fbb7-9809-4353-88c2-848f7c96eb1a" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc">1st column → where (1,0,0) goes to<ul id="95d361f8-e8f0-4511-b331-b38456d54d80" class="bulleted-list"><li style="list-style-type:circle"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>1</mn><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo><mi>t</mi><mi>o</mi><mo stretchy="false">(</mo><mi>X</mi><mn>0</mn><mo>+</mo><mi>a</mi><mi>x</mi><mo separator="true">,</mo><mi>Y</mi><mn>0</mn><mo>+</mo><mi>a</mi><mi>y</mi><mo separator="true">,</mo><mi>Z</mi><mn>0</mn><mo>+</mo><mi>a</mi><mi>z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(s,t)=(1,0)to(X0 +ax,Y0 +ay,Z0 +az)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mord mathnormal">t</span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul></li></ul><ul id="c80130cf-ef85-4ab4-ae4f-fce1f6af40a0" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc">2nd column → where (0,1,0) goes to<ul id="01c25759-e021-4164-b05c-1891ea99e1fb" class="bulleted-list"><li style="list-style-type:circle"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>t</mi><mo stretchy="false">)</mo><mo>=</mo><mo stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo stretchy="false">)</mo><mi>t</mi><mi>o</mi><mo stretchy="false">(</mo><mi>X</mi><mn>0</mn><mo>+</mo><mi>b</mi><mi>x</mi><mo separator="true">,</mo><mi>Y</mi><mn>0</mn><mo>+</mo><mi>b</mi><mi>y</mi><mo separator="true">,</mo><mi>Z</mi><mn>0</mn><mo>+</mo><mi>b</mi><mi>z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(s,t) = (0,1) to (X0 + bx,Y0 + by,Z0 + bz)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mord mathnormal">t</span><span class="mord mathnormal">o</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">b</span><span class="mord mathnormal" style="margin-right:0.04398em;">z</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul></li></ul><ul id="f00ed2e5-44cc-44b7-bfaf-af2b5999e0ef" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc">3rd column → where (0,0,0) goes to                     <ul id="0729135e-ca78-4b33-a6b1-e9196c05aea4" class="bulleted-list"><li style="list-style-type:circle">3D world coordinate of ORIGIN</li></ul></li></ul><p id="ec22e135-187e-48be-873e-371b7db1b0c2" class="">
+</p><p id="d5e15b8b-38be-456a-adf2-c3a47d426011" class="">
+</p><ul id="0936cb7c-a8aa-4be2-87f4-421359247937" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><strong>get homography</strong></span><p id="30941acd-de88-47ea-b4df-4e609cfee3c5" class="">Adding the projection matrix <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span></span><span>﻿</span></span>, </p><figure id="f019f6f2-98db-43fc-85bc-0cfea7023ad0" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.39.50_PM.png"><img style="width:478px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.39.50_PM.png"/></a></figure></li></ul><p id="ac233b02-ed38-42b3-8e0d-2db47cd4f6c1" class="">
+</p><p id="ab4a47b3-ea9b-428a-8393-06b1852d344e" class="">
+</p><h2 id="3ce2aa9d-ae79-4dac-96e4-5b1f427c37c7" class="">H is invertible</h2><hr id="350a688e-0e3a-447a-a8e5-2fb7341671c7"/><p id="94ee180e-defe-442a-a91c-ef6d4481c58a" class=""><strong><strong><strong>inverse is…</strong></strong></strong></p><figure id="0a3beebb-013e-4678-b3ff-635ea3805eb6" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.40.52_PM.png"><img style="width:384px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.40.52_PM.png"/></a></figure><p id="849e9260-dde7-42f9-a305-a8b16f8aa6c6" class=""><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>inverse is defined as long as camera position DOES NOT belong to 3D planar surface</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="42b76758-f174-4fcb-90b4-21b2e6a7a3bb"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">WHY?</div></figure><ul id="71a85a28-4568-49e9-8d1a-9f9fc34e5b27" class="bulleted-list"><li style="list-style-type:disc">if camera position belong to 3D planar surface, then<p id="a1057c6a-b930-4ece-b4de-bcb285d8ad85" class=""><div class="indented"><figure id="647d9942-d884-44a2-ad9c-76b0fc13baf0" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.42.48_PM.png"><img style="width:288px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-22_at_10.42.48_PM.png"/></a></figure></div></p></li></ul><ul id="cf87fb08-a3ac-4b00-8341-09c191f16bab" class="bulleted-list"><li style="list-style-type:disc"><strong>when the columns are LINEARLY DEPENDENT</strong><figure id="13b4e00f-244e-4d6a-9989-9a07c5a3ef80" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_12.23.47_AM.png"><img style="width:384px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_12.23.47_AM.png"/></a></figure><ul id="fdcf6bec-e397-4acf-a32c-9fe4d7858c38" class="block-color-brown_background bulleted-list"><li style="list-style-type:circle">vector from the camera c to the 3D origin (X0, Y0, Z0)<ul id="ca78530a-07ff-47cf-bdb1-2546726aef6f" class="bulleted-list"><li style="list-style-type:square">of the plane is a <strong><mark class="highlight-brown">linear combination of vectors a and b</mark></strong></li></ul></li></ul></li></ul><p id="7b25fbd9-aabd-4ce4-85d9-af515f6f98f7" class="">
+</p><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="ac0dce36-0312-485c-822c-add62ed28662"><div style="font-size:1.5em"><span class="icon">✔️</span></div><div style="width:100%"><strong><mark class="highlight-teal_background">only INVERTIBLE if the camera is not on the scene plane!!!!</mark></strong></div></figure><p id="6ef903e8-9d45-4b89-ab71-dfedefb0ec4e" class="">
+</p><p id="d69b3560-8332-41e2-8c71-dcc393fca53f" class="">
+</p><p id="94318feb-a251-4269-98d6-0c976adefe56" class=""><time>@November 15, 2022</time> </p><h1 id="6eed6380-a458-4571-a718-58f12b0ecd68" class="">CASE 2: Two Cameras, One Scene Plane</h1><hr id="a4bb6e84-aedd-4065-87c7-3c8a4de7204f"/><figure id="f3eeece6-817b-4c1d-924c-7bb7e7ad58e8" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.36.55_AM.png"><img style="width:624px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.36.55_AM.png"/></a></figure><ul id="51387160-aad8-4ccc-87ef-f3e13e680032" class="bulleted-list"><li style="list-style-type:disc">diff <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi></mrow><annotation encoding="application/x-tex">P</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span></span></span></span></span><span>﻿</span></span> matrices, so <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>2 homographies</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></li></ul><ul id="c5cb7f7c-d0d3-4fa6-85aa-07021c99e2ca" class="bulleted-list"><li style="list-style-type:disc">→ this implies that the composite mapping <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>2</mn></msub><msubsup><mi>H</mi><mn>1</mn><mrow><mo>−</mo><mn>1</mn></mrow></msubsup></mrow><annotation encoding="application/x-tex">H_2H_1^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.120547em;vertical-align:-0.266308em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854239em;"><span style="top:-2.433692em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span><span style="top:-3.1031310000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.266308em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="366b70f0-0ec7-4645-b3dc-596953058807" class="bulleted-list"><li style="list-style-type:circle">maps from <ol type="1" id="d7a57768-e492-4db6-90c9-4ed2ab84de7c" class="block-color-blue_background numbered-list" start="1"><li>pixel coordinate in camera 1</li></ol><ol type="1" id="4c928508-8da1-4f76-bd62-a37518651303" class="block-color-blue_background numbered-list" start="2"><li>→ world coordinate (from camera 1) </li></ol><ol type="1" id="4d8d6eaa-488c-4381-b48b-aa17b29fdcfe" class="block-color-blue_background numbered-list" start="3"><li>→ pixel coordinate in camera 2<figure id="f792a597-d341-4660-83f2-a3bb04c3ea1c" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.02.45_AM.png"><img style="width:576px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.02.45_AM.png"/></a></figure></li></ol></li></ul></li></ul><p id="ba8a44af-d0f0-459b-913f-b6688b4cd2e7" class="block-color-yellow">⚠️：the homographies are invertible!!</p><p id="d16b973b-8023-434e-8aeb-6362e89e0907" class="">
+</p><h1 id="f3169a38-2b6d-42c5-b750-27df6e4e4a77" class="">CASE 3: Panoramas &amp; Image Stitching</h1><hr id="cd727223-669d-4d0b-a3b8-6b65a666d3a1"/><blockquote id="9dbd3168-fd65-41df-b7fd-d2bb6a1e0feb" class="">one camera, camera rotaion around center of projection</blockquote><ul id="30e40777-4f97-4141-ae87-d2ea4acdb08d" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue_background"><strong>only differ by </strong></mark><mark class="highlight-blue_background"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></mark><mark class="highlight-blue_background"><strong> &amp; </strong></mark><mark class="highlight-blue_background"><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">R_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></mark><mark class="highlight-blue_background"><strong>, because SAME camera position + SAME camera intrinsics</strong></mark></li></ul><figure id="13c15ea3-e639-48c2-b401-396ed1c69b67" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.24.01_AM.png"><img style="width:576px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.24.01_AM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="17831119-f588-437f-bfbf-a96f1dda2ee6"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">Homography: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><msub><mi>R</mi><mn>2</mn></msub><mo stretchy="false">(</mo><mi>K</mi><msub><mi>R</mi><mn>1</mn></msub><msup><mo stretchy="false">)</mo><mrow><mtext>−</mtext><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">KR_2(KR_1)^{−1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose"><span class="mclose">)</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−1</span></span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> that takes <ol type="1" id="30da8cec-7dce-490d-a285-7fac49545a33" class="numbered-list" start="1"><li><strong>pixel coordinates (x, y) in camera orientation 1 </strong></li></ol><ol type="1" id="18dd0db0-fb29-442d-a61e-6ad8cd986797" class="numbered-list" start="2"><li><strong>to pixel coordinates (x′,y′) in camera orientation 2.</strong><figure id="49435640-3896-4736-893b-81db17d2c52d" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-12-02_at_8.00.05_PM.png"><img style="width:528px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-12-02_at_8.00.05_PM.png"/></a></figure></li></ol></div></figure><p id="effdf442-31d2-42f7-9a67-499bf9656e82" class="">
+</p><p id="db9f7ac2-f9ba-4069-bfde-ce7de46d7e5f" class="">
+</p><p id="18f447b3-af26-4d57-b96d-46b447857e10" class="block-color-yellow"><strong>⚠️：distances DOES NOT affect </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span></span><span>﻿</span></span></strong></p><figure id="7988f058-0289-4178-9703-56992a1935d0" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.27.19_AM.png"><img style="width:338px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.27.19_AM.png"/></a></figure><p id="1b9fcf09-0ff7-4e1c-9194-abb238877dd4" class="">
+</p><p id="ae77f1ae-967e-4641-baeb-3f85b622817d" class="">
+</p><h1 id="4d5eb4b3-ff3f-49a0-9165-d84ca1886b63" class="">CASE 4: Image Rectification</h1><hr id="a55abcc3-114c-4d26-b6bc-69a6b32ade80"/><div id="07b43cac-f06c-4e99-ac10-1cbe54cbc28f" class="column-list"><div id="6e18fe66-9dbf-4eb4-bd33-36113202519c" style="width:50%" class="column"><blockquote id="adb122a5-8e2d-4ad5-9457-e15f6108d99a" class=""><strong>2 cameras, non-planar 3D scene</strong></blockquote><p id="b789a76e-7c6c-4332-8f2d-8ad817cab0fd" class="">
+</p><ul id="14ab0ec3-c6cc-4fc5-8d54-6d47e8590dde" class="bulleted-list"><li style="list-style-type:disc">assume performed camera calibration for both &amp; know <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">P_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>P</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">P_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span><ul id="d205a083-7efb-45d4-af87-af4c557cd715" class="bulleted-list"><li style="list-style-type:circle">AND have decomposed into <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>R</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>C</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1,R_1,C_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>R</mi><mn>2</mn></msub><mo separator="true">,</mo><msub><mi>C</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K_2,R_2,C_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><p id="cdf6de3a-a9a8-4720-9871-c9e01eb456d6" class="">
+</p></li></ul><p id="20717efd-65b9-4df8-8523-6b1c90fd8f4d" class="">
+</p></div><div id="e4e5ae75-ad06-416f-a7f1-1122188cd972" style="width:50%" class="column"><figure id="1f9f1aab-0f21-4f4b-9f4b-709bbf222b76" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.38.06_AM.png"><img style="width:550px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_1.38.06_AM.png"/></a></figure></div></div><h2 id="0cc3bdd2-146b-411d-88fd-81f08e774226" class=""><mark class="highlight-blue">step 1: apply H that virtually rotate each REAL camera so</mark></h2><blockquote id="5cb8917e-63a0-46aa-b6dd-304fc8caadec" class="">apply H that virtually rotate each REAL camera so XYZ axes of 2 virtual cameras are <strong><strong><strong><strong><strong><strong><strong><strong>parallel</strong></strong></strong></strong></strong></strong></strong></strong></blockquote><figure id="4d2989fa-1a1a-48fc-8894-b2b4724a4880" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.02.54_PM.png"><img style="width:576px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.02.54_PM.png"/></a></figure><figure id="363d7332-bf98-443e-aab7-89182d0bdffd" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.07.23_PM.png"><img style="width:624px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.07.23_PM.png"/></a></figure><p id="8f32cd4a-e09b-4886-884c-f795f36345f1" class="block-color-red_background">
+</p><p id="dd7341fd-7de8-482e-9f0d-7b1cb0cce095" class="">
+</p><h3 id="f913433c-81b2-44a7-96ee-f137e4a0a3fa" class="">let’s deal with x axis …. so it becomes CASE 2</h3><figure id="75f17e1a-becb-4bb9-9f70-b4a3fd8fa3cb" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.26.14_PM.png"><img style="width:624px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.26.14_PM.png"/></a></figure><p id="dc3e5926-265f-43ba-b2d1-155c834cebdc" class=""><mark class="highlight-red_background"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>rotation matrix:</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark></p><figure id="4816c0f0-6bb9-45fd-900e-70e346516788" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.29.09_PM.png"><img style="width:624px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_4.29.09_PM.png"/></a><figcaption>✅✅</figcaption></figure><p id="d7f4b227-6d84-4fff-8271-e52ac7f82f43" class="">
+</p><h2 id="c836c4ae-95a0-4d8b-acda-cfe14d7baa39" class="">STEP 2: rotate real camera 2 to parallel to virtual camera 1 coord system</h2><figure id="50182b1a-16e9-407b-b587-200a172423d0" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.02.41_PM.png"><img style="width:240px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.02.41_PM.png"/></a></figure><hr id="476fe8cf-adce-4f79-8b9c-56dfd931f829"/><ol type="1" id="7d140a32-1b11-4caa-9d4b-a84ac006f723" class="numbered-list" start="1"><li>apply <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mn>1</mn></msub><msubsup><mi>R</mi><mn>2</mn><mrow><mo>−</mo><mn>1</mn></mrow></msubsup></mrow><annotation encoding="application/x-tex">R_1 R_2^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.120547em;vertical-align:-0.266308em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.854239em;"><span style="top:-2.433692em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span><span style="top:-3.1031310000000003em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.266308em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> to change coord</li></ol><ol type="1" id="daa71fe5-dc64-42e4-ab4d-318c16f77c55" class="numbered-list" start="2"><li>then apply <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mrow><mi>r</mi><mi>e</mi><mi>c</mi></mrow></msub></mrow><annotation encoding="application/x-tex">R_{rec}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.00773em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">rec</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> to  rotate to virtual cam 1 place</li></ol><p id="baf0598b-ab1c-4b41-846b-3fa7f6c02d77" class="">           ⬆️</p><p id="1cb0b4bb-9d17-4870-9755-86301a29a278" class=""><mark class="highlight-yellow"><strong><strong><strong><strong>real cam 2 pixel coord → world coord → real cam 1 pixel coord → virtual cam 1 coord</strong></strong></strong></strong></mark></p><p id="8af666af-7138-462a-8cbe-7be8bd805120" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="f347af09-cb08-4afc-a801-ee50b14c0d03"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">NOTE: we are not rotating cameras!!! <strong><mark class="highlight-orange">ONLY virtually</mark></strong><p id="3f51311b-a16b-4eec-8fc3-658657f0e516" class=""><strong>A key difference here is that if we actually rotate a camera, then we bring new parts of the scene into view and we lose other parts of the scene from view</strong></p></div></figure><p id="2d07ac07-0d9d-40e1-8892-8406a6fe1d5e" class="">
+</p><p id="eec4e6ab-feff-4977-bce5-7655fafd5627" class="">
+</p><h2 id="afb93b63-37d4-4786-aa1f-6a60abb0b907" class="">STEP 3: deal with intrinsics <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></h2><hr id="d09579a1-6208-4361-8d5a-71d4a275f038"/><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="abff6186-4a3a-4fe9-b7ca-1dae461b5b5d"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">GOAL: give camera 2 the real cam 1 intrinsics → <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></div></figure><h3 id="02f9187c-a921-48ce-bc97-850a468fa495" class="">3.1 → give virtual camera 1 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></h3><figure id="c93b977c-3c39-465b-ac38-eea35949be80" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.01.53_PM.png"><img style="width:432px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.01.53_PM.png"/></a></figure><h3 id="7d8b0e04-e2b4-4611-9904-d295cbf21176" class="">3.2 → give virtual camera 2 <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></h3><figure id="37f2adfc-e0a9-487a-9833-634d5e4aa9d8" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.03.21_PM.png"><img style="width:528px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_6.03.21_PM.png"/></a></figure><p id="4f737a09-931e-40af-bee2-7f6162e29d1d" class="">
+</p><p id="ee36b4e7-ed42-4a47-8115-9421976f18a0" class="">
+</p><h1 id="04088f22-ccfc-4af0-b78c-499a6b8a1685" class="">PROBLEM: Given 2 images, <strong>how do we fit a homography? How to combine 2 images?</strong></h1><hr id="75ff6be7-ff13-4eb8-bc95-753e6317d309"/><p id="de9de897-3940-485f-a9a9-82beffec9a75" class="">
+</p><ul id="9264c55f-d7bc-4ed8-9569-1392aa602ccb" class="bulleted-list"><li style="list-style-type:disc"><em><strong>Assume that we can find matching points </strong></em><strong>(e.g. SIFT features → </strong><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow"><mark class="highlight-yellow">candiates</mark></mark></mark></mark></mark></mark><strong>)</strong></li></ul><p id="88594952-7d41-4a03-a35f-2f417c3dad6e" class=""><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>Then we can apply similar </strong></mark></span><mark class="highlight-yellow"><span style="border-bottom:0.05em solid"><strong>least squares methods </strong></span></mark><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>that we used for camera calibration.</strong></mark></span></p><p id="0ba3d432-5bf9-40f1-83ec-81194d5ced64" class="">
+</p><h2 id="9816fd6f-0f53-4d59-8014-dce9442771c9" class="">1. Naive: </h2><hr id="5f5710c8-81df-4ff7-aa62-7210ac088178"/><p id="aa8515db-4a4e-4f01-b10b-0c40f698f594" class=""><strong>For each SIFT keypoint in image 1, </strong><span style="border-bottom:0.05em solid"><mark class="highlight-yellow"><strong>find the most similar</strong></mark></span><strong> feature (or 𝑘 features) in image 2, and vice versa, where similarity is defined by the 128-D SIFT descriptor.
+</strong></p><figure id="d38e1c55-be4b-4b68-b5a5-093c9aae75a7" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.00.05_PM.png"><img style="width:1120px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.00.05_PM.png"/></a></figure><p id="39d7ef16-4302-4715-9651-31537d37e543" class=""><span style="border-bottom:0.05em solid">Example.</span></p><div id="34a1ec50-f937-4be3-af01-3ba2dcd246a6" class="column-list"><div id="db0eb1da-2a74-4b7c-a1bf-01451488a2f6" style="width:43.75%" class="column"><figure id="2bd448cd-2587-4604-8474-871184ea2f96" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.00.35_PM.png"><img style="width:1064px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.00.35_PM.png"/></a></figure></div><div id="82cf7033-b08c-4486-90cd-0a8b798f3f54" style="width:56.25%" class="column"><figure id="fe12623b-d9e5-4c2c-8e95-e924d7fea755" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.02.03_PM.png"><img style="width:1206px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.02.03_PM.png"/></a></figure><p id="eada2184-be82-47f5-945e-743259f0b4b4" class="">✅</p></div></div><p id="c65d3fd8-e046-40af-ad1a-a46d18386c2d" class="">
+</p><h2 id="cf99281c-daa3-402b-8cb1-4003e69c83ae" class="">A trick: Data Normalization</h2><hr id="76739f80-ee0c-47e5-8939-3af9fc5c0b4a"/><ul id="94ae1b80-e019-4b6c-aa54-e18c4c1ecfe4" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-yellow">Normalize so that the mean and standard deviation are 0 and 1, respectively.</mark></strong><ul id="3a15c0c7-5c46-48e0-8bf7-c6532efee820" class="bulleted-list"><li style="list-style-type:circle">do this for all the matching pairs before putting into equation</li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="056e5bc7-afe5-4b59-9fbf-e66a5af10002"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">which just means to add on <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">M_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.10903em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></div></figure><figure id="9f6c6da9-540f-4e2e-aec9-6a47a3ad99eb" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.04.03_PM.png"><img style="width:1116px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.04.03_PM.png"/></a></figure><figure id="e10e1e9a-b384-4570-9e1a-a82da7f229a2" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.04.20_PM.png"><img style="width:1188px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.04.20_PM.png"/></a></figure></li></ul><p id="83e4243b-9fbc-446a-b085-37bc519c49a9" class="">
+</p><blockquote id="79fbbe8c-92bd-464c-9413-2f53779979c5" class="">However, some of the matches might be incorrect!! ⬇️</blockquote><p id="7be260a3-9320-4b87-ba82-9956c86abfe4" class="">
+</p><h2 id="f6c3f2d2-a9e9-422c-a230-72c535c291fd" class="block-color-blue">2. Using RANSAC → BRUTE FORCE</h2><hr id="b7167503-386d-4d9a-909d-a964bec38153"/><p id="0c41bc55-d491-485c-9393-b66c552e1959" class="">
+</p><h3 id="54949f67-82ee-4afa-b677-616f73c88973" class="block-color-blue_background"><strong>Random Sample Consensus ALGORITHM</strong></h3><figure id="829f493f-6ad3-48b1-a8f0-dc18382708d5" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.11.15_PM.png"><img style="width:720px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.11.15_PM.png"/></a></figure><p id="cae0d413-c2ab-4255-9a6a-f705d1bf5886" class="block-color-blue_background">
+</p><ul id="79a6f24b-b26e-49e9-a1d5-e64aed01cefc" class="block-color-blue_background bulleted-list"><li style="list-style-type:disc">randomly sample <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>N=4 matching pairs of points </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>from 2 images<figure id="fbc3cf51-e431-4f1f-8381-92dbc41449fd" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.13.29_PM.png"><img style="width:624px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-15_at_12.13.29_PM.png"/></a></figure><p id="fb36147c-558a-4870-b96f-b980059ae731" class="">
+</p></li></ul><p id="5d2e1b13-0582-451f-875d-5ce7e19abd99" class="">
+</p><p id="70b5960c-9400-4e50-8855-d1d1153183d2" class="">
+</p><h3 id="205c8e5c-0e1a-4f91-9de8-38a5acf7024f" class="">How to put them together?</h3><hr id="ea64af24-6910-4531-bccf-b9360091aa52"/><ul id="0c4f6af1-64b3-46f7-9f0a-2f896e5cd433" class="bulleted-list"><li style="list-style-type:disc">copy RGB value → look up RGB value using <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi></mrow><annotation encoding="application/x-tex">H</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="5ef719ee-35b3-4b86-bf13-3a1ffb5a7ba5" class="bulleted-list"><li style="list-style-type:disc">for each <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y) </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> in unassigned black region of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x,y)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span> check if corresponding position</li></ul><figure id="de54b9e9-3c2a-41a8-b136-943c92619a39" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.37.41_PM.png"><img style="width:350px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.37.41_PM.png"/></a></figure><p id="94fdecfd-f20b-4f75-b5c0-9f8da2ff5017" class="">⬇️</p><div id="c2fba02f-9cef-4f71-9092-e47925ca724f" class="column-list"><div id="e5a9dd2d-2f34-4786-a947-79b0a8503eb5" style="width:66.66666666666666%" class="column"><figure id="2dd43901-bdef-490a-a132-24ebbbf69e91" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.38.55_PM.png"><img style="width:828px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.38.55_PM.png"/></a></figure></div><div id="778c5ceb-8227-4e25-8271-b0e49bb31cf8" style="width:4.166666666666666%" class="column"><p id="b56e97e1-4df5-45ea-a596-96375935f25a" class=""><strong>&amp;</strong></p></div><div id="cd842db3-0bf3-41e7-b802-98009316be86" style="width:29.166666666666686%" class="column"><figure id="a01285f3-27af-4e98-a4f9-d54f9d56f54f" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.39.20_PM.png"><img style="width:308px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.39.20_PM.png"/></a></figure></div></div><figure id="8ceab471-58ae-4744-a1d6-c1ae11493e06" class="image"><a href="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.40.26_PM.png"><img style="width:1292px" src="19%20-%20Homographies%20be32d6eeee8e4ea6a541f3525296af63/Screen_Shot_2022-11-23_at_10.40.26_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="57e96881-4059-40bd-a4a6-7d518ef14159"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%"><strong>ALWAYS want to paint on BIGGER canvas!</strong></div></figure><p id="5dd6850a-0599-4787-ad0f-5cbba8fc6a88" class="">
+</p><p id="9a5fdd3c-be42-4388-8a36-1d6807055a96" class="">
+</p><p id="baf5b520-5238-43cc-b7a3-28b891f6e725" class="">
+</p></div></article></body></html>

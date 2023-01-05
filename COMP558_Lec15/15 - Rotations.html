@@ -1,0 +1,728 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>15 - Rotations</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="9449e5c1-c80a-40f0-ac8b-1775e708cb5a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">15 - Rotations</h1></header><div class="page-body"><p id="e091c53a-ccea-40dc-91ae-00a31213920d" class=""><time>@October 20, 2022</time> </p><nav id="f9babd85-deb5-48bf-9db6-95c62cbfe2b5" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#cf7fcd55-a3c3-44e8-8a96-67e43809645b">2D Rotation (discrete)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#f95e4a13-606f-4dbc-88f8-cd89fb0fc322">2D Rotation (continuous)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5552bb53-6457-4b8d-a3f8-8a3545909806">Cross product:</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#e14ca2d8-81d4-4f96-8e85-b0057029fb30">1. 3D Camera Rotation (Z axis - “roll”)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#271618bf-9e2a-49de-852a-4e520f542775">2. 3D Camera Rotation (X axis - “tilt”)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#a3d9dc89-3c53-42b5-857e-38035080a7cd">2. 3D Camera Rotation (Y axis - “pan”)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#88e7c5f5-837e-4f52-b3d4-de00bc08a699">Rotation &amp; Image Projections (Continuous):</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#65f34340-65b0-4ca1-84b4-ba62f09cd80c">1. <strong>3D Camera Rotation about Z axis: “roll”</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9fe0f83e-20e2-42c1-be26-6a316977ddcc">2. <strong>3D Camera Rotation about X axis: “pitch” OR “tilt”</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8e7f3ec4-b800-4b36-b2d3-8dc6d8f5389f">3. <strong>3D Camera Rotation about Y axis: “pan”</strong></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#17773d3d-2c43-4afc-b068-5227ea6dd46b">3D  Rotations (discrete)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b20177f1-4d67-410e-818a-743fe8427906">REVIEW: Cross Product</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c95dbaf0-8557-4328-b3b0-56284858c0dd">Rotation matrix property ⭐️</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#e7ac8d13-df6f-4f82-98e3-3ec5c0d966b2">Rotation Matrix</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#a0a89bf0-62a8-4d83-9342-cbf994915bad">Property: preserve <span style="border-bottom:0.05em solid">length &amp; angles</span> for a vector </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#d7fefc55-839f-4139-be3c-6565f252d02f">non-ex: 3D Reflection</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#099f2e05-a463-434e-9b91-0a1e73e926bb">3D Camera Rotation (discrete) …matrix</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#734eb565-aef4-4478-b688-444a2b6c1ed2">Axis of Rotation </a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#100de76f-eb3a-4ba7-8a99-fb5b5092311c"><mark class="highlight-blue">Cross Product REVIEW</mark></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b71c634f-d057-44d1-91e7-d144c79d5df1">⭐️<mark class="highlight-blue_background">Homogenous Coordinates</mark></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#8c954d92-14ba-4a6d-94ad-d222887c917d">3D HOMOGENEOUS COORDINATES:
+</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#dc58b21d-71ce-44df-b017-94db0ed5ddd7">What if we have a value diff than 1 in <code>4th</code> coordinate?</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#2eaeac7a-ff3e-4dc0-9d14-8a72008dae1b">Scaling 3D coordinates of this pt by <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s&gt;0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span><span>﻿</span></span>?</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#616c63e3-c821-4429-b58e-7bed0a6481e2">⬇️ As s → <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">∞</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord">∞</span></span></span></span></span><span>﻿</span></span>, <span style="border-bottom:0.05em solid">POINT AT INFINITY</span></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#5ee3580b-7a60-437c-90d6-58a44fc59383">👍 POINTS AT INFINITY</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1027a581-3e78-4372-aaed-fbb418fbf0bb"><strong>translation, rotation, scaling to a point at infinity……</strong></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#033c0c48-b0fb-4aa2-aaf1-3fa2d54d080a">2D HOMOGENEOUS COORDINATES:</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d8cca310-7f94-42d6-ac26-1cc83575510a">Translation, rotation, scaling, shear..</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#2c1bc69e-e0db-4833-9af2-ad3ad63f6201">points at infinity in 2D</a></div></nav><p id="a7e653df-8ae2-4523-ac64-c483d4116d73" class="">
+</p><p id="7f268b96-67a8-458c-909f-a52b4d53ed9d" class="">
+</p><h2 id="cf7fcd55-a3c3-44e8-8a96-67e43809645b" class="">2D Rotation (discrete)</h2><hr id="1076ceff-69aa-48f3-a379-de96fe50a6eb"/><p id="4471d298-4ccb-445a-b319-88bdd54e0cf5" class=""><span style="border-bottom:0.05em solid"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>rotation matrix</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></span></p><figure id="9c1d8c1b-70b6-40cd-b17f-5f72deda9b78" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.44.24_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.44.24_PM.png"/></a><figcaption>rotate by theta, counter clockwise</figcaption></figure><figure id="3a7f21b1-9562-4107-93ed-477ca20c6922" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.44.31_PM.png"><img style="width:528px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.44.31_PM.png"/></a></figure><p id="60a5544c-a337-49ab-b7a3-0e662ed71007" class="">
+</p><h2 id="f95e4a13-606f-4dbc-88f8-cd89fb0fc322" class="">2D Rotation (continuous)</h2><blockquote id="5f4bdffd-6593-4939-a1bb-186b48127992" class=""><strong>angle grows over time</strong></blockquote><hr id="024ee1ab-7f9c-49a4-a63d-3a989f096d45"/><figure id="be0b4aed-a422-4a53-a13a-636ced92b01a" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.09_PM.png"><img style="width:528px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.09_PM.png"/></a></figure><p id="466c1c1d-17f4-4da8-ad26-51f189cf3abd" class="">
+</p><h3 id="5552bb53-6457-4b8d-a3f8-8a3545909806" class="">Cross product:</h3><figure id="c141aff5-712c-4200-8d32-cf5a24e7f48e" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.34_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.34_PM.png"/></a></figure><p id="a8790229-4ed3-4ba7-a9c8-449bc24a0a94" class="">
+</p><figure id="706ad44a-f31f-402b-adb5-9fd056815d2e" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"/></a></figure><p id="1811e8f5-8d9f-4e61-886e-0c1c64bcd462" class="block-color-blue_background">
+</p><figure id="1c1fcca9-9627-4c49-8f51-5ca3d691eacd" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.53_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.53_PM.png"/></a></figure><p id="47522b44-ee83-4486-927d-913b329814a1" class="block-color-blue_background">
+</p><p id="bf5a50a5-5e97-4669-8e00-f54132cda102" class="">
+</p><h2 id="e14ca2d8-81d4-4f96-8e85-b0057029fb30" class="">1. 3D Camera Rotation (Z axis - “roll”)</h2><figure id="3297b3cc-b494-4ec3-afc5-81dcedd3ec04" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.47.51_PM.png"><img style="width:1238px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.47.51_PM.png"/></a><figcaption><strong>Notice: </strong><strong><code>z does not change!!!</code></strong></figcaption></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="8347bbc0-29fe-4049-9aed-4fea816861da"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Same geometry, for X axis &amp; Y axis, mostly <mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong><mark class="highlight-blue_background"><strong>identical!!</strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark><ul id="f69ff041-5dc9-4b38-b978-1d261f20a001" class="bulleted-list"><li style="list-style-type:disc">just changing the place where <code>0</code>s are in the matrix</li></ul></div></figure><p id="8a56be83-d477-4076-80d0-4b2523df221c" class="">
+</p><h2 id="271618bf-9e2a-49de-852a-4e520f542775" class="">2. 3D Camera Rotation (X axis - “tilt”)</h2><figure id="279d8f88-1ecd-445e-94c9-4fd3ae7cbf6c" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.47.57_PM.png"><img style="width:1166px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.47.57_PM.png"/></a></figure><p id="fa607b85-6dc7-4fd6-97dd-5f1eb788cd09" class="">
+</p><p id="ba650eef-9ca1-4918-a635-265e0ea79751" class="">
+</p><h2 id="a3d9dc89-3c53-42b5-857e-38035080a7cd" class="">2. 3D Camera Rotation (Y axis - “pan”)</h2><figure id="7dcb6e60-0139-4011-910d-f2c974890c68" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.48.59_PM.png"><img style="width:1144px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.48.59_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="70a37d50-b779-4bf4-8bb8-8452151b827b"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"> NOTE：continuous world is a bit nasty → discrete is much better 😟</div></figure><p id="b6ab44c0-9529-48bc-9bee-adb37e685995" class="">
+</p><p id="f5f8b40a-1460-4d92-b7a5-267d2c0f77df" class="">
+</p><p id="e9743913-3409-42df-a03e-82566c1df4ed" class="">
+</p><h1 id="88e7c5f5-837e-4f52-b3d4-de00bc08a699" class="">Rotation &amp; Image Projections (Continuous):</h1><blockquote id="0a291471-009f-4b52-94a7-ae0aa3eb24c6" class=""><mark class="highlight-blue_background"><strong>Q: What is the image motion field seen by a rotating camera?</strong></mark></blockquote><p id="0c219c58-463c-4594-aee3-509c4bf40b47" class="">
+</p><figure id="97f92fbe-b9c2-4018-8ad8-111df449146b" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.51.46_PM.png"><img style="width:624px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.51.46_PM.png"/></a></figure><p id="b21ac4a0-0cac-4fbd-9b9b-6b0eca0b5d00" class="">
+</p><h2 id="65f34340-65b0-4ca1-84b4-ba62f09cd80c" class="">1. <strong>3D Camera Rotation about Z axis: “roll”</strong></h2><figure id="adf701d7-3f7b-487b-8681-e414a65c9677" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.52.36_PM.png"><img style="width:1112px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.52.36_PM.png"/></a></figure><ul id="0d2d7d0c-60c1-438c-883a-a43d24441c4d" class="bulleted-list"><li style="list-style-type:disc">IN ROTATION:<ul id="507853a1-6e33-4771-a010-1efa7fa27dad" class="block-color-blue bulleted-list"><li style="list-style-type:circle"><strong>scene points closer moves slower</strong></li></ul><ul id="ad5b1b21-e2a3-4105-9ea6-d752bf24d3b6" class="block-color-blue bulleted-list"><li style="list-style-type:circle"><strong>scene points farther move faster</strong></li></ul><ul id="d460debb-9e10-43c6-b297-f49d2334f7f0" class="bulleted-list"><li style="list-style-type:circle">on motion at center</li></ul><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="917e8222-48ce-45bd-b74e-b93c3b53aafe"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Opposite to translation!!! </div></figure><p id="35b6c37b-3b75-49c4-9455-e666eb80b4f6" class="">
+</p></li></ul><h2 id="9fe0f83e-20e2-42c1-be26-6a316977ddcc" class="">2. <strong>3D Camera Rotation about X axis: “pitch” OR “tilt”</strong></h2><figure id="c840b5cb-5160-4147-ab2b-15aaa042aef5" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-31_at_11.55.33_PM.png"><img style="width:1308px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-31_at_11.55.33_PM.png"/></a></figure><p id="71428708-8faf-4b33-a748-a3d542ccc75f" class="">
+</p><h2 id="8e7f3ec4-b800-4b36-b2d3-8dc6d8f5389f" class="">3. <strong>3D Camera Rotation about Y axis: “pan”</strong></h2><figure id="d9dd0de8-5f0e-417d-aaac-3239de880c82" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-31_at_11.57.48_PM.png"><img style="width:1326px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-31_at_11.57.48_PM.png"/></a></figure><p id="3cfc7db0-a790-4331-9c05-a1239e6d0dfa" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="2866c985-ceae-4c72-be30-229fdcf9c160"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%"><span style="border-bottom:0.05em solid"><mark class="highlight-purple"><strong>Rotation fields DO NOT depend on depth (dist)</strong></mark></span><ul id="d2a99cf9-9177-4170-ac1f-cc78344cda6e" class="bulleted-list"><li style="list-style-type:disc">the equations only cares about posititon</li></ul><ul id="2a998ae9-0212-45d3-8aac-a18a8efb0e6a" class="bulleted-list"><li style="list-style-type:disc"><em>so rotation field doesn’t tell anything about depth also</em></li></ul><ul id="e0f85a9f-2368-4fe1-85ca-89721c35d17a" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><em>bc we only get INFO at one POV → but translation def does</em></span></li></ul></div></figure><p id="b1aed87b-5cb5-4d30-8508-3031186735c5" class="">.</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="e0228c8c-bb74-4757-80b3-fb8a2a9ce0c3"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">translation ofc depend on depth, tho</div></figure><p id="90349a1c-b58d-4a88-9877-08652f76a1a3" class="">
+</p><p id="2b3f059b-2455-4fb5-9199-53ca59ae535a" class="">
+</p><h1 id="17773d3d-2c43-4afc-b068-5227ea6dd46b" class="">3D  Rotations (discrete)</h1><hr id="0c4db5fd-111d-4c52-a79a-6d01449418e0"/><figure id="95071cfc-2e17-4181-817e-9d1f0d6b2365" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.06.16_AM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.06.16_AM.png"/></a></figure><ul id="d90207ae-7398-4587-a658-a20f0bcf6a14" class="bulleted-list"><li style="list-style-type:disc">get info from changes between images</li></ul><ul id="c69b2d8a-3306-4995-975c-40e1dc0526a4" class="bulleted-list"><li style="list-style-type:disc">a matching problem</li></ul><ul id="326accc7-180a-4b76-8eeb-0b9338db5c93" class="bulleted-list"><li style="list-style-type:disc">explain motion from <mark class="highlight-blue_background"><strong>translation &amp; rotation &amp; depth map</strong></mark></li></ul><p id="003f09af-eb5b-46cc-b612-6e6e9e7b7379" class="">
+</p><p id="937cd8ae-ece8-4407-85a5-969f9bd8b553" class="">
+</p><h3 id="b20177f1-4d67-410e-818a-743fe8427906" class="">REVIEW: Cross Product</h3><div id="e9cacb4e-133d-4bed-ac01-23675a1dfd0d" class="column-list"><div id="6dca3dde-fd55-47ae-bb1c-74b9a80f75d9" style="width:50%" class="column"><figure id="51d984e3-3af6-42ce-91ec-7d85d6f284c5" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.34_PM.png"><img style="width:1112px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.34_PM.png"/></a></figure></div><div id="9aae6a10-59e9-4230-9561-446edccb148a" style="width:50%" class="column"><figure id="f921cd7c-6255-4361-a3e5-9a4ea81bdd72" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"/></a></figure></div></div><figure id="e8e86bf6-63fb-4f79-bc3b-e6f522a89222" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.37_AM.png"><img style="width:432px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.37_AM.png"/></a></figure><p id="53e8301d-daf2-4721-b2d3-4f0a0b645d6c" class="">
+</p><p id="5df2cf24-e3d7-4ebc-be9a-5333fc6d22b8" class="">
+</p><h2 id="c95dbaf0-8557-4328-b3b0-56284858c0dd" class="block-color-purple">Rotation matrix property ⭐️</h2><hr id="63d3f0b3-971e-4d38-8afd-6c39446add1d"/><figure id="26e60012-18cc-4a8e-a0ff-6f0460483782" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.33_AM.png"><img style="width:2px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.33_AM.png"/></a></figure><div id="14e25c00-cfa9-46f8-a2a2-4b56a6821b5e" class="column-list"><div id="abade51b-511e-4608-a0fd-dbc2e2fadeca" style="width:50%" class="column"><p id="71cccb80-a2af-41f9-9af0-986ff216ba5c" class="block-color-pink_background"><strong>A 3D rotation matrix is a 3x3 matrix that has </strong></p><ul id="741c4701-88d2-4517-a8d5-59fdb59dd4b1" class="block-color-pink_background bulleted-list"><li style="list-style-type:disc"><strong>orthonormal rows and columns </strong></li></ul><ul id="45c20cc6-edc2-4214-9ecf-e52e01af91c8" class="block-color-pink_background bulleted-list"><li style="list-style-type:disc"><strong>determinant = 1
+</strong></li></ul><p id="0e92473c-e09b-4b4e-ad03-95605c312ed5" class="">
+</p><p id="1e6f2c8f-1c4d-453b-86d5-a88df09767ce" class=""><mark class="highlight-pink_background"><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>NON-EXAMPLES:</strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></mark></p></div><div id="70ed7f21-f08d-4e7c-b62f-d562655c99c3" style="width:50%" class="column"><figure id="6e6d6060-f4e4-4cc1-9f63-0e5740cf2a59" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.29_AM.png"><img style="width:384px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.25.29_AM.png"/></a></figure></div></div><figure id="071077f4-03a3-4d98-8aeb-c0a65e697b94" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.37.25_AM.png"><img style="width:576px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.37.25_AM.png"/></a><figcaption>           reflection across x axis                                                  reflection about x = y</figcaption></figure><h3 id="e7ac8d13-df6f-4f82-98e3-3ec5c0d966b2" class="">Rotation Matrix</h3><ul id="a2f81c5e-03f6-4293-bf72-d478baa0b44c" class="bulleted-list"><li style="list-style-type:disc">just think as a different coordinaste system!</li></ul><p id="ed616107-9d33-46e7-962e-32691aaecd7d" class="">
+</p><h3 id="a0a89bf0-62a8-4d83-9342-cbf994915bad" class="">Property: preserve <span style="border-bottom:0.05em solid">length &amp; angles</span> for a vector </h3><figure id="bc8d2e7e-4bad-4223-a898-1452d7256799" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.29.13_AM.png"><img style="width:576px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.29.13_AM.png"/></a></figure><p id="39bbfb80-3839-4139-95a6-cd400c666f17" class="">
+</p><p id="85a9ea5c-0f75-42cb-9d81-4bab3e7edef3" class="">
+</p><p id="3199fe6e-ef86-48c8-8494-ac6ccc02d440" class="">
+</p><p id="9450f598-4cf8-434a-8156-02ea5e6a663f" class="">
+</p><p id="f1871a06-1b62-4fc3-bfc6-9e7705498795" class="">
+</p><h2 id="d7fefc55-839f-4139-be3c-6565f252d02f" class="">non-ex: 3D Reflection</h2><hr id="a4203b68-81d5-4fa5-8343-c5be6a7d1c31"/><h3 id="099f2e05-a463-434e-9b91-0a1e73e926bb" class="">3D Camera Rotation (discrete) …matrix</h3><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="096f3167-8934-4954-9e60-3c2699194502"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">recall definition:<p id="66d06af9-326b-4fd9-bb8d-d44ba75eb2bd" class=""><mark class="highlight-purple"><strong>A 3D </strong></mark><mark class="highlight-purple"><span style="border-bottom:0.05em solid"><strong>rotation matrix </strong></span></mark><mark class="highlight-purple"><strong>is a 3x3 matrix that has </strong></mark></p><ul id="a4ca75ac-4ea8-4ac0-baf9-2934692009ed" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-purple"><strong>orthonormal rows and columns </strong></mark><em><span style="border-bottom:0.05em solid"><mark class="highlight-purple"><strong> like change of basis</strong></mark></span></em></li></ul><ul id="aa2da7bb-e319-48ab-9f30-3ba75e67632f" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-purple"><strong>determinant = 1</strong></mark></li></ul></div></figure><p id="6c70f27d-e569-4dab-83b3-70f2f5398f50" class="">→ for 3D reflection, <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>d</mi><mi>e</mi><mi>t</mi><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">det = -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span></span><span>﻿</span></span></p><figure id="6c96ad22-4d37-4da1-96ec-8364027e676b" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.37.25_AM.png"><img style="width:994px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.37.25_AM.png"/></a><figcaption>                   reflection across x axis                                                  reflection about x = y</figcaption></figure><p id="6ce0abaf-b716-4bc1-878b-7a0b97bd7f34" class="">
+</p><p id="7032f454-0361-45a9-97e9-71bb07d409a1" class="">
+</p><p id="815a65d0-5aac-46d1-9adf-74c0af6f497c" class="">
+</p><p id="6acbe2b7-728c-4633-aec0-02fecbb15d97" class="">
+</p><h2 id="734eb565-aef4-4478-b688-444a2b6c1ed2" class="">Axis of Rotation </h2><hr id="7413c69f-7690-46f9-9797-140a8f5a1fbc"/><blockquote id="8be66e13-b55e-408b-8de2-8e83f7a1f5cd" class=""><strong><mark class="highlight-blue_background">eigenvector defines it!  </mark></strong></blockquote><ul id="adb3f8a4-2d5b-4560-85c3-c3afd878fde6" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-pink_background"><span style="border-bottom:0.05em solid"><strong>one of the eigenvalues has to be ONE</strong></span></mark></li></ul><figure id="c8125afe-6e46-44f7-be6e-2849e37be5fd" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.39.20_AM.png"><img style="width:576px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.39.20_AM.png"/></a></figure><p id="4f46f106-3a6f-4fa0-ac97-d486cbcd2a8e" class="">
+</p><p id="a8a457ad-335a-4dc8-86a4-fcbf72f3c42a" class="">
+</p><h2 id="100de76f-eb3a-4ba7-8a99-fb5b5092311c" class=""><mark class="highlight-blue">Cross Product REVIEW</mark></h2><hr id="e35a5889-4944-4109-8e9a-2fbb5673d494"/><figure id="f67b9dbe-af0a-45e8-a4f8-084414e9cd11" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.40.42_AM.png"><img style="width:432px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.40.42_AM.png"/></a></figure><figure id="2ebb9537-532e-4ba3-b408-849744768215" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-10-20_at_12.45.42_PM.png"/></a></figure><p id="09c290f2-5258-4669-82c2-9a2cb0fd9f55" class="">
+</p><p id="74726223-0542-4ad4-96dd-cb74b82af092" class="">
+</p><p id="15171baa-3236-492b-8758-37fe4acd5cfb" class="">
+</p><h1 id="b71c634f-d057-44d1-91e7-d144c79d5df1" class="">⭐️<mark class="highlight-blue_background">Homogenous Coordinates</mark></h1><hr id="eee7ac3c-d1d2-4193-a5ba-f99cbda9eb67"/><h2 id="8c954d92-14ba-4a6d-94ad-d222887c917d" class="">3D HOMOGENEOUS COORDINATES:
+</h2><figure id="896cc1ff-b76a-4721-9a53-9e9b4859a117" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.27_AM.png"><img style="width:576px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.27_AM.png"/></a></figure><p id="186146a5-1c6e-4923-930c-0f558b4a774f" class="">
+</p><figure id="b9568f91-cd07-442c-bf05-0e3fe1416a27" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.33_AM.png"><img style="width:576px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.33_AM.png"/></a></figure><figure id="fff092fe-f7c9-4e9b-84d8-6fec2c8ffd57" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.39_AM.png"><img style="width:528px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.49.39_AM.png"/></a></figure><p id="852c17e3-90c5-4273-9f99-3c98126d76ca" class="">
+</p><h3 id="dc58b21d-71ce-44df-b017-94db0ed5ddd7" class="">What if we have a value diff than 1 in <code>4th</code> coordinate?</h3><hr id="6e6d7c83-2c41-4c17-b8aa-6e5551f1a04d"/><blockquote id="65ce8d94-003c-45fa-9132-c41a566ac5f2" class="">What if we have a value diff than 1 in <code>4th</code> coordinate?<figure id="525faa87-5e8d-4348-b348-b946263df491" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.52.32_AM.png"><img style="width:944px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.52.32_AM.png"/></a></figure><ul id="c0bd377b-2f9d-44df-bfb8-e12fe732ca24" class="bulleted-list"><li style="list-style-type:disc">NO PROBLEM!! this 4D point still represent the same 3D coordinate <strong><strong><strong><strong><strong><strong><strong>by association</strong></strong></strong></strong></strong></strong></strong><ul id="6b9f287a-78e4-4343-a8bf-ecfef20ccce3" class="bulleted-list"><li style="list-style-type:circle"><em>the whole line in 4D rep the same 3D point!!!</em></li></ul><ul id="268bf8dd-67ea-4dec-9194-6e4dce161ae2" class="bulleted-list"><li style="list-style-type:circle"><strong><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>X</mi><mo separator="true">,</mo><mi>Y</mi><mo separator="true">,</mo><mi>Z</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(X,Y,Z)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-blue"> direction</mark></strong></li></ul></li></ul></blockquote><p id="d686f95f-a04e-4db8-8846-935c408835a2" class="">
+</p><p id="7bf90739-d610-4584-b4aa-2b373652786b" class="">
+</p><h3 id="2eaeac7a-ff3e-4dc0-9d14-8a72008dae1b" class="">Scaling 3D coordinates of this pt by <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">s&gt;0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span></span><span>﻿</span></span>?</h3><hr id="c0f01e5a-f7e7-4041-aee4-117b76b23cfb"/><blockquote id="f6cb7d7d-1702-4e55-845c-143f9ada3719" class="">Answer:<figure id="da2b1c7c-31c8-46b2-b42a-d8640e90df53" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.55.24_AM.png"><img style="width:624px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.55.24_AM.png"/></a></figure><ul id="dbbdf41a-3a42-45bd-8bba-17fcdef2f7c4" class="bulleted-list"><li style="list-style-type:disc">just need to rescale</li></ul><ul id="247c4f0f-657e-463f-87e9-823c553d062a" class="bulleted-list"><li style="list-style-type:disc">so <strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong><strong>same representation!! </strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong></strong>🙂</li></ul></blockquote><p id="ea4b62ee-030a-4ae8-8576-5edab8bc30bd" class="">
+</p><p id="94fbe85e-8c47-449d-a114-6c96eed9040e" class="">
+</p><h3 id="616c63e3-c821-4429-b58e-7bed0a6481e2" class="">⬇️ As s → <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∞</mi></mrow><annotation encoding="application/x-tex">∞</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord">∞</span></span></span></span></span><span>﻿</span></span>, <span style="border-bottom:0.05em solid">POINT AT INFINITY</span></h3><hr id="612203b7-f129-42a1-aa5b-90a16b3fdf98"/><ul id="e7dc9d88-f836-48a0-91da-25b222450280" class="bulleted-list"><li style="list-style-type:disc"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">1/s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1/</span><span class="mord mathnormal">s</span></span></span></span></span><span>﻿</span></span> goes to <mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong><mark class="highlight-blue"><strong>ZERO!!!!!!!!!</strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></strong></mark></li></ul><figure id="019875da-d41c-43ee-8682-e44f30034942" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.57.50_AM.png"><img style="width:432px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_12.57.50_AM.png"/></a></figure><p id="5e9386e9-4a70-4ef3-9963-939535d8e71b" class="">
+</p><p id="6566b56b-6717-4a01-84e3-31b8f5b68514" class="">
+</p><p id="b2763e17-0cf8-4c89-92ec-9f09ebf66652" class="">
+</p><h2 id="5ee3580b-7a60-437c-90d6-58a44fc59383" class="">👍 POINTS AT INFINITY</h2><hr id="93e2406a-5691-4628-a521-1461850c1c59"/><p id="e1de184c-5b60-400e-abc4-2b6fe790060a" class="">
+</p><h3 id="1027a581-3e78-4372-aaed-fbb418fbf0bb" class=""><strong>translation, rotation, scaling to a point at infinity……</strong></h3><ol type="1" id="0f60e245-0a0a-4e68-914f-a5b036909d98" class="numbered-list" start="1"><li><mark class="highlight-blue"><strong>Translation: doesn’t move!!!</strong></mark><figure id="53396e92-702b-4d10-8378-04e9d8587fb3" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.01.01_AM.png"><img style="width:1140px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.01.01_AM.png"/></a></figure></li></ol><ol type="1" id="d5174a97-beed-4cf6-b091-8f1f93114d55" class="numbered-list" start="2"><li><mark class="highlight-blue"><strong>Rotation: same as FINITE point</strong></mark><figure id="23e975de-a81c-4cf2-b827-98cbf56a17e7" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.02.28_AM.png"><img style="width:1180px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.02.28_AM.png"/></a></figure></li></ol><ol type="1" id="f35c5cb2-e3f0-427e-b07f-ea3b016db857" class="numbered-list" start="3"><li><strong><mark class="highlight-blue">Scaling: acc CAN affect!! scale up the space</mark></strong><figure id="d7cacde3-7402-4c2b-8fe9-90f31ccc8c67" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.02.32_AM.png"><img style="width:1252px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.02.32_AM.png"/></a></figure><p id="7aa5681b-a7c1-47e1-9b32-8c7e1869fc9e" class="">
+</p></li></ol><p id="b91050f4-c501-4bdc-acbc-7a892c2486fc" class="">
+</p><h2 id="033c0c48-b0fb-4aa2-aaf1-3fa2d54d080a" class="">2D HOMOGENEOUS COORDINATES:</h2><hr id="df72f53c-0fad-4bea-a063-987c8e8fc35a"/><h3 id="d8cca310-7f94-42d6-ac26-1cc83575510a" class="">Translation, rotation, scaling, shear..</h3><div id="b83ed376-af4e-4c13-befd-b041b5f2b310" class="column-list"><div id="743d3685-f3e3-405a-9ee9-0e138f742d79" style="width:50%" class="column"><figure id="42253716-5579-4e63-9ba3-93f0caf4cefb" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.05_AM.png"><img style="width:1232px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.05_AM.png"/></a></figure></div><div id="7c67e1c0-0a6d-465b-8790-9749b8914fda" style="width:50%" class="column"><figure id="45d5d8a6-be18-4091-8082-c7cf9ff6e690" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.11_AM.png"><img style="width:1226px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.11_AM.png"/></a></figure></div></div><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="c457dcc8-7c1d-4f57-b29a-9f1edc39f854"><div style="font-size:1.5em"><span class="icon">⭐</span></div><div style="width:100%">NOTE: <code>shear</code> transformation: <p id="69faf122-6eda-4fa3-bd36-20a348261aa6" class="">(ex. moving faster when horizontal motion of camera）</p></div></figure><p id="a223ab00-d3d6-48b2-bffd-e7afe41201c3" class="">
+</p><p id="f90fb77c-32a4-4def-8d52-8d5e072a9def" class="">
+</p><h3 id="2c1bc69e-e0db-4833-9af2-ad3ad63f6201" class="">points at infinity in 2D</h3><hr id="276b7d3c-a1c8-473f-b2f0-ee12e457e35d"/><ul id="9066c2b0-39c2-4575-bea3-22002aac22ee" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-blue">in direction of </mark></strong><strong><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo separator="true">,</mo><mn>0</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x,y, 0)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></mark></strong></li></ul><ul id="281e6f09-9a51-4e8d-a71f-67b818277b2b" class="bulleted-list"><li style="list-style-type:disc">→ not exact location…</li></ul><figure id="897be1f7-a7d1-4fa0-a060-5ce8281501a2" class="image"><a href="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.22_AM.png"><img style="width:480px" src="15%20-%20Rotations%209449e5c1c80a40f0ac8b1775e708cb5a/Screen_Shot_2022-11-01_at_1.06.22_AM.png"/></a></figure><p id="d3b7df8b-1cc2-4695-9cd9-0cee331211af" class="">
+</p></div></article></body></html>

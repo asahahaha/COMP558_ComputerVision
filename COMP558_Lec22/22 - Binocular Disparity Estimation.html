@@ -1,0 +1,714 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>22 - Binocular Disparity Estimation</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="f26ba347-6d5d-4b97-a19d-4e2ea9531238" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">22 - Binocular Disparity Estimation</h1></header><div class="page-body"><p id="94a9cce7-983b-4ff8-8023-f2fa473fd64a" class=""><time>@November 22, 2022</time> </p><nav id="67bf527d-d78e-4135-969a-37f413d0c910" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#ff8161e5-5eaa-459e-b136-5eac389c0865">RECALL:</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#646a2426-e5ec-4898-a96a-d7e114bcb766">Correspndence (matching) problem</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#021ed371-a8eb-49db-8bb8-2de8b0d3e558">Example.</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#c9829a7b-ea48-4ac8-ab4f-6ec04474e378"><strong>Data costs and smoothness costs</strong></a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#c8b12c6d-ea63-479f-8e4b-21d156bb2963"><mark class="highlight-blue">Assumptions of LK:</mark></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#55df4417-965d-41f8-82c0-793ce5822166">Random Dot Stereograms</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#94677178-5481-4a61-bcf0-63f2ca32707e">Occlusions</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#fc0d93d9-c460-48f5-a7d6-87d69b1c92a7">Disparity Space</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6a2e37bb-5b39-427b-a70c-6d4839aab987">“Lines of sight”</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b03a53b6-aefe-4a0d-b1e9-46f3b25537a4">Correspondence Problem:</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#1488f60c-86af-4004-9f78-5391b55b9fa3">“Continuity Constraint”</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#40fe8188-b59e-4fce-ad4c-9a373c468130">“Uniqueness Constraint”</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#d61519e0-cb52-4632-88cb-b57724aa6d32">BUT “uniqueness” may fail…. ☹️☹️</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#6c62c7d0-10f4-42a7-9fdf-e6aaff95c7a9">RECALL: Global cost → “Data + Smoothness”</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b0327536-ab37-400c-be23-f5794a7ea39c">MORE Advanced Stereo</a></div></nav><p id="1314bc3b-1d89-430f-b9df-2fa6bf64af6f" class="">
+</p><blockquote id="ea75b100-4532-4b06-86cb-0e2dc5a413e7" class="">Assume able to recover disparicies &amp; have rectified images</blockquote><p id="747cfc55-b357-45fb-92ff-d9e87d09250d" class="">
+</p><h3 id="ff8161e5-5eaa-459e-b136-5eac389c0865" class="">RECALL:</h3><div id="d1561de5-d101-4f34-92f6-0c7ed27f4359" class="column-list"><div id="6f6c9895-1767-4544-b0e1-de6198bc30fc" style="width:50%" class="column"><figure id="5722174e-6b1c-472b-81bf-e27f3c5a8413" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.30.33_PM.png"><img style="width:1276px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.30.33_PM.png"/></a></figure></div><div id="5cdde200-7733-4ab6-9a46-db0197d02726" style="width:50%" class="column"><figure id="697d9d39-f2ac-4bb0-91b2-d1badaab6df0" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.30.48_PM.png"><img style="width:1388px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.30.48_PM.png"/></a></figure></div></div><p id="473c4083-3e6e-437a-aac7-7b197bf38bdf" class="">
+</p><p id="041aaca1-7e3a-480d-a2c1-8b862bfbeb4c" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="5e3aa299-f66b-44c1-825f-662e003ad564"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">disparity: ALWAYS + number</div></figure><figure id="1b072894-55ba-46f6-9bd4-fabc586d8ea3" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.34.05_PM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.34.05_PM.png"/></a></figure><p id="86b505dc-7e67-49dc-88aa-3687f457ddb0" class="">✅</p><h1 id="646a2426-e5ec-4898-a96a-d7e114bcb766" class="">Correspndence (matching) problem</h1><hr id="b9bff09e-6b77-4362-95b5-77d9ca0003c5"/><ul id="e802ca88-c701-41dd-b402-19bff7711b4f" class="bulleted-list"><li style="list-style-type:disc"><strong>We can match feature points e.g. SIFT, or SURF. But feature points are sparse. We would like </strong><em><strong>dense </strong></em><strong>matches</strong></li></ul><ul id="d3b8e8ea-3e01-43d3-97c3-936b66b31571" class="bulleted-list"><li style="list-style-type:disc"><strong>Lucas-Kanade registration performs dense matching, but
+only for points that are locally distinctive. For stereo
+matching, we need images only to be locally distinctive
+</strong><em><strong>within each epipolar line. </strong></em><strong>This is still a problem for dense
+matching.
+</strong></li></ul><h2 id="021ed371-a8eb-49db-8bb8-2de8b0d3e558" class="">Example.</h2><figure id="135b3c28-d745-4930-9f6d-3e95dd957074"><a href="https://vision.middlebury.edu/stereo/data/scenes2003/" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">2003 Stereo Datasets</div><div class="bookmark-description">These datasets were created by Daniel Scharstein, Alexander Vandenberg-Rodes, and Rick Szeliski. They consist of high-resolution stereo sequences with complex geometry and pixel-accurate ground-truth disparity data. The ground-truth disparities are acquired using a novel technique that employs structured lighting and does not require the calibration of the light projectors.</div></div><div class="bookmark-href"><img src="https://vision.middlebury.edu/favicon.ico" class="icon bookmark-icon"/>https://vision.middlebury.edu/stereo/data/scenes2003/</div></div><img src="https://vision.middlebury.edu/stereo/data/scenes2003/newdata/thumbnails/cones/im2.png" class="bookmark-image"/></a></figure><div id="0d050162-b81f-43f4-8de8-abb2fd1c3225" class="column-list"><div id="0aa9b058-d2b2-4564-a795-a224576cf2eb" style="width:50%" class="column"><figure id="aad5eca0-3ac0-49c5-926e-d0395a5b9f4d" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.35.42_PM.png"><img style="width:580px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.35.42_PM.png"/></a></figure></div><div id="7ba82dbd-4f8a-4a36-8330-1918e875be48" style="width:50%" class="column"><figure id="7c61f1e1-e493-49b4-8dd9-bb383a468429" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.36.11_PM.png"><img style="width:584px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.36.11_PM.png"/></a></figure></div></div><p id="ef1cc199-e9e4-4e11-b22d-755789efeb42" class="">
+</p><p id="2925e376-f119-4188-ac19-a2ed1f1e0613" class="">
+</p><h2 id="c9829a7b-ea48-4ac8-ab4f-6ec04474e378" class=""><strong>Data costs and smoothness costs</strong></h2><hr id="3cef8745-d9ee-4e7b-9c58-5f2f99d6c280"/><figure id="4a9a1010-34b0-449b-8aa5-41538d095081" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.10.23_AM.png"><img style="width:480px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.10.23_AM.png"/></a></figure><h3 id="c8b12c6d-ea63-479f-8e4b-21d156bb2963" class=""><mark class="highlight-blue">Assumptions of LK:</mark></h3><ul id="5a812030-d1c2-454f-9583-8db6de6382a2" class="bulleted-list"><li style="list-style-type:disc"><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>unique value </strong></mark></span>of disparity in local neighbourhood of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">(</mo><msub><mi>x</mi><mi>l</mi></msub><mo separator="true">,</mo><msub><mi>y</mi><mi>l</mi></msub><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">(x_l,y_l)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><ul id="f85f8d0f-9493-4af2-b073-163f28e63353" class="bulleted-list"><li style="list-style-type:disc">intensity of matching points are <ul id="b2a826f8-387a-49ba-bec1-f23c71651c6d" class="bulleted-list"><li style="list-style-type:circle"><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>roughly the same </strong></mark></span></li></ul><ul id="a9978cba-8993-430e-9116-d9708ebe5ab3" class="bulleted-list"><li style="list-style-type:circle"><span style="border-bottom:0.05em solid"><mark class="highlight-blue"><strong>locally distinctive</strong></mark></span></li></ul></li></ul><p id="242a75f5-6990-4136-8efb-070ce93532b8" class="">
+</p><figure id="abd63d9a-173c-4c02-ae71-089e315af894" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.49.34_AM.png"><img style="width:576px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.49.34_AM.png"/></a></figure><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="ac3d53ff-0459-4315-a3f5-50c433507e52"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">according to pictures, decide which one is more important</div></figure><p id="82f67a76-f966-48ba-ba88-6d9ab7a389e5" class="">
+</p><p id="96b0440a-243a-47c2-9d20-a8f7087b367c" class="">
+</p><ul id="031ee103-e510-4dfb-9741-6381139df33f" class="bulleted-list"><li style="list-style-type:disc">One can give more weight to one versus the other, as one chooses.</li></ul><p id="f1aff5db-0878-4b12-a09b-490a84991b0b" class=""><em>There is no best way to do this, in general, i.e. that works best for every image pair.</em></p><figure id="b8368ed5-3279-452e-bd5e-9ab2bf59e20a" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.43.02_PM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.43.02_PM.png"/></a></figure><p id="8ff00f41-02f0-4a0d-9d39-755159894c79" class="">→ <strong>Once one defines these cost functions, one also needs data structures and algorithms for minimizing their sum.
+</strong><mark class="highlight-brown"><strong>⬆️ This is an example of a “regularization” problem.</strong></mark></p><p id="35b09ff6-da33-4c11-839c-39dfe29e126e" class="block-color-blue_background">
+</p><p id="c9b833d2-c09a-415c-902f-452dd1a30265" class="">
+</p><p id="a1447849-6858-4f4a-a33b-f73ccc0ab947" class="">
+</p><h1 id="55df4417-965d-41f8-82c0-793ce5822166" class="">Random Dot Stereograms</h1><hr id="33757507-666b-4811-8b90-d61582dbb470"/><p id="13cbf7d5-c105-435b-84d0-37d6ebed7732" class="">
+</p><figure id="803f6093-dce9-4a5d-9e87-1ba60ba17a20" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.44.55_PM.png"><img style="width:576px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.44.55_PM.png"/></a></figure><ul id="3b16df1d-8d29-45aa-b40b-f962149183da" class="bulleted-list"><li style="list-style-type:disc">cut out some parts from random place, shift to right/left</li></ul><p id="87de988c-1d72-4c17-a2b8-7bd891b73320" class="">
+</p><p id="2cae4c7a-75c4-4a7e-9a88-27963d1a2462" class="">
+</p><figure id="76d22e48-d5db-4d77-813a-880fa160852f" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.55.04_AM.png"><img style="width:576px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.55.04_AM.png"/></a></figure><figure id="72f8ba07-4559-491e-a0d8-1e159d8a853c" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.54.45_AM.png"><img style="width:576px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_4.54.45_AM.png"/></a></figure><p id="67bbe1fa-5a58-4f02-8dd0-3fbdbca7bc22" class="">
+</p><p id="2be21edb-fe2b-4503-a394-fff0df226bd3" class="">
+</p><p id="f3a52986-d993-45d2-aaf2-3ad2876cfec9" class="">
+</p><h2 id="94677178-5481-4a61-bcf0-63f2ca32707e" class="">Occlusions</h2><hr id="74263c82-3f8c-4968-80a9-005b3c1eddc6"/><p id="a616300c-5c23-4520-a0aa-b3add21a0664" class="">
+</p><ul id="acd0f98c-5070-438f-8609-8cabd18c3ce4" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>black in visible to both 👁 👁</strong></mark></li></ul><ul id="4554e84f-5b77-4cb9-9695-08108e4b7ba4" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-teal"><strong>green is visible to ONLY one 👁</strong></mark></li></ul><figure id="f8ef3104-cb90-443f-aee1-47cdb68b5e8c" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.46.18_PM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.46.18_PM.png"/></a></figure><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="017936e5-9f5b-4c0b-a645-c59063a96f02"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">Points that are visible to ONE camera are called<ul id="963c8f84-c907-47d2-ace5-77523ece8937" class="bulleted-list"><li style="list-style-type:disc"><strong><mark class="highlight-teal"> “monocular points” or “half-occluded” points.</mark></strong></li></ul><p id="fbc2cf49-bf76-49a8-9f74-af3a328b8207" class="">
+</p><p id="cc6558a8-0a61-4444-9df2-b40a864c50ae" class="">There is no <span style="border-bottom:0.05em solid"><mark class="highlight-teal"><strong>correct</strong></mark></span> binocular match for these points.</p></div></figure><p id="6548a707-80b2-4b23-b66d-ca6dd85e4245" class="">
+</p><p id="b987a508-5d4f-4979-a898-46f64e3229a3" class="">
+</p><h1 id="fc0d93d9-c460-48f5-a7d6-87d69b1c92a7" class="">Disparity Space</h1><hr id="0a5862d8-e364-4c4d-a0b1-ee3a76d267bf"/><figure id="ad2db269-5ba6-4930-b41d-9b46905a75b8" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.49.53_PM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.49.53_PM.png"/></a></figure><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="85403aac-2218-4144-b992-be48c513ddbf"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%">set up <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">x_l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> on ONE axis &amp; <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">x_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span> on the other</div></figure><ul id="3912a1ad-9711-4114-bc7f-cf941534f1ea" class="bulleted-list"><li style="list-style-type:disc">also know disparity NEVER less than 0</li></ul><figure id="a8cd5b9b-db79-4b4e-a588-ffbe32a95cc9" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.50.40_PM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.50.40_PM.png"/></a></figure><p id="314fcefc-2c53-4644-a70b-1a2b8f33f0f3" class="">
+</p><figure class="block-color-blue_background callout" style="white-space:pre-wrap;display:flex" id="faf8fa05-d48b-4434-b4f4-3a0474b744a1"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%"><strong><mark class="highlight-blue"><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Z</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">Z_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">Z</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></mark></strong><strong><mark class="highlight-blue"> (depth) is constant when disparity is constant</mark></strong></div></figure><figure id="e499ff8a-0024-40d1-b358-e6967752ed9f" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.52.10_PM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.52.10_PM.png"/></a></figure><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="8be45d3a-9852-475d-b039-d1f3e693a0ae"><div style="font-size:1.5em"><span class="icon">✔️</span></div><div style="width:100%">Because objects are opaque, for any vertical or horizontal line, the scene point that is visible is the one with largest disparity, i.e. smallest Z value.</div></figure><p id="67d082af-a3d1-4816-a58d-bd3987a6c1d4" class="">
+</p><h2 id="6a2e37bb-5b39-427b-a70c-6d4839aab987" class="">“Lines of sight”</h2><hr id="9a80f0ae-5a4e-4d4c-b3b7-a2215040334a"/><ul id="eb1fac3d-536f-4454-b54a-f92fcaa649db" class="bulleted-list"><li style="list-style-type:disc"><mark class="highlight-blue">example for right camera </mark></li></ul><figure id="e2fec7cf-83f3-4bb0-906a-4a4dad00ed50" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.52.38_PM.png"><img style="width:576px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.52.38_PM.png"/></a></figure><figure id="a09bef2f-f481-425f-bf82-0285fb4b2a42" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.56.43_PM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-22_at_12.56.43_PM.png"/></a></figure><h2 id="b03a53b6-aefe-4a0d-b1e9-46f3b25537a4" class="">Correspondence Problem:</h2><hr id="f3281309-2a73-49c1-9cc3-6820d75eee70"/><figure id="f3be55c8-c702-47b0-99bc-2c1f29aa2327" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-24_at_12.00.32_PM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-11-24_at_12.00.32_PM.png"/></a></figure><p id="226a39d6-9327-4437-8059-6e47bbc8f38d" class="">
+</p><h3 id="1488f60c-86af-4004-9f78-5391b55b9fa3" class="">“Continuity Constraint”</h3><blockquote id="2afa0152-ed36-44a3-9b34-63e1dd43910a" class=""><strong>disparity tends to change slowly with </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">x_l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong><strong> or </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">x_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></strong></blockquote><figure id="1d53c645-5884-4d53-ab47-aa0a130ffc9a" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.10.50_AM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.10.50_AM.png"/></a></figure><p id="80561f08-aa10-4013-8d9b-acaff9de35ba" class="">
+</p><h3 id="40fe8188-b59e-4fce-ad4c-9a373c468130" class="">“Uniqueness Constraint”</h3><blockquote id="dcdf8277-108d-4e70-86bd-714f60c7bab4" class="">for each <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>l</mi></msub></mrow><annotation encoding="application/x-tex">x_l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>, there is one corresponding <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">x_r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">r</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>; and vice versa!!</blockquote><figure id="b4a1ce4b-6683-416b-8515-88f82d847575" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.11.29_AM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.11.29_AM.png"/></a><figcaption><strong>For each position in left image, there is
+typically exactly one position in right image.
+</strong>
+</figcaption></figure><p id="22a09644-eab4-442f-929a-c9aab72a153e" class="">
+</p><h3 id="d61519e0-cb52-4632-88cb-b57724aa6d32" class="">BUT “uniqueness” may fail…. ☹️☹️</h3><p id="34bd1bf4-fdd9-40a2-8e91-ebb9ac6a733c" class=""><mark class="highlight-teal"><strong><strong><strong><strong><strong><strong><strong>example.</strong></strong></strong></strong></strong></strong></strong></mark></p><div id="d14d434b-7e60-48de-adec-8a1df7ae13a9" class="column-list"><div id="7a8017bb-6987-4436-bf31-9e7b471b0dcc" style="width:50%" class="column"><figure id="25032f77-b14b-46c3-b16b-bae34ce39a13" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.14.09_AM.png"><img style="width:1060px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.14.09_AM.png"/></a></figure></div><div id="a3c3109d-31d2-4705-a48a-2d109330212d" style="width:50%" class="column"><figure id="59c62e06-4b2b-4419-81da-00edf8a76a4b" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.14.21_AM.png"><img style="width:1024px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.14.21_AM.png"/></a></figure></div></div><p id="24dc8ba3-05c1-40f2-bbe3-23c42bca1cf7" class="">
+</p><p id="862aace8-00cc-4a1a-b557-03b8ac96584c" class="">
+</p><h2 id="6c62c7d0-10f4-42a7-9fdf-e6aaff95c7a9" class="">RECALL: Global cost → “Data + Smoothness”</h2><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="5b9ac9cb-ac13-4a78-8419-43118ab6e478"><div style="font-size:1.5em"><span class="icon">📍</span></div><div style="width:100%"><span style="border-bottom:0.05em solid"><strong>stereo matching </strong></span><strong>= </strong><mark class="highlight-teal"><strong>choosing disparities that minimizes a global cost:</strong></mark></div></figure><figure id="fe5861ca-5b71-45ad-81cf-2bf38bc1a1d3" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.19.07_AM.png"><img style="width:624px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.19.07_AM.png"/></a></figure><p id="9cb784b8-1420-4854-bb13-5cade7b4876a" class=""><strong><mark class="highlight-gray"><em>Marr and Poggio also formulated their uniqueness and continuity constraints in terms of a “data” and “smoothness” cost. (Details omitted.)</em></mark></strong></p><p id="3fe9e438-cfed-44e6-a2a9-8514d9a19438" class="">
+</p><p id="e25ce7a1-da2c-4f9b-8ccf-0e1e9f291072" class="">
+</p><p id="f9c5643d-d3b4-4b65-9c27-7fecb36b4849" class="">
+</p><p id="b24f53b8-f7a6-472f-a218-f87390079ee3" class="">
+<time>@November 24, 2022</time> </p><h1 id="b0327536-ab37-400c-be23-f5794a7ea39c" class="">MORE Advanced Stereo</h1><figure id="72523a00-76fb-4ea4-8d40-c89b355cd7dc" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.20.53_AM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.20.53_AM.png"/></a></figure><figure id="4bdafaf3-94aa-422c-b14e-eb93a7ccea9b" class="image"><a href="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.21.34_AM.png"><img style="width:528px" src="22%20-%20Binocular%20Disparity%20Estimation%20f26ba3476d5d4b97a19d4e2ea9531238/Screen_Shot_2022-12-04_at_5.21.34_AM.png"/></a></figure><p id="50f7410a-dcc7-4343-9a58-7e2584b65dd7" class="">
+</p><p id="2b5f1763-c5ff-4ed3-adfb-11f456439f88" class="">
+</p><p id="c95425b8-c70b-4cc7-89ef-bb078be47077" class="">
+</p></div></article></body></html>

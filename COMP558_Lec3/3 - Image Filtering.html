@@ -1,0 +1,699 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>3 - Image Filtering</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-opaquegray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="278eb4b1-c3f8-4169-9d94-1f611476ac9a" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📸</span></div><h1 class="page-title">3 - Image Filtering</h1></header><div class="page-body"><p id="b79a7aee-8762-4c1f-8543-18c153bd6ff7" class=""><time>@September 8, 2022</time> </p><nav id="3cf1a7db-e606-43b3-bebc-49dc22c215e2" class="block-color-gray table_of_contents"><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#b7f8c80f-24d1-4f83-87fe-11205e246782">Linear Scale Spaces</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#919a8257-67a8-4b8f-b09c-c7ecdb0aaace">HSV &amp; Lab</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#1fa18038-ba63-4e7d-8a3f-7b26cc2e8ead">Image smoothing</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#c6167700-c2d7-4400-837a-a06b5e1c4d25">How to choose weights of smoothing function?</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#0ee5b59d-4781-4deb-9be8-2a49e7e00299">Gaussian function</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#1f0bdfe3-0999-4e4a-9995-f06457e610be">Properties of Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#a3ca2534-9e69-44be-a4ed-5b42689cc7d1">Local difference</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#afe2dba9-edba-484d-9dd2-89bce95e6b64">Local averaging of weights → Image filtering</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#3a409b25-1c45-4d0c-aba1-07c5b74b9ba4">1. Cross Correlation</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#bdc7a73c-2748-4c85-8737-498b8551fd5c">CORRELATION: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>⊗</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∑</mo><mi>u</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>u</mi><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo><mi>I</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)⊗I(x)=∑_{u}f(u-x)I(u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0497100000000001em;vertical-align:-0.29971000000000003em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.0016819999999999613em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#496c74df-dc52-4761-ac5a-05730213746f">2. Convolution ( weighted, shifted ver)</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#40594309-593d-4f06-90de-632877583438">CONVOLUTION: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>∗</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∑</mo><mi>u</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>u</mi><mo stretchy="false">)</mo><mi>I</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)*I(x) = ∑_uf(x-u)I(u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0497100000000001em;vertical-align:-0.29971000000000003em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.0016819999999999613em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">u</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#b31fe32f-e798-4cfa-afbe-92fbeebf85e2">Cross correlation vs. Convolution</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0945a018-bb2a-4b3c-986f-401a30d823d9">Convolution of an image (image filtering)</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#2f9bcc89-5bb3-48f4-9be1-3ca2318db084">Impulse Function</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#cef5df66-cdbd-49dc-bdc5-1e5c336e2233">Impulse Response function</a></div><div class="table_of_contents-item table_of_contents-indent-0"><a class="table_of_contents-link" href="#0f039dd3-2b1a-41f8-9b97-41440a609bbe">⭐️ 2D Correlation, convolution, Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#7348cc1a-e6d4-469f-aa14-68086af14af1">2D Gaussian</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#727e8da6-fb13-4ea4-816e-14521f3b44e3">2D Gaussian Smoothing</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#3bd9a731-dde5-4b61-b29c-9eb99cf3781f">Partial Derivatives… which leads to IMAGE GRADIENT!!! ✅</a></div><div class="table_of_contents-item table_of_contents-indent-1"><a class="table_of_contents-link" href="#9a8924b4-4c96-4220-bfbd-9402dd54efac">Image Gradient</a></div><div class="table_of_contents-item table_of_contents-indent-2"><a class="table_of_contents-link" href="#17400a5c-174c-48d5-8da9-09a92eae3a12">Magnitude of image gradient:</a></div></nav><h2 id="b7f8c80f-24d1-4f83-87fe-11205e246782" class="">Linear Scale Spaces</h2><figure id="885b104e-5f9b-44fa-8871-ff4436942d6e" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_11.55.27_AM.png"><img style="width:624px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_11.55.27_AM.png"/></a></figure><p id="e42bc5cb-767f-411b-91ad-c25b6ddb488c" class="">when the pic is not too saturated, 3 channels look similar:)</p><h3 id="919a8257-67a8-4b8f-b09c-c7ecdb0aaace" class="">HSV &amp; Lab</h3><ul id="12a59a12-a2db-4310-b229-8193a3f43b1c" class="bulleted-list"><li style="list-style-type:disc">HSV</li></ul><ul id="4d1046d8-b97d-4b0f-8bfc-aa42a4f1d783" class="bulleted-list"><li style="list-style-type:disc">Lab<ul id="1b8563e2-67f3-4510-a47b-d6327014bcfb" class="bulleted-list"><li style="list-style-type:circle">L: luminous</li></ul><ul id="37a2f66a-6005-4575-83a2-87ab38fc0d1e" class="bulleted-list"><li style="list-style-type:circle">a: green to red</li></ul><ul id="2b2e0423-0a01-4c03-be38-e7270f2a3f0b" class="bulleted-list"><li style="list-style-type:circle">b: yellow to blue</li></ul></li></ul><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="de707589-03eb-4cc2-a6cb-21f06e5628fb"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">look at lecture notes more before filtering</div></figure><p id="9b095937-b3c8-4928-b21d-43e8e7e39913" class="">
+</p><h2 id="1fa18038-ba63-4e7d-8a3f-7b26cc2e8ead" class="">Image smoothing</h2><ul id="5ba1f213-dbda-42ba-b23a-08a9e5eccf5b" class="bulleted-list"><li style="list-style-type:disc">to reduce noise, one often smooths the image by averaging intensities (RGBs)</li></ul><figure id="fb0eeed2-74a0-49e7-97fa-f721e7be719e" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.00.59_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.00.59_PM.png"/></a><figcaption>dependent on your neighbours</figcaption></figure><p id="785a8279-71c9-463c-9cf7-f02719259f60" class="">
+</p><ul id="5975b7dc-6405-4fbf-8e57-44396a48da4a" class="bulleted-list"><li style="list-style-type:disc">when we do averaging in MatLab, since they assume out-of-boundary values are 0<figure id="a4f6c997-118e-44ec-b201-78189aef04ba" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.02.20_PM.png"><img style="width:1226px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.02.20_PM.png"/></a><figcaption>btw we are not averaging it sequentially, but making a copy and overwrite it</figcaption></figure></li></ul><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="5516c3fc-540c-44a6-8562-c170c439e4df"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">also smooths the “signal”</div></figure><p id="aade1f9f-2c06-4f34-ad01-e47b23689cf0" class="">
+</p><figure id="5e0684d2-b2a6-4a6b-a821-b668e947f70a" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.05.54_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.05.54_PM.png"/></a></figure><figure id="bb732e7e-0019-40d4-add3-5f30ad751943" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.06.13_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.06.13_PM.png"/></a><figcaption>we can tell our function how to deal with edge values to make it look nicer<strong>👍</strong></figcaption></figure><blockquote id="53172c39-8ae5-43ab-b67f-9a14211bb31f" class=""><mark class="highlight-purple"><strong>We can also smooth over a larger neighbourhood!!! </strong></mark></blockquote><figure id="4e8d8e27-265d-46ed-9bd0-8fd8ef1e1d83" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.08.30_PM.png"><img style="width:528px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.08.30_PM.png"/></a></figure><figure id="65833ed6-4392-47aa-b8b1-6c735737b503" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.08.40_PM.png"><img style="width:624px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.08.40_PM.png"/></a><figcaption>so it has a smoother curve. YAYYYYYY!!!</figcaption></figure><p id="90732845-90b0-4002-bf70-fa0af51c4fdc" class="">
+</p><h2 id="c6167700-c2d7-4400-837a-a06b5e1c4d25" class="">How to choose weights of smoothing function?</h2><hr id="0bc51560-fe0c-4bd8-b7fd-668fd32b8950"/><h3 id="0ee5b59d-4781-4deb-9be8-2a49e7e00299" class="">Gaussian function</h3><figure id="44de3791-813f-40e7-a968-83229d92f39e" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.09.54_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.09.54_PM.png"/></a></figure><ul id="cc417eb6-2847-4af4-91ee-f87c2a479e4d" class="bulleted-list"><li style="list-style-type:disc">integrates to 1, because of normalization constant</li></ul><ul id="d5298ebe-4349-438a-a923-b45b34a33e95" class="bulleted-list"><li style="list-style-type:disc">often called normal distribution</li></ul><ul id="de834924-838b-47be-a7e8-2920984aa72a" class="bulleted-list"><li style="list-style-type:disc">can use it for smoothing weights</li></ul><p id="11dc8100-5837-40a2-84a7-fc339e2582a3" class="">
+</p><h3 id="1f0bdfe3-0999-4e4a-9995-f06457e610be" class="">Properties of Gaussian</h3><ul id="b465e7b0-9212-4682-9056-f136c0f5e5c6" class="bulleted-list"><li style="list-style-type:disc">95% within <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">±2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">±</span><span class="mord">2</span></span></span></span></span><span>﻿</span></span> 𝛔</li></ul><ul id="fcba5e5d-800f-41a6-89a1-33effdfdf69f" class="bulleted-list"><li style="list-style-type:disc">98% within <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>±</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">±3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">±</span><span class="mord">3</span></span></span></span></span><span>﻿</span></span> 𝛔</li></ul><p id="bef60c67-76e8-440c-b7f3-14721ecaf44e" class="">bigger sigma, lower probability to get out of bound</p><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="9122ab26-a1d3-4e25-a49a-a8303aa43552"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">bigger sigma, smoother</div></figure><figure id="266cdce1-9872-4349-b75a-636be7d19f0b" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.13.59_PM.png"><img style="width:672px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.13.59_PM.png"/></a></figure><p id="55753266-0f9e-44b2-aed8-c5c820f21a17" class="">
+</p><h3 id="a3ca2534-9e69-44be-a4ed-5b42689cc7d1" class="">Local difference</h3><p id="20471f72-5d5a-4f20-b0d4-61626e3eedd2" class=""><strong>Often one would like to </strong><em><strong>enhance </strong></em><strong>local differences in intensity, since these differences indicate interesting events such as </strong><em><strong>edges</strong></em><strong>.</strong></p><figure id="bf76d483-74f1-433c-a213-a70cd899d944" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.15.01_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.15.01_PM.png"/></a></figure><p id="de861948-077b-4383-9d77-30f3491f4961" class=""><strong><mark class="highlight-teal">Example.</mark></strong></p><figure id="20e6fae5-ebd4-4a50-878d-a1529312a4f6" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.15.35_PM.png"><img style="width:432px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.15.35_PM.png"/></a></figure><h3 id="afe2dba9-edba-484d-9dd2-89bce95e6b64" class="">Local averaging of weights → Image filtering</h3><p id="440ad0ad-5b04-44ad-9a99-e7159cc884a5" class="block-color-teal">more generally:<div class="indented"><ul id="51e10ec9-f0d8-48a9-aca8-86d77f5c72dc" class="bulleted-list"><li style="list-style-type:disc"><strong>We can take higher order derivatives (2</strong>nd <strong>&amp; beyond)</strong></li></ul><ul id="7809c296-30d5-4a90-b789-abdcc45570c1" class="bulleted-list"><li style="list-style-type:disc">We can combine local averaging and differences
+e.g. smooth out noise + take derivatives.</li></ul><ul id="b1cb4040-f7ef-4602-a93b-a4003806e927" class="bulleted-list"><li style="list-style-type:disc">We can take <em>arbitrary local linear combinations</em>.</li></ul><p id="6eec547b-7ad1-44c3-9678-8465c1daf0de" class="">
+</p></div></p><p id="9db4ff1c-16c8-4be4-b83e-c960711d5422" class="">
+</p><figure id="e4f18091-1664-43d5-921b-3d8f67b9b55c" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.22.48_PM.png"><img style="width:816px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.22.48_PM.png"/></a></figure><p id="82e37ed9-ae06-4fc3-9aa1-b99e0ff7cd79" class="">
+</p><h2 id="3a409b25-1c45-4d0c-aba1-07c5b74b9ba4" class="">1. Cross Correlation</h2><h3 id="bdc7a73c-2748-4c85-8737-498b8551fd5c" class="block-color-teal">CORRELATION: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>⊗</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∑</mo><mi>u</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>u</mi><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo><mi>I</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)⊗I(x)=∑_{u}f(u-x)I(u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⊗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0497100000000001em;vertical-align:-0.29971000000000003em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.0016819999999999613em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">u</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></h3><ul id="7b779705-1e9e-4c1b-8b4a-ce98862c92d8" class="bulleted-list"><li style="list-style-type:disc">for diff values of u, we are looking at how much we shift f() weighted by I(x)</li></ul><figure class="block-color-teal_background callout" style="white-space:pre-wrap;display:flex" id="a6f9665e-4dd5-4bda-90a8-b4000f3e8500"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%"><strong>Think of 𝑓( ) as a </strong><em><strong>template </strong></em><strong>that we match to the image (by an
+inner product.</strong></div></figure><figure id="87afca62-516c-44ae-8a27-19bb6cf83acd" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.23.22_PM.png"><img style="width:1222px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.23.22_PM.png"/></a><figcaption>✅</figcaption></figure><h2 id="496c74df-dc52-4761-ac5a-05730213746f" class="">2. Convolution ( weighted, shifted ver)</h2><h3 id="40594309-593d-4f06-90de-632877583438" class="block-color-teal">CONVOLUTION: <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>∗</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><msub><mo>∑</mo><mi>u</mi></msub><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>u</mi><mo stretchy="false">)</mo><mi>I</mi><mo stretchy="false">(</mo><mi>u</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)*I(x) = ∑_uf(x-u)I(u)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.0497100000000001em;vertical-align:-0.29971000000000003em;"></span><span class="mop"><span class="mop op-symbol small-op" style="position:relative;top:-0.0000050000000000050004em;">∑</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.0016819999999999613em;"><span style="top:-2.40029em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">u</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.29971000000000003em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">u</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">u</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></h3><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="898024bf-255b-4da8-821c-5a46b9e59d43"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">flipping across y-axis, we can switch from <strong>convolution to cross correlation</strong></div></figure><ul id="6f2d1aaa-b8eb-4a8e-9995-23afb30eaa66" class="bulleted-list"><li style="list-style-type:disc">convolution <mark class="highlight-pink_background"><em><strong>sums up copies of shifted versions of f(x)</strong></em></mark>, and weights each shifted copy of a value of I(x)</li></ul><p id="c2a26bbc-2c50-47a6-8de6-1e16a9aa8245" class="">
+</p><p id="983236bf-7b95-42c4-a629-88e7783c3909" class=""><mark class="highlight-pink"><strong>Property:</strong></mark></p><ul id="d5906154-e84d-4a5d-8db6-635c3b377bd6" class="bulleted-list"><li style="list-style-type:disc">In Linear system: fully characterized by its impulse (<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">δ(n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span>) response</li></ul><p id="0203b803-be2d-4a19-a528-829911139ad8" class=""><span style="border-bottom:0.05em solid"><strong>Convolution Theorem</strong></span></p><figure id="7350b613-be07-464c-b37e-bae22352b941" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.32.06_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.32.06_PM.png"/></a></figure><p id="ade3ca66-c35d-4306-b455-c662069c2f65" class="">
+</p><h3 id="b31fe32f-e798-4cfa-afbe-92fbeebf85e2" class="">Cross correlation vs. Convolution</h3><figure id="8312a546-bbbd-470a-8547-af3c35c74410" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.28.34_PM.png"><img style="width:528px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.28.34_PM.png"/></a></figure><p id="4f476bad-777d-4a25-a0f8-61442afd9dfb" class="">
+</p><p id="dc5ad475-ff61-491b-9eab-aa957d7bc525" class="">
+</p><h2 id="0945a018-bb2a-4b3c-986f-401a30d823d9" class="">Convolution of an image (image filtering)</h2><figure class="block-color-purple_background callout" style="white-space:pre-wrap;display:flex" id="f14abcb7-7593-4510-8edd-084298e58945"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Remember colvolution is shifted, so the <strong>kernels are opposite</strong></div></figure><ul id="6c2e1a55-8222-4bd1-a10b-1b676c21c1e7" class="bulleted-list"><li style="list-style-type:disc"><strong>convolution of an image </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">I(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong><strong> with a function </strong><strong><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">f(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></strong><strong> is called “filtering an image”</strong><figure id="fbb043a3-5a1a-4a63-b024-449d18739b5e" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.33.45_PM.png"><img style="width:480px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.33.45_PM.png"/></a></figure><figure class="block-color-pink_background callout" style="white-space:pre-wrap;display:flex" id="a0bda94b-9a10-4299-969a-5315a94a468e"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">for convo, kernel get flipped before u do the filter</div></figure></li></ul><p id="134b6bf0-e5f8-47a0-81bc-c6c57836828f" class="">
+</p><h2 id="2f9bcc89-5bb3-48f4-9be1-3ca2318db084" class="">Impulse Function</h2><ul id="c0fa3911-9c70-4208-a262-2d062bd1aad7" class="bulleted-list"><li style="list-style-type:disc">zero when <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><msub><mi>x</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">x= x_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul><div id="64ed62e6-cae9-48b9-9f3d-3981fd8af0d7" class="column-list"><div id="bd68e57d-21c0-46e9-9a3a-3bcc6095de57" style="width:50%" class="column"><figure id="404a7d2c-848b-453a-9d2e-8aa3199d81c5" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.37.37_PM.png"><img style="width:844px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.37.37_PM.png"/></a></figure></div><div id="246210ee-27df-4076-b3f5-87a1ab9c6dd6" style="width:50%" class="column"><figure id="0bf58d45-6073-40cb-901a-ea5f719fb5e6" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.37.44_PM.png"><img style="width:884px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.37.44_PM.png"/></a></figure><p id="45b2024e-41ad-4843-b426-1518efabef83" class="">a translation of original</p></div></div><figure id="47d8dcaf-b9f4-4c85-bf39-e2f0dcd30e1b" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.40.00_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.40.00_PM.png"/></a><figcaption><mark class="highlight-pink">⬇️</mark></figcaption></figure><figure id="791100c5-5449-4bdc-9847-18c33de29913" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.40.06_PM.png"><img style="width:672px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.40.06_PM.png"/></a></figure><ul id="ceaa2373-7664-4bd0-988c-c3789d74dacb" class="bulleted-list"><li style="list-style-type:disc">impulse function is ONLY 1 when u = x, and 0 otherwise!!!<ul id="78ae34f6-d4fd-4287-9c9c-dc74698079ca" class="bulleted-list"><li style="list-style-type:circle">so <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>=</mo><mn>0</mn><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><mn>0</mn><mo>+</mo><mi>δ</mi><mo stretchy="false">(</mo><mi>x</mi><mo>−</mo><mi>x</mi><mo stretchy="false">)</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>+</mo><mn>0</mn><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><mn>0</mn><mo>=</mo><mn>1</mn><mo>∗</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo><mo>=</mo><mi>I</mi><mo stretchy="false">(</mo><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">=0+..+0+ δ(x-x)I(x)+0+...+0=1*I(x)=I(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">..</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03785em;">δ</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.66666em;vertical-align:-0.08333em;"></span><span class="mord">...</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mopen">(</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span><span>﻿</span></span></li></ul><p id="c9e7b5a3-6cdc-4663-ab99-18bc0bb713a7" class=""><strong><mark class="highlight-pink">-⇒ sifting property of a delta function</mark></strong></p><hr id="a0dacd33-fc6a-42b5-904e-e3a3af103310"/></li></ul><h2 id="cef5df66-cdbd-49dc-bdc5-1e5c336e2233" class="">Impulse Response function</h2><ul id="922f3b0a-2d29-4195-8a9f-0fd7ba719006" class="bulleted-list"><li style="list-style-type:disc">filters (kernels) are often referred to as “impulse response” functions<figure id="3e0d4ec1-51ad-428b-b460-cbb794726d2f" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.47.00_PM.png"><img style="width:672px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.47.00_PM.png"/></a><figcaption>和上面的I 是一样的proof证明！</figcaption></figure></li></ul><figure id="13986b89-fe22-46d2-9d4b-9600d5d30ae1" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.47.10_PM.png"><img style="width:624px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.47.10_PM.png"/></a></figure><hr id="c6f84737-f37c-4b0f-8942-8cb51818f949"/><hr id="42ff6266-59ee-45aa-9557-98a1e7a4fe9b"/><p id="f81da887-14d6-44c6-8506-c041904a9b15" class="">
+</p><h1 id="0f039dd3-2b1a-41f8-9b97-41440a609bbe" class="">⭐️ 2D Correlation, convolution, Gaussian</h1><hr id="89f2b948-6091-4c24-b036-7b3cd7493c21"/><figure id="15b417a1-d44c-43ea-9141-d257498806dc" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.29.52_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.29.52_PM.png"/></a></figure><p id="cb129770-fad7-42d2-8ed7-87989777a12b" class="">
+</p><p id="84f9eb20-d507-453d-8b42-8e24b99a1466" class="">
+</p><h2 id="7348cc1a-e6d4-469f-aa14-68086af14af1" class="">2D Gaussian</h2><ul id="12d91874-61f0-4ed6-9209-1b23a034518f" class="bulleted-list"><li style="list-style-type:disc">assume μ =0 and σ same for x and y<figure id="81df84b1-761d-4c62-a7d0-5ce39af6d243" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.31.48_PM.png"><img style="width:432px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.31.48_PM.png"/></a></figure><p id="9984931a-6f75-4b0f-b5bc-ab4ca138d223" class=""><mark class="highlight-purple">1）</mark><mark class="highlight-purple"><span style="border-bottom:0.05em solid"> </span></mark><mark class="highlight-purple"><span style="border-bottom:0.05em solid"><strong>radially symmetric</strong></span></mark><div class="indented"><figure id="da2905db-6bbf-45ba-be78-df938760afa2" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.50.05_PM.png"><img style="width:240px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-09-08_at_12.50.05_PM.png"/></a></figure><ul id="0663cbcb-9e98-4ce9-a44c-a436dbb4747c" class="bulleted-list"><li style="list-style-type:disc">we can simply think of a function with respect to <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi></mrow><annotation encoding="application/x-tex">r</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span></span></span></span></span><span>﻿</span></span><ul id="567fe970-f2e1-4dec-9e66-9975d402f403" class="bulleted-list"><li style="list-style-type:circle">because <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.13.2/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>r</mi><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">r^2=x^2+y^2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord mathnormal">x</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.008548em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></li></ul></li></ul><p id="e793c100-2824-42fe-ad3e-5640b8c2004a" class="">so it’s a function wrt to r only! (distance to origin)</p></div></p><p id="f43225de-1868-4caa-b428-1dba83ad2690" class=""><mark class="highlight-purple">2）</mark><mark class="highlight-purple"><span style="border-bottom:0.05em solid"><strong> integrate to 1</strong></span></mark>, bc it’s separable &amp; 1D gaussian integrates to 1 因为两个小part都是1啦<div class="indented"><figure id="b1122028-032a-4d50-805d-85b20a6024a1" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.33.39_PM.png"><img style="width:384px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.33.39_PM.png"/></a></figure></div></p></li></ul><p id="5da72d03-0500-40a5-abf9-5162ab790cad" class="">
+</p><p id="66df64ab-2737-4c47-beeb-b4816c534a00" class="">
+</p><h3 id="727e8da6-fb13-4ea4-816e-14521f3b44e3" class="">2D Gaussian Smoothing</h3><figure id="d7c5215b-3817-4d33-85f3-0685ebb17b37" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.40.39_PM.png"><img style="width:856px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.40.39_PM.png"/></a></figure><hr id="31a078a2-993d-41c5-9b62-d65bb5f9ebda"/><p id="15108aa9-9099-44d0-9dc0-af4fa4571502" class="">
+</p><h3 id="3bd9a731-dde5-4b61-b29c-9eb99cf3781f" class="">Partial Derivatives… which leads to IMAGE GRADIENT!!! ✅</h3><figure id="f3c6425a-9fba-4c67-9138-39e6833d40ca" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.41.57_PM.png"><img style="width:432px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.41.57_PM.png"/></a></figure><p id="af692dba-ba67-48ea-9e99-1080d3d3584c" class="">
+</p><h2 id="9a8924b4-4c96-4220-bfbd-9402dd54efac" class="">Image Gradient</h2><hr id="1ca1beed-7ee0-48e2-ab70-8782b51627e3"/><figure id="e1aac839-b363-4bf3-b50b-4deb63418a21" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.42.39_PM.png"><img style="width:624px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.42.39_PM.png"/></a></figure><figure id="8dbc344a-554e-4841-ada5-526bad76b127" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.45.12_PM.png"><img style="width:1236px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.45.12_PM.png"/></a></figure><blockquote id="314f4778-0706-4363-ae33-b4359ccb37c2" class="">Q: What is direction in which image intensity is changing at <strong>fastest rate? </strong>what is the rate? <em><span style="border-bottom:0.05em solid"><strong>→ Magnitude of image gradient!!!</strong></span></em></blockquote><p id="d6121cc9-5c04-4152-9659-6d8b5ca816e5" class="">
+</p><h3 id="17400a5c-174c-48d5-8da9-09a92eae3a12" class="">Magnitude of image gradient:</h3><figure id="18313995-3e9b-48fb-86d2-0d202be4d8e1" class="image"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.46.08_PM.png"><img style="width:576px" src="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/Screen_Shot_2022-10-07_at_4.46.08_PM.png"/></a></figure><p id="5471bfdd-ba81-48c5-b4b6-bea2a48e24f2" class="">
+</p><p id="16e5b8a4-5167-4d48-97fc-de86f7f6430f" class="">
+</p><p id="a50d6ff7-0add-4c48-9baa-faa4bc3ce297" class="">
+</p><figure id="6b5fb1a2-63b6-4def-87bf-e0b7dad0d906"><div class="source"><a href="3%20-%20Image%20Filtering%20278eb4b1c3f841699d941f611476ac9a/03-image-filtering-lecturenotes.pdf">https://s3-us-west-2.amazonaws.com/secure.notion-static.com/df86ed11-c3e5-4031-8cee-1df39fb26b37/03-image-filtering-lecturenotes.pdf</a></div></figure><p id="981fd268-e38d-4eb0-a12b-37813077414f" class="">
+</p><p id="45447027-02ba-4749-b22c-a50edf0836c8" class="">
+</p><p id="c862d9c6-5c76-41c5-966f-082f6bffde50" class="">
+</p></div></article></body></html>
