@@ -54,28 +54,65 @@ All class notes written in [notion.so](https://www.notion.so/), click on the *le
 * inner scale & outer scale
 * HoG, histogram equalization
 
-## [Lec](COMP558_Lec10)
+## [Lec 10 - SIFT Keypoints](COMP558_Lec10)
+* Keypoint detection using laplacian pyramid & gradient → SIFT vector ⭐️⭐️
+* Laplacian == DoG
 
-## [Lec](COMP558_Lec11&12)
+## [Lec 11 & 12 - Image Registration](COMP558_Lec11&12)
+* 1D & 2D Image Registration
+    * iterative method
+* Applications:
+    * Lucas-Kanade
+    * KLT Tracking
+    * Shi & Tomasi (a 6D problem)
+   
+## [Lec 14 - Perspectives](COMP558_Lec14)
+* Depth map
+* Camera movement
+    * similar triangles
+* 1, 2, 3 point perspectives
 
-## [Lec](COMP558_Lec14)
+## [Lec 15 - Rotations](COMP558_Lec15)
+* 2D & 3D rotaion, scaling
+* Homogenous coordinates
 
-## [Lec](COMP558_Lec15)
+## [Lec 16 - Camera Extrinsics & Intrinsics](COMP558_Lec16)
+* Camera calibration matrix K → intrinstics
+* Extrinsics $R[I|-C]$
 
-## [Lec](COMP558_Lec16)
+## [Lec 17 - Least Squares Estimation & SVD](COMP558_Lec17)
+* A = $U∑V^T$
 
-## [Lec](COMP558_Lec17)
+## [Lec 18 - Camera Calibration & Homographies](COMP558_Lec18)
+* Having a list of paired point coordinates
+    * Data normalization
+* $P==M_1^{-1}P_{normalized}M_2$
 
-## [Lec](COMP558_Lec18)
+## [Lec 19 - Homographies](COMP558_Lec19)
+* Case 1: 1 camera, 1 image plane
+* Case 2: 2 cameras, 1 image plane
+* Case 3: 1 camera (rotation)
+* Case 4: 2 images, 1 scene space (not same image plane)
 
-## [Lec](COMP558_Lec19)
+## [Lec 20 - Epipolar Geometry](COMP558_Lec20)
+* Essential matrix:
+    * **Uses projection plane coordinates, not pixel coordinates**
+* Fundamental matrix
+    * **Uses pixel coordinates**
 
-## [Lec](COMP558_Lec20)
+## [Lec 21 - Stereo & Epipolar Geometry](COMP558_Lec21)
+* Estimating the fundamental matrix F
+* Disparity Estimation
+* Estimate Depth
 
-## [Lec](COMP558_Lec21)
+## [Lec 22 - Binocular Disparity Estimation](COMP558_Lec22)
+* Correspondence problem
+* Occlusions
+* Disparity space
 
-## [Lec](COMP558_Lec22)
+## [Lec 23 - RGBD Cameras](COMP558_Lec23)
+* How does depth camera work
+* Iterative Closest Points (ICP)
 
-## [Lec](COMP558_Lec23)
-
-## [Lec](COMP558_Lec24)
+## [Lec 24 - Convolutional Neural Networks (CNNs)](COMP558_Lec24)
+* Classification problems in computer vision
