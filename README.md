@@ -1,4 +1,4 @@
-# [COMP558_ComputerVision](https://asahahaha.github.io/comp558-computer-vision/)
+# [COMP558_ComputerVision ** click me to see the notes in a WEBPAGE! **](https://asahahaha.github.io/comp558-computer-vision/)
 COMP 558 Fundamentals of Computer Vision @ McGill Class Notes
 ```
 * Instructor: Kaleem Siddiqi
